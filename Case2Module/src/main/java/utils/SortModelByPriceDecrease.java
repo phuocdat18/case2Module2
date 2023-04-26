@@ -4,7 +4,7 @@ import model.Model;
 
 import java.util.Comparator;
 
-public class SortFoodByPriceDecrease implements Comparator<Model> {
+public class SortModelByPriceDecrease implements Comparator<Model> {
 
     @Override
     public int compare(Model o1, Model o2) {

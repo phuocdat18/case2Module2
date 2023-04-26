@@ -4,7 +4,7 @@ import model.User;
 
 public class UserUseRepository extends FileContext<User>{
     public UserUseRepository(){
-        filePath = "src/main/data/userUse.csv";
+        filePath = "Case2Module/src/main/data/userUse.csv.csv";
         tClass = User.class;
     }
 }

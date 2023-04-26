@@ -1,10 +1,10 @@
 package repository;
 
-import model.Model;
+import model.Order;
 
-public class OrderAllRepository extends FileContext<Model> {
+public class OrderAllRepository extends FileContext<Order> {
     public OrderAllRepository() {
-        filePath = "./src/main/data/orderAll.csv";
-        tClass = Model.class;
+        filePath = "Case2Module/src/main/data/orderAll.csv";
+        tClass = Order.class;
     }
 }

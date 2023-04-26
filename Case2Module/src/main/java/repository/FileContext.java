@@ -1,5 +1,6 @@
 package repository;
 
+
 import model.Model;
 import service.FileService;
 
@@ -7,15 +8,18 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileContext<T> {
-    protected Class<Model> tClass;
+    protected Class<T> tClass;
     protected String filePath;
     private FileService fileService;
-    public FileContext(){
+
+    public FileContext() {
         fileService = new FileService();
     }
+
     public List<T> getAll() throws IOException {
-        return fileService.readData(filePath,tClass);
+        return fileService.readData(filePath, tClass);
     }
+
     public int checkID(int id) throws IOException {
         List<T> list = getAll();
         for (int i = 0; i < list.size(); i++) {
@@ -26,6 +30,7 @@ public class FileContext<T> {
         }
         return -1;
     }
+
     public int checkName(String name) throws IOException {
         List<T> list = getAll();
         for (int i = 0; i < list.size(); i++) {
@@ -36,6 +41,7 @@ public class FileContext<T> {
         }
         return -1;
     }
+
     public void deleteById(int id) throws IOException {
         List<T> list = getAll();
         for (int i = 0; i < list.size(); i++) {

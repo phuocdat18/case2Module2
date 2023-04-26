@@ -1,7 +1,7 @@
 package model;
 
 public enum EGender {
-    MALE(1,"MALE"), FEMALE(2,"FEMALE"), ORTHER( 3,"ORTHER");
+    male(1,"male"), female(2,"female"), orther( 3,"orther");
     private int id;
     private String name;
 

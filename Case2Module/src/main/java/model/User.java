@@ -52,7 +52,7 @@ public class User implements IModel<User> {
 
     public User parseData(String line) {
         User user = new User();
-        String[] strings = line.split(",");
+        String[] strings = line.split(";");
         int id = Integer.parseInt(strings[0]);
         String username = strings[1];
         String password = strings[2];
@@ -69,11 +69,11 @@ public class User implements IModel<User> {
         user.setPassword(password);
         user.setFullName(fullName);
         user.setPhoneNumber(phoneNumber);
-        user.setGender(gender);
+        user.setGender(eGender);
         user.setBirthDay(birthDay);
         user.setEmail(email);
         user.setAddress(address);
-        user.setRole(Role);
+        user.setRole(role);
 
         return user;
     }

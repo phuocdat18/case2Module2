@@ -1,42 +1,39 @@
 package view;
 
+import model.EGender;
 import model.Model;
 import service.FileService;
-import service.FoodService;
-import utils.SortFoodByIDIncrease;
-import utils.SortFoodByPriceDecrease;
-import utils.SortFoodByPriceIncrease;
-import utils.ValidateUtils;
+import service.ModelService;
+import utils.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class FoodView {
-    private final String FILE_PATH_FOOD = "./src/main/data/food.csv";
-    private final String FILE_PATH_FOOD_UPDATE = "./src/main/data/foodupdate.csv";
+public class ModelView {
+    private final String FILE_PATH_MODEL = "Case2Module/src/main/data/model.csv";
+    private final String FILE_PATH_MODEL_UPDATE = "Case2Module/src/main/data/modelUpdate.csv";
     private FileService fileService;
-    private FoodService foodService;
+    private ModelService modelService;
     private Scanner scanner;
 
-    public FoodView() {
+    public ModelView() {
         fileService = new FileService();
-        foodService = new FoodService();
+        modelService = new ModelService();
         scanner = new Scanner(System.in);
     }
 
-    public void menuFoodAdminView() {
+    public void menuModelAdminView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("                               ║                               Giao diện đồ uống, thức ăn                          ║");
-        System.out.println("                               ║                        1. Hiển thị danh sách đồ uống, thức ăn                     ║");
-        System.out.println("                               ║                        2. Hiển thị danh sách đồ uống, thức ăn theo danh mục       ║");
-        System.out.println("                               ║                        3. Hiển thị đồ uống, thức ăn theo giá tăng dần             ║");
-        System.out.println("                               ║                        4. Hiển thị đồ uống, thức ăn theo giá giảm dần             ║");
-        System.out.println("                               ║                        5. Thêm đồ uống, thức ăn                                   ║");
-        System.out.println("                               ║                        6. Chỉnh sửa đồ uống, thức ăn theo id                      ║");
-        System.out.println("                               ║                        7. Tìm kiếm đồ uống, thức ăn theo id                       ║");
-        System.out.println("                               ║                        8. Xóa đồ uống, thức ăn theo id                            ║");
+        System.out.println("                               ║                        1. Hiển thị danh sách Model                                ║");
+        System.out.println("                               ║                        2. Hiển thị danh sách Model theo danh mục                  ║");
+        System.out.println("                               ║                        3. Hiển thị Model theo giá tăng dần                        ║");
+        System.out.println("                               ║                        4. Hiển thị Model theo giá giảm dần                        ║");
+        System.out.println("                               ║                        5. Thêm Model vào danh sách                                ║");
+        System.out.println("                               ║                        6. Chỉnh sửa Model theo id                                 ║");
+        System.out.println("                               ║                        7. Tìm kiếm Model theo id                                  ║");
+        System.out.println("                               ║                        8. Xóa đồ Model theo id                                    ║");
         System.out.println("                               ║                        9. Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
@@ -45,7 +42,7 @@ public class FoodView {
         boolean checkAction = false;
         int select = 0;
         do {
-            menuFoodAdminView();
+            menuModelAdminView();
             System.out.println("Chọn chức năng:");
             try {
                 select = Integer.parseInt(scanner.nextLine());
@@ -56,11 +53,11 @@ public class FoodView {
             }
             switch (select) {
                 case 1:
-                    showFoodListStepFood();
+                    showModelListStepModel();
                     checkAction = checkActionContinue();
                     break;
                 case 2:
-                    showFoodListByType();
+                    showModelListByType();
                     checkAction = checkActionContinue();
                     break;
                 case 3:
@@ -72,19 +69,19 @@ public class FoodView {
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    addFood();
+                    addModel();
                     checkAction = checkActionContinue();
                     break;
                 case 6:
-                    editFoodById();
+                    editModelById();
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    findFoodById();
+                    findModelById();
                     checkAction = checkActionContinue();
                     break;
                 case 8:
-                    deleteFoodById();
+                    deleteModelById();
                     checkAction = checkActionContinue();
                     break;
 
@@ -120,33 +117,35 @@ public class FoodView {
         } while (!checkActionContinue);
         return true;
     }
-    public void menuEditFoodView() {
+    public void menuEditModelView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                               Chọn mục bạn muốn sửa                               ║");
-        System.out.println("                               ║                        1. Chỉnh sửa tên đồ uống, thức ăn                          ║");
-        System.out.println("                               ║                        2. Chỉnh sửa số lượng đồ uống, thức ăn                     ║");
-        System.out.println("                               ║                        3. Chỉnh sửa giá đồ uống, thức ăn                          ║");
-        System.out.println("                               ║                        4. Chỉnh sửa loại uống, thức ăn                            ║");
+        System.out.println("                               ║                        1. Chỉnh sửa tên người mẫu                                 ║");
+        System.out.println("                               ║                        2. Chỉnh sửa tuổi người mẫu                                ║");
+        System.out.println("                               ║                        2. Chỉnh sửa chiều cao người mẫu                           ║");
+        System.out.println("                               ║                        2. Chỉnh sửa cân nặng người mẫu                            ║");
+        System.out.println("                               ║                        3. Chỉnh sửa giá nguời mẫu                                 ║");
+        System.out.println("                               ║                        4. Chỉnh sửa giới tính người mẫu                           ║");
         System.out.println("                               ║                        5. Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
     public void sortByPriceDecrease() throws IOException {
-        List<Model> models = foodService.getAllFood();
-        models.sort(new SortFoodByPriceDecrease());
-        fileService.writeData(FILE_PATH_FOOD, models);
-        showFoodList();
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByPriceDecrease());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
     public void sortByPriceIncrease() throws IOException {
-        List<Model> models = foodService.getAllFood();
-        models.sort(new SortFoodByPriceIncrease());
-        fileService.writeData(FILE_PATH_FOOD, models);
-        showFoodList();
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByPriceIncrease());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
-    public void findFoodById() throws IOException {
-        List<Model> models = foodService.getAllFood();
+    public void findModelById() throws IOException {
+        List<Model> models = modelService.getAllModel();
         boolean checkAction = false;
         noChange();
         int id = 0;
@@ -169,14 +168,14 @@ public class FoodView {
                 id = 0;
                 continue;
             }
-            switch (foodService.checkIdFood(id)) {
+            switch (modelService.checkIdModel(id)) {
                 case 1:
                     for (int i = 0; i < models.size(); i++) {
                         if (models.get(i).getIdModel() == id) {
                             System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-                            System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+                            System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
                             System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
-                            System.out.printf(models.get(i).foodView()).println();
+                            System.out.printf(models.get(i).modelView()).println();
                             System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
                         }
                     }
@@ -190,10 +189,10 @@ public class FoodView {
         } while (!checkAction);
     }
 
-    public void deleteFoodById() throws IOException {
-        showFoodList();
-        List<Model> models = foodService.getAllFood();
-        List<Model> foodsUpdate = foodService.getAllFoodUpdate();
+    public void deleteModelById() throws IOException {
+        showModelList();
+        List<Model> models = modelService.getAllModel();
+        List<Model> modelsUpdate = modelService.getAllModelUpdate();
 
         int id = 0;
         boolean checkID = false;
@@ -217,11 +216,11 @@ public class FoodView {
                 id = 0;
                 continue;
             }
-            int check = foodService.checkIdFood(id);
+            int check = modelService.checkIdModel(id);
             switch (check) {
                 case 1:
-                    foodService.deleteFoodById(id);
-                    foodService.ddeleteFoodUpdateById(id);
+                    modelService.deleteModelById(id);
+                    modelService.deleteModelUpdateById(id);
                     checkID = true;
                     break;
                 case -1:
@@ -231,17 +230,17 @@ public class FoodView {
             }
         } while (!checkID);
 //
-//        fileService.writeData(FILE_PATH_FOOD, foods);
-//        fileService.writeData(FILE_PATH_FOOD_UPDATE,foodsUpdate);
-        showFoodList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+//        fileService.writeData(FILE_PATH_MODEL_UPDATE,modelsUpdate);
+        showModelList();
         System.out.println("✔ Bạn đã xóa món thành công ✔\n");
     }
 
-    public void editFoodById() throws IOException {
-        showFoodList();
-        List<Model> models = foodService.getAllFood();
-        List<Model> foodsUpdate = foodService.getAllFoodUpdate();
-        FoodView foodView = new FoodView();
+    public void editModelById() throws IOException {
+        showModelList();
+        List<Model> models = modelService.getAllModel();
+        List<Model> modelsUpdate = modelService.getAllModelUpdate();
+        ModelView modelView = new ModelView();
 
         int id = 0;
         boolean checkId = false;
@@ -266,14 +265,14 @@ public class FoodView {
                 id = 0;
                 continue;
             }
-            int check = foodService.checkIdFood(id);
+            int check = modelService.checkIdModel(id);
             switch (check) {
                 case 1:
                     for (int i = 0; i < models.size(); i++) {
                         if (models.get(i).getIdModel() == id) {
                             do {
                                 noChange();
-                                menuEditFoodView();
+                                menuEditModelView();
                                 System.out.println("Chọn mục bạn muốn sửa:");
                                 int select = 0;
                                 try {
@@ -286,26 +285,26 @@ public class FoodView {
                                 switch (select) {
                                     case 1:
 
-                                        String nameFood = null;
+                                        String nameModel = null;
                                         boolean checkValidFullName = false;
                                         boolean checkFullName = false;
                                         do {
                                             noChange();
                                             System.out.println("Nhập tên đồ uống, thức ăn:");
-                                            nameFood = scanner.nextLine();
-                                            if (nameFood.equals("0")) {
+                                            nameModel = scanner.nextLine();
+                                            if (nameModel.equals("0")) {
                                                 checkId = true;
                                                 launcher();
                                             }
-                                            checkValidFullName = ValidateUtils.isNameFood(nameFood);
+                                            checkValidFullName = ValidateUtils.isNameModel(nameModel);
                                             if (!checkValidFullName) {
                                                 System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
                                             }
                                         } while (!checkValidFullName);
-                                        models.get(i).setNameModel(nameFood);
-                                        for (int j = 0; j < foodsUpdate.size(); j++) {
-                                            if(foodsUpdate.get(j).getIdModel() == id) {
-                                                foodsUpdate.get(j).setNameModel(nameFood);
+                                        models.get(i).setNameModel(nameModel);
+                                        for (int j = 0; j < modelsUpdate.size(); j++) {
+                                            if(modelsUpdate.get(j).getIdModel() == id) {
+                                                modelsUpdate.get(j).setNameModel(nameModel);
                                             }
                                         }
                                         checkAction = true;
@@ -327,10 +326,10 @@ public class FoodView {
                                                 checkValidQuantity = false;
                                             }else {
                                                 quantity = Integer.parseInt(input1);
-                                                foods.get(i).setQuantity(quantity);
-                                                for (int j = 0; j < foodsUpdate.size(); j++) {
-                                                    if(foodsUpdate.get(j).getIdModel() == id) {
-                                                        foodsUpdate.get(j).setQuantity(quantity);
+                                                models.get(i).setQuantityModel(quantity);
+                                                for (int j = 0; j < modelsUpdate.size(); j++) {
+                                                    if(modelsUpdate.get(j).getIdModel() == id) {
+                                                        modelsUpdate.get(j).setQuantityModel(quantity);
                                                     }
                                                 }
                                                 checkValidQuantity = true;
@@ -362,9 +361,9 @@ public class FoodView {
                                             }
                                         } while (!checkValidPrice);
                                         models.get(i).setPriceModel(price);
-                                        for (int j = 0; j < foodsUpdate.size(); j++) {
-                                            if(foodsUpdate.get(j).getIdModel() == id) {
-                                                foodsUpdate.get(j).setPriceModel(price);
+                                        for (int j = 0; j < modelsUpdate.size(); j++) {
+                                            if(modelsUpdate.get(j).getIdModel() == id) {
+                                                modelsUpdate.get(j).setPriceModel(price);
                                             }
                                         }
                                         checkAction = true;
@@ -377,22 +376,22 @@ public class FoodView {
                                             checkId = true;
                                             launcher();
                                         }
-                                        if (models.get(i).geteTypeOfFood().equals(ETypeOfFood.DRINK)) {
+                                        if (models.get(i).getType().equals(EGender.male)) {
                                             switch (type) {
-                                                case "bakery":
+                                                case "MALE":
                                                     break;
                                                 default:
                                                     System.out.println("Nhập sai, kiểu hiện tại là \"drink\"! Mời bạn nhập \"bakery\" hoặc quay lại!");
                                                     type = scanner.nextLine();
                                                     break;
                                             }
-                                            models.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
-                                            for (int j = 0; j < foodsUpdate.size(); j++) {
-                                                if(foodsUpdate.get(j).getIdFood() == id) {
-                                                    foodsUpdate.get(j).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                            models.get(i).setType(EGender.getEGenderByName(type));
+                                            for (int j = 0; j < modelsUpdate.size(); j++) {
+                                                if(modelsUpdate.get(j).getIdModel() == id) {
+                                                    modelsUpdate.get(j).setType(EGender.getEGenderByName(type));
                                                 }
                                             }
-                                        }else if(models.get(i).geteTypeOfFood().equals(ETypeOfFood.BAKERY)){
+                                        }else if(models.get(i).getType().equals(EGender.female)){
                                             switch (type) {
                                                 case "drink":
                                                     break;
@@ -401,17 +400,17 @@ public class FoodView {
                                                     type = scanner.nextLine();
                                                     break;
                                             }
-                                            models.get(i).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
-                                            for (int j = 0; j < foodsUpdate.size(); j++) {
-                                                if(foodsUpdate.get(j).getIdFood() == id) {
-                                                    foodsUpdate.get(j).seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(type));
+                                            models.get(i).setType(EGender.getEGenderByName(type));
+                                            for (int j = 0; j < modelsUpdate.size(); j++) {
+                                                if(modelsUpdate.get(j).getIdModel() == id) {
+                                                    modelsUpdate.get(j).setType(EGender.getEGenderByName(type));
                                                 }
                                             }
                                         }
                                         checkAction = true;
                                         break;
                                     case 5:
-                                        foodView.editFoodById();
+                                        modelView.editModelById();
                                         checkAction = true;
                                         break;
                                     default:
@@ -431,28 +430,28 @@ public class FoodView {
                     break;
             }
         } while (!checkId);
-        fileService.writeData(FILE_PATH_FOOD_UPDATE,foodsUpdate);
-        fileService.writeData(FILE_PATH_FOOD, models);
-        showFoodList();
+        fileService.writeData(FILE_PATH_MODEL_UPDATE,modelsUpdate);
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
         System.out.println("✔ Bạn đã cập nhật sản phẩm thành công ✔\n");
     }
 
-    public void addFood() throws IOException {
-        List<Model> models = foodService.getAllFood();
-        List<Model> models = foodService.getAllFoodUpdate();
-        Model food = new Model();
+    public void addModel() throws IOException {
+        List<Model> models = modelService.getAllModel();
+        List<Model> models1 = modelService.getAllModelUpdate();
+        Model model = new Model();
 
-        String typeOfFood;
+        String typeOfModel;
         boolean checkType = false;
         do {
             noChange();
             System.out.println("Nhập danh mục cần thêm! \"drink\" or \"bakery\":");
-            typeOfFood = scanner.nextLine();
-            if(typeOfFood.equals("0")){
+            typeOfModel = scanner.nextLine();
+            if(typeOfModel.equals("0")){
                 checkType = true;
                 launcher();
             }
-            switch (typeOfFood) {
+            switch (typeOfModel) {
                 case "drink":
                     checkType = true;
                     break;
@@ -465,24 +464,24 @@ public class FoodView {
                     break;
             }
         }while (!checkType);
-        boolean checkNameFood = false;
+        boolean checkNameModel = false;
         do {
-            String nameFood = null;
-            boolean checkValidNameFood = false;
+            String nameModel = null;
+            boolean checkValidNameModel = false;
                 do {
                     noChange();
                     System.out.println("Nhập tên đồ uống, thức ăn (tối đa 40 kí tự):");
-                    nameFood = scanner.nextLine();
-                    if (nameFood.equals("0")) {
-                        checkNameFood = true;
+                    nameModel = scanner.nextLine();
+                    if (nameModel.equals("0")) {
+                        checkNameModel = true;
                         launcher();
                     }
-                    checkValidNameFood = ValidateUtils.isNameFood(nameFood);
-                    if (!checkValidNameFood) {
+                    checkValidNameModel = ValidateUtils.isNameModel(nameModel);
+                    if (!checkValidNameModel) {
                         System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
                     }
-                } while (!checkValidNameFood);
-            int checkName = foodService.checkNameFood(nameFood);
+                } while (!checkValidNameModel);
+            int checkName = modelService.checkNameModel(nameModel);
             switch (checkName) {
                 case 1:
                     System.out.println("Sản phẩm đã có, mời bạn thêm số lượng");
@@ -494,7 +493,7 @@ public class FoodView {
                         System.out.println("Nhập số lượng");
                         String input = scanner.nextLine();
                         if(input.equals("0")) {
-                            checkNameFood = true;
+                            checkNameModel = true;
                             launcher();
                         }
                         checkValid = ValidateUtils.isQuantity(quantity,input);
@@ -503,11 +502,11 @@ public class FoodView {
                         } else {
                             quantity = Integer.parseInt(input);
                             for (int j = 0; j < models.size(); j++) {
-                                if (models.get(j).getNameFood().equals(nameFood)) {
-                                    if (quantity + models.get(j).getQuantity() <= 1000) {
+                                if (models.get(j).getNameModel().equals(nameModel)) {
+                                    if (quantity + models.get(j).getQuantityModel() <= 1000) {
                                         checkValidQuantity = true;
                                     } else {
-                                        int inputQuantity = 1000 - models.get(j).getQuantity();
+                                        int inputQuantity = 1000 - models.get(j).getQuantityModel();
                                         System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + inputQuantity);
                                         checkValidQuantity = false;
                                     }
@@ -517,17 +516,17 @@ public class FoodView {
                     } while (!checkValidQuantity);
                     int quantityNew = 0;
                     for (int i = 0; i < models.size(); i++) {
-                        if (models.get(i).getNameFood().equals(nameFood)) {
-                            quantityNew = models.get(i).getQuantity() + quantity;
-                            food.setIdFood(models.get(i).getIdFood());
-                            food.setNameFood(models.get(i).getNameFood());
-                            food.setQuantity(quantityNew);
-                            food.setPriceFood(models.get(i).getPriceFood());
-                            food.seteTypeOfFood(models.get(i).geteTypeOfFood());
-                            models.set(i, food);
+                        if (models.get(i).getNameModel().equals(nameModel)) {
+                            quantityNew = models.get(i).getQuantityModel() + quantity;
+                            model.setIdModel(models.get(i).getIdModel());
+                            model.setNameModel(models.get(i).getNameModel());
+                            model.setQuantityModel(quantityNew);
+                            model.setPriceModel(models.get(i).getPriceModel());
+                            model.setType(models.get(i).getType());
+                            models.set(i, model);
                         }
                     }
-                    checkNameFood = true;
+                    checkNameModel = true;
                     break;
                 case -1:
                     int quantity1 = 0;
@@ -537,7 +536,7 @@ public class FoodView {
                         System.out.println("Nhập số lượng");
                         String input = scanner.nextLine();
                         if(input.equals("0")) {
-                            checkNameFood = true;
+                            checkNameModel = true;
                             launcher();
                         }
                         checkValidQuantity2 = ValidateUtils.isQuantity(quantity1,input);
@@ -553,7 +552,7 @@ public class FoodView {
                         System.out.println("Nhập giá");
                         String input = scanner.nextLine();
                         if(input.equals("0")) {
-                            checkNameFood = true;
+                            checkNameModel = true;
                             launcher();
                         }
                         try {
@@ -569,44 +568,45 @@ public class FoodView {
                         }
                     } while (!checkValidPrice);
 
-                    models.sort(new SortFoodByIDIncrease());
-                    int id = models.get(models.size() - 1).getIdFood() + 1;
-                    food.setIdFood(id);
-                    food.setNameFood(nameFood);
-                    food.setQuantity(quantity1);
-                    food.setPriceFood(price);
-                    food.seteTypeOfFood(ETypeOfFood.getTypeOfFoodByName(typeOfFood));
-                    models.add(food);
-                    models.add(food);
-                    checkNameFood = true;
+                    models.sort(new SortModelByIDIncrease());
+                    int id = models.get(models.size() - 1).getIdModel() + 1;
+                    model.setIdModel(id);
+                    model.setNameModel(nameModel);
+                    model.setQuantityModel(quantity1);
+                    model.setPriceModel(price);
+                    model.setType(EGender.getEGenderByName(typeOfModel));
+                    models.add(model);
+                    models.add(model);
+                    checkNameModel = true;
                     break;
             }
-        }while (!checkNameFood);
+        }while (!checkNameModel);
 
-        fileService.writeData(FILE_PATH_FOOD_UPDATE, foodsUpdate);
-        fileService.writeData(FILE_PATH_FOOD, models);
-        showFoodList();
+//        fileService.writeData(FILE_PATH_MODEL_UPDATE, modelsUpdate);
+        fileService.writeData(FILE_PATH_MODEL_UPDATE, models);
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
         System.out.println("✔ Bạn đã thêm sản phẩm thành công ✔\n");
     }
 
-    public void showFoodList() throws IOException {
-        List<Model> models = foodService.getAllFood();
-//        models.sort(new SortFoodByIDIncrease());
+    public void showModelList() throws IOException {
+        List<Model> models = modelService.getAllModel();
+//        models.sort(new SortModelByIDIncrease());
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
         for (Model model : models) {
-            System.out.printf(model.foodView()).println();
+            System.out.printf(model.modelView()).println();
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
-    public void showFoodListStepFood() throws IOException {
-        List<Model> foods = foodService.getAllFood();
+    public void showModelListStepModel() throws IOException {
+        List<Model> models = modelService.getAllModel();
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
         for (int i = 0; i < 10; i++) {
-            System.out.printf(models.get(i).foodView()).println();
+            System.out.printf(models.get(i).modelView()).println();
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
         boolean checkShow = false;
@@ -626,7 +626,7 @@ public class FoodView {
                     System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
                     for (int i = index; i < index + 10; i++) {
                         if(size>=10){
-                            System.out.printf(models.get(i).foodView()).println();
+                            System.out.printf(models.get(i).modelView()).println();
                         }
                     }
                     System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
@@ -649,7 +649,7 @@ public class FoodView {
             if (s.equals("")) {
                 System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
                 for (int i = size; i > 0; i--) {
-                    System.out.printf(models.get(models.size() - i).foodView()).println();
+                    System.out.printf(models.get(models.size() - i).modelView()).println();
                 }
                 System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
                 checkShow2 = true;
@@ -658,31 +658,33 @@ public class FoodView {
             }
         }while (!checkShow2);
         System.out.println("Finished!");
+
+        modelView();
     }
-    public void showFoodList(List<Model> models) throws IOException {
+    public void showModelList(List<Model> models) throws IOException {
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
-        for (Food food : foods) {
-            System.out.printf(food.foodView()).println();
+        for (Model model : models) {
+            System.out.printf(model.modelView()).println();
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
 
-    public void showFoodListByType() throws IOException {
-        List<Food> foods = foodService.getAllFood();
+    public void showModelListByType() throws IOException {
+        List<Model> models = modelService.getAllModel();
 
-        String typeOfFood;
+        String typeOfModel;
         boolean checkType = false;
         do {
             noChange();
             System.out.println("Nhập danh mục cần xem! \"drink\" or \"bakery\":");
-            typeOfFood = scanner.nextLine();
-            if(typeOfFood.equals("0")){
+            typeOfModel = scanner.nextLine();
+            if(typeOfModel.equals("0")){
                 checkType = true;
                 launcher();
             }
-            switch (typeOfFood) {
+            switch (typeOfModel) {
                 case "drink":
                     checkType = true;
                     break;
@@ -695,23 +697,199 @@ public class FoodView {
                     break;
             }
         }while (!checkType);
-        foods.sort(new SortFoodByIDIncrease());
+        models.sort(new SortModelByIDIncrease());
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Food's name", "Quantity", "Price", "Type Of Food").println();
+        System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
-        for (int i = 0; i < foods.size(); i++) {
-            if(foods.get(i).geteTypeOfFood().getName().equals(typeOfFood)) {
-                System.out.printf(foods.get(i).foodView()).println();
+        for (int i = 0; i < models.size(); i++) {
+            if(models.get(i).getType().getName().equals(typeOfModel)) {
+                System.out.printf(models.get(i).modelView()).println();
             }
 
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
     }
 
-    public void searchFoodByKeyword() throws IOException {
+
+
+
+
+
+
+    public void ModelView(){
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                                    Danh sách Model                                ║");
+        System.out.println("                               ║                   [1] Xem danh sách Model theo tên tăng dần                       ║");
+        System.out.println("                               ║                   [2] Xem danh sách Model theo tuổi tăng dần                      ║");
+        System.out.println("                               ║                   [3] Xem danh sách Model theo chiều cao tăng dần                 ║");
+        System.out.println("                               ║                   [4] Xem danh sách Model theo cân nặng tăng dần                  ║");
+        System.out.println("                               ║                   [5] Xem danh sách Model theo giá tăng dần                       ║");
+        System.out.println("                               ║                   [6] Quay lại Menu                                               ║");
+        System.out.println("                               ║                   [7] Đăng xuất                                                   ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+    public void modelView() throws IOException {
+//        LoginView loginView = new LoginView();
+        int select = 0;
+        boolean checkAction = false;
+        do {
+            ModelView();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    sortByNameIncrease();
+                    checkAction = checkActionContinue();
+                    break;
+                case 2:
+                    sortByAgeIncrease();
+                    checkAction = checkActionContinue();
+                    break;
+                case 3:
+                    sortByWeightIncrease();
+                    checkAction = checkActionContinue();
+                    break;
+                case 4:
+                    sortByHeightIncrease();
+                    checkAction = checkActionContinue();
+                    break;
+                case 5:
+                    sortByPriceIncrease();
+                    checkAction = checkActionContinue();
+                    break;
+                case 6:
+                    CustomerView.menuCustomerView();
+                    checkAction = checkActionContinue();
+                    break;
+                case 7:
+                    Menu menu = new Menu();
+                    menu.login();
+                    checkAction = checkActionContinue();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        }while (!checkAction);
+        if(checkAction) {
+            launcher();
+        }
+    }
+
+    public void sortByNameIncrease() throws IOException {
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByName());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+    }
+    public void sortByAgeIncrease() throws IOException {
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByAge());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+    }
+    public void sortByHeightIncrease() throws IOException {
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByHeight());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+    }
+    public void sortByWeightIncrease() throws IOException {
+        List<Model> models = modelService.getAllModel();
+        models.sort(new SortModelByWeight());
+        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList();
+//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+    }
+
+
+
+
+
+    public void searchModelView(){
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                                    Tìm kiếm Model                                ║");
+        System.out.println("                               ║                   [1] Tìm kiếm Model theo tên                                     ║");
+        System.out.println("                               ║                   [2] Tìm kiếm Model theo tuổi                                    ║");
+        System.out.println("                               ║                   [3] Tìm kiếm Model theo chiều cao                               ║");
+        System.out.println("                               ║                   [4] Tìm kiếm Model theo cân nặng                                ║");
+        System.out.println("                               ║                   [5] Tìm kiếm Model theo giá                                     ║");
+        System.out.println("                               ║                   [6] Quay lại Menu                                               ║");
+        System.out.println("                               ║                   [7] Đăng xuất                                                   ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+
+    public void searchModel() throws IOException {
+        List<Model> models = modelService.getAllModel();
+
+        String typeOfModel;
+        int select = 0;
+        boolean checkAction = false;
+        do {
+            searchModelView();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    searchModelByKeyword();
+                    checkAction = checkActionContinue();
+                    break;
+                case 2:
+                    searchModelByAgeRange();
+                    checkAction = checkActionContinue();
+                    break;
+                case 3:
+                    searchModelByHeightRange();
+                    checkAction = checkActionContinue();
+                    break;
+                case 4:
+                    searchModelByWeightRange();
+                    checkAction = checkActionContinue();
+                    break;
+                case 5:
+                    searchModelByPriceRange();
+                    checkAction = checkActionContinue();
+                    break;
+                case 6:
+                    CustomerView.menuCustomerView();
+                    checkAction = checkActionContinue();
+                    break;
+                case 7:
+                    Menu menu = new Menu();
+                    menu.login();
+                    checkAction = checkActionContinue();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        }while (!checkAction);
+        if(checkAction) {
+            launcher();
+        }
+    }
+
+    public void searchModelByKeyword() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Food> results = new ArrayList<>();
-        List<Food> foods = foodService.getAllFood();
+        List<Model> results = new ArrayList<>();
+        List<Model> models = modelService.getAllModel();
 
         boolean checkKW = false;
         do {
@@ -723,9 +901,9 @@ public class FoodView {
                 customerView.launcher();
             }
             boolean checkOut = false;
-            for (int i = 0; i < foods.size(); i++) {
-                if (foods.get(i).getNameFood().toUpperCase().contains(kw.toUpperCase())) {
-                    results.add(foods.get(i));
+            for (int i = 0; i < models.size(); i++) {
+                if (models.get(i).getNameModel().toUpperCase().contains(kw.toUpperCase())) {
+                    results.add(models.get(i));
                     checkOut = true;
                 }
             }
@@ -736,11 +914,171 @@ public class FoodView {
                 checkKW = true;
             }
         }while (!checkKW);
-        showFoodList(results);
+        showModelList(results);
     }
+
+    public void searchModelByPriceRange() throws IOException {
+        CustomerView customerView = new CustomerView();
+        List<Model> results = new ArrayList<>();
+        List<Model> models = modelService.getAllModel();
+        boolean checkRange = false;
+        do {
+            noChange();
+            System.out.println("Nhập khoảng giá muốn tìm kiếm (ví dụ: 1000 1500): ");
+            String input = scanner.nextLine();
+            String[] priceRange = input.split(" ");
+            int lowerBound = Integer.parseInt(priceRange[0]);
+            int upperBound = Integer.parseInt(priceRange[1]);
+            if(lowerBound < 0 || upperBound < 0 || lowerBound > upperBound) {
+                System.out.println("Khoảng giá không hợp lệ, vui lòng nhập lại!");
+                checkRange = false;
+            }else {
+                boolean checkOut = false;
+                for (int i = 0; i < models.size(); i++) {
+                    if (models.get(i).getPriceModel() >= lowerBound && models.get(i).getPriceModel() <= upperBound) {
+                        results.add(models.get(i));
+                        checkOut = true;
+                    }
+                }
+                if(!checkOut) {
+                    System.out.println("Không tìm thấy món, vui lòng nhập lại!");
+                    checkRange = false;
+                }else {
+                    checkRange = true;
+                }
+            }
+        }while (!checkRange);
+        showModelList(results);
+    }
+
+    public void searchModelByAgeRange() throws IOException {
+        CustomerView customerView = new CustomerView();
+        List<Model> results = new ArrayList<>();
+        List<Model> models = modelService.getAllModel();
+        boolean checkRange = false;
+        do {
+            noChange();
+            System.out.println("Nhập khoảng tuổi muốn tìm kiếm (ví dụ: 16 20): ");
+            String input = scanner.nextLine();
+            String[] ageRange = input.split(" ");
+            int lowerBound = Integer.parseInt(ageRange[0]);
+            int upperBound = Integer.parseInt(ageRange[1]);
+            if(lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
+                System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
+                checkRange = false;
+            }else {
+                boolean checkOut = false;
+                for (int i = 0; i < models.size(); i++) {
+                    if (models.get(i).getAge() >= lowerBound && models.get(i).getAge() <= upperBound) {
+                        results.add(models.get(i));
+                        checkOut = true;
+                    }
+                }
+                if(!checkOut) {
+                    System.out.println("Không tìm thấy món, vui lòng nhập lại!");
+                    checkRange = false;
+                }else {
+                    checkRange = true;
+                }
+            }
+        }while (!checkRange);
+        showModelList(results);
+    }
+
+    public void searchModelByHeightRange() throws IOException {
+        CustomerView customerView = new CustomerView();
+        List<Model> results = new ArrayList<>();
+        List<Model> models = modelService.getAllModel();
+        boolean checkRange = false;
+        do {
+            noChange();
+            System.out.println("Nhập khoảng chiều cao muốn tìm kiếm (ví dụ: 1.55 1.65): ");
+            String input = scanner.nextLine();
+            String[] heightRange = input.split(" ");
+            double lowerBound = Double.parseDouble(heightRange[0]);
+            double upperBound = Double.parseDouble(heightRange[1]);
+            if(lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 3) {
+                System.out.println("Khoảng chiều cao không hợp lệ, vui lòng nhập lại!");
+                checkRange = false;
+            }else {
+                boolean checkOut = false;
+                for (int i = 0; i < models.size(); i++) {
+                    if (models.get(i).getHeight() >= lowerBound && models.get(i).getHeight() <= upperBound) {
+                        results.add(models.get(i));
+                        checkOut = true;
+                    }
+                }
+                if(!checkOut) {
+                    System.out.println("Không tìm thấy Model, vui lòng nhập lại khoảng chiều cao!");
+                    checkRange = false;
+                }else {
+                    checkRange = true;
+                }
+            }
+        }while (!checkRange);
+        showModelList(results);
+    }
+
+    public void searchModelByWeightRange() throws IOException {
+        CustomerView customerView = new CustomerView();
+        List<Model> results = new ArrayList<>();
+        List<Model> models = modelService.getAllModel();
+        boolean checkWeight = false;
+        do {
+            noChange();
+            System.out.println("Nhập cân nặng tối thiểu: ");
+            double minWeight = scanner.nextDouble();
+            System.out.println("Nhập cân nặng tối đa: ");
+            double maxWeight = scanner.nextDouble();
+            if (minWeight > maxWeight) {
+                System.out.println("Cân nặng tối thiểu phải nhỏ hơn cân nặng tối đa!");
+            } else {
+                boolean checkOut = false;
+                for (int i = 0; i < models.size(); i++) {
+                    double weight = models.get(i).getWeight();
+                    if (weight >= minWeight && weight <= maxWeight) {
+                        results.add(models.get(i));
+                        checkOut = true;
+                    }
+                }
+                if (!checkOut) {
+                    System.out.println("Không tìm thấy model trong khoảng cân nặng này!");
+                }
+                checkWeight = true;
+            }
+        } while (!checkWeight);
+        showModelList(results);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void noChange() {
         System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: \"0\" ⦿ ");
     }
-
 }

@@ -1,6 +1,6 @@
 package service;
 
-import model.Model;
+import model.Order;
 import repository.OrderAllRepository;
 import repository.OrderRepository;
 
@@ -14,10 +14,10 @@ public class OrderService {
         orderRepository = new OrderRepository();
         orderAllRepository = new OrderAllRepository();
     }
-    public List<Model> getAllOrder() throws IOException {
+    public List<Order> getAllOrder() throws IOException {
         return orderRepository.getAll();
     }
-    public List<Model> getAllOrderAll() throws IOException {
+    public List<Order> getAllOrderAll() throws IOException {
         return orderAllRepository.getAll();
     }
     public int checkIdOrderAll(int id) throws IOException {
@@ -26,10 +26,10 @@ public class OrderService {
     public int checkIdOrder(int id) throws IOException {
         return orderRepository.checkID(id);
     }
-    public void deleteFoodOutOrderAllById(int id) throws IOException {
+    public void deleteModelOutOrderAllById(int id) throws IOException {
         orderAllRepository.deleteById(id);
     }
-    public void deleteFoodOutOrderById(int id) throws IOException {
+    public void deleteModelOutOrderById(int id) throws IOException {
         orderRepository.deleteById(id);
     }
 

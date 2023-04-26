@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class LoginView {
-    private final String FILE_PATH_USER = "./src/main/data/user.csv";
-    private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
+    private final String FILE_PATH_USER = "Case2Module/src/main/data/user.csv";
+    private final String FILE_PATH_USERUSE = "Case2Module/src/main/data/userUse.csv.csv";
     private Menu menu;
     private UserService userService;
     private FileService fileService;
@@ -32,9 +32,9 @@ public class LoginView {
     public void menuLoginAdmin() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
-        System.out.println("                               ║                            HỆ THỐNG QUẢN LÝ                                       ║");
-        System.out.println("                               ║------------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP ADMIN----------------------║");
-        System.out.println("                               ║                             Đăng nhập bằng tài khoản admin!!!                     ║");
+        System.out.println("                               ║                                  HỆ THỐNG QUẢN LÝ                                 ║");
+        System.out.println("                               ║                          BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP ADMIN                          ║");
+        System.out.println("                               ║                          Đăng nhập bằng tài khoản admin                           ║");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
@@ -44,9 +44,9 @@ public class LoginView {
     public void menuLoginCustomer() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
-        System.out.println("                               ║                           HỆ THỐNG QUẢN LÝ                                        ║");
-        System.out.println("                               ║---------------------------BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP CUSTOMER----------------------║");
-        System.out.println("                               ║                          Đăng nhập bằng tài khoản khách hàng!!!                   ║");
+        System.out.println("                               ║                                  HỆ THỐNG QUẢN LÝ                                 ║");
+        System.out.println("                               ║                          BẢNG ĐIỀU KHIỂN ĐĂNG NHẬP CUSTOMER                       ║");
+        System.out.println("                               ║                          Đăng nhập bằng tài khoản khách hàng                      ║");
         System.out.println("                               ║                                                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();

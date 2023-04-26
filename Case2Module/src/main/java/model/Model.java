@@ -1,18 +1,16 @@
 package model;
 
 import utils.CurrencyFormat;
-import utils.DateFormat;
-
-import java.util.Date;
 
 public class Model {
     private int idModel;
     private double priceModel;
     private EGender type;
     private String nameModel;
-    private Date birthDayModel;
+    private int age;
     private double height;
     private double weight;
+    private int quantityModel;
     private String phoneNumberModel;
     private String addressModel;
     private String description;
@@ -21,14 +19,15 @@ public class Model {
     public Model() {
     }
 
-    public Model(int id, double price, EGender type, String name, Date birthDay, double height, double weight, String phoneNumber, String address, String description) {
+    public Model(int id, double price, EGender type, String name, int age, double height, double weight, int quantity, String phoneNumber, String address, String description) {
         this.idModel = id;
         this.priceModel = price;
         this.type = type;
         this.nameModel = name;
-        this.birthDayModel = birthDay;
+        this.age = age;
         this.height = height;
         this.weight = weight;
+        this.quantityModel = quantity;
         this.phoneNumberModel = phoneNumber;
         this.addressModel = address;
         this.description = description;
@@ -58,12 +57,12 @@ public class Model {
         this.nameModel = nameModel;
     }
 
-    public Date getBirthDayModel() {
-        return birthDayModel;
+    public int getAge() {
+        return age;
     }
 
-    public void setBirthDayModel(Date birthDayModel) {
-        this.birthDayModel = birthDayModel;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public double getHeight() {
@@ -80,6 +79,14 @@ public class Model {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public int getQuantityModel() {
+        return quantityModel;
+    }
+
+    public void setQuantityModel(int quantityModel) {
+        this.quantityModel = quantityModel;
     }
 
     public String getPhoneNumberModel() {
@@ -122,9 +129,10 @@ public class Model {
         this.priceModel = obj.priceModel;
         this.type = obj.type;
         this.nameModel = obj.nameModel;
-        this.birthDayModel = obj.birthDayModel;
+        this.age = obj.age;
         this.height = obj.height;
         this.weight = obj.weight;
+        this.quantityModel = obj.quantityModel;
         this.phoneNumberModel = obj.phoneNumberModel;
         this.addressModel = obj.addressModel;
         this.description = obj.description;
@@ -133,29 +141,35 @@ public class Model {
 
     public Model parseData1(String line) {
         Model model = new Model();
-        String[] strings = line.split(",");
-        int id = Integer.parseInt(strings[0]);
-        Double price = CurrencyFormat.parseDouble(strings[1]);
+        String[] strings = line.split(";");
+        int idModel = Integer.parseInt(strings[0]);
+        Double priceModel = Double.parseDouble(strings[1]);
         EGender type = EGender.getEGenderByName(strings[2]);
-        String name = strings[3];
-        Date birthDay = DateFormat.parseDate(strings[4]);
-        Double height = CurrencyFormat.parseDouble(strings[5]);
-        Double weight = CurrencyFormat.parseDouble(strings[6]);
-        String phoneNumber = strings[7];
-        String address = strings[8];
-        String description = strings[9];
+        String nameModel = strings[3];
+        int age = Integer.parseInt(strings[4]);
+        Double height = Double.parseDouble(strings[5]);
+        Double weight = Double.parseDouble(strings[6]);
+        int quantityModel = Integer.parseInt(strings[7]);
+        String phoneNumberModel = strings[8];
+        String addressModel = strings[9];
+        String description = strings[10];
 
 
-
-
-        model.setIdModel(id);
-        model.setNameModel(name);
-        model.setPriceModel(price);
+        model.setIdModel(idModel);
+        model.setPriceModel(priceModel);
         model.setType(type);
+        model.setNameModel(nameModel);
+        model.setAge(age);
+        model.setHeight(height);
+        model.setWeight(weight);
+        model.setQuantityModel(quantityModel);
+        model.setPhoneNumberModel(phoneNumberModel);
+        model.setAddressModel(addressModel);
+        model.setDescription(description);
         return model;
     }
-    public String foodView() {
-        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idModel, this.type, this.nameModel, CurrencyFormat.covertPriceToString(this.priceModel), this.type.getName());
+    public String modelView() {
+        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idModel, this.type, this.nameModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type.getName());
     }
     @Override
     public String toString() {

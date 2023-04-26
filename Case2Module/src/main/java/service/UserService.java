@@ -75,6 +75,15 @@ public class UserService {
         return false;
     }
 
+//    public boolean checkCCCD(String cccd) throws IOException {
+//        List<User> allUsers = getAllUser();
+//        for (int i = 0; i < allUsers.size(); i++) {
+//            if(allUsers.get(i).getCccd().equals(cccd)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public boolean checkEmail(String email) throws IOException {
         List<User> allUsers = getAllUser();

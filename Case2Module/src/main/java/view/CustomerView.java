@@ -8,35 +8,30 @@ import java.util.Scanner;
 
 public class CustomerView {
     private static final String FILE_PATH_ODER = "./src/main/data/order.csv";
-    private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
+    private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv.csv";
     private UserService userService;
     private OrderView orderView;
-    private FoodView foodView;
+    private ModelView modelView;
     private Scanner scanner;
     private FileService fileService;
     private LoginView loginView;
 
     public CustomerView() {
         orderView = new OrderView();
-        foodView = new FoodView();
+        modelView = new ModelView();
         fileService = new FileService();
         scanner = new Scanner(System.in);
         loginView = new LoginView();
     }
 
-    public void menuCustomerView() {
+    public static void menuCustomerView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                    Giao diện Customer                             ║");
-        System.out.println("                               ║                   [1] Xem danh sách đồ uống, thức ăn                              ║");
-        System.out.println("                               ║                   [2] Xem danh sách đồ uống, thức ăn theo danh mục                ║");
-        System.out.println("                               ║                   [3] Xem danh sách đồ uống, thức ăn theo giá tăng dần            ║");
-        System.out.println("                               ║                   [4] Xem danh sách đồ uống, thức ăn theo giá giảm dần            ║");
-        System.out.println("                               ║                   [5] Tìm kiếm đồ uống, thức ăn theo keyword                      ║");
-        System.out.println("                               ║                   [6] Thêm món vào order theo id đồ uống, thức ăn                 ║");
-        System.out.println("                               ║                   [7] Chỉnh sửa số lượng món đã order theo id order               ║");
-        System.out.println("                               ║                   [8] Xóa món khỏi order theo id order                            ║");
-        System.out.println("                               ║                   [9] Xem lịch sử order món                                       ║");
-        System.out.println("                               ║                   [10] Xem lịch sử mua hàng                                       ║");
+        System.out.println("                               ║                   [1]  Xem danh sách người mẫu                                    ║");
+        System.out.println("                               ║                   [5]  Tìm kiếm người mẫu                                         ║");
+        System.out.println("                               ║                   [7]  Chỉnh sửa số lượng người mẫu đã order                      ║");
+        System.out.println("                               ║                   [9]  Xem lịch trình của người mẫu                               ║");
+        System.out.println("                               ║                   [10] Xem lịch sử Book                                           ║");
         System.out.println("                               ║                   [11] Thanh toán                                                 ║");
         System.out.println("                               ║                   [12] Quản lý tài khoản                                          ║");
         System.out.println("                               ║                   [13] Đăng xuất                                                  ║");
@@ -57,35 +52,35 @@ public class CustomerView {
             }
             switch (select) {
                 case 1:
-                    foodView.showFoodListStepFood();
+                    modelView.showModelListStepModel();
                     checkAction = checkActionContinue();
                     break;
                 case 2:
-                    foodView.showFoodListByType();
+                    modelView.showModelListByType();
                     checkAction = checkActionContinue();
                     break;
                 case 3:
-                    foodView.sortByPriceIncrease();
+                    modelView.sortByPriceIncrease();
                     checkAction = checkActionContinue();
                     break;
                 case 4:
-                    foodView.sortByPriceDecrease();
+                    modelView.sortByPriceDecrease();
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    foodView.searchFoodByKeyword();
+                    modelView.searchModelByKeyword();
                     checkAction = checkActionContinue();
                     break;
                 case 6:
-                    orderView.addFoodInOderByIdCustomer();
+                    orderView.addModelInOderByIdCustomer();
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    orderView.editQuantityFoodInOderByIdOder();
+                    orderView.editQuantityModelInOderByIdOder();
                     checkAction = checkActionContinue();
                     break;
                 case 8:
-                    orderView.deleteFoodOutOderByIdOder();
+                    orderView.deleteModelOutOderByIdOder();
                     checkAction = checkActionContinue();
                     break;
                 case 9:

@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class AdminView {
-    private static final String FILE_ODER = "./src/main/data/order.csv";
-    private FoodView foodView;
+    private static final String FILE_ODER = "src/main/data/order.csv";
+    private ModelView modelView;
     private OrderView orderView;
     private FileService fileService;
     private Scanner scanner;
     public AdminView() {
-        foodView = new FoodView();
+        modelView = new ModelView();
         orderView = new OrderView();
         fileService = new FileService();
         scanner = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class AdminView {
     public  void menuAdminView(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                    Giao diện Admin                                ║");
-        System.out.println("                               ║                                 [1] Quản lý đồ uống, thức ăn                      ║");
+        System.out.println("                               ║                                 [1] Quản lý Model                                 ║");
         System.out.println("                               ║                                 [2] Quản lý đơn hàng                              ║");
         System.out.println("                               ║                                 [3] Xem danh sách khách hàng                      ║");
         System.out.println("                               ║                                 [4] Xem doanh thu                                 ║");
@@ -43,7 +43,7 @@ public class AdminView {
             }
             switch (select) {
                 case 1:
-                    foodView.launcher();
+                    modelView.launcher();
                     checkAction = checkActionContinue();
                     break;
                 case 2:
@@ -130,7 +130,7 @@ public class AdminView {
     }
     public  void menuRevenue(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("                               ║                              Doanh thu Phúc Long coffe                            ║");
+        System.out.println("                               ║                              Doanh thu                                            ║");
         System.out.println("                               ║                       [1] Xem doanh thu theo ngày                                 ║");
         System.out.println("                               ║                       [2] Xem doanh thu theo tháng                                ║");
         System.out.println("                               ║                       [3] Xem tổng doanh thu toàn bộ                              ║");

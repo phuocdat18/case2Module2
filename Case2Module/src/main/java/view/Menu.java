@@ -13,7 +13,6 @@ public class Menu {
     public void menuLogin() {
         System.out.println("                               ╔══════════════════════════════════════--Giao diện--════════════════════════════════╗");
         System.out.println("                               ║                                                                                   ║");
-        System.out.println("                               ║                              PHÚC LONG COFFEE XIN KÍNH CHÀO!                      ║");
         System.out.println("                               ║                               [1] Đăng nhập bằng Admin                            ║");
         System.out.println("                               ║                               [2] Đăng nhập bằng khách hàng                       ║");
         System.out.println("                               ║                               [3] Đăng ký tài khoản                               ║");
