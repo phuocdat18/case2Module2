@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public class CurrencyFormat {
     public static String convertPriceToString(double price) {
-        Locale localeVN = new Locale("vi", "VN");
+        Locale localeVN = new Locale("en", "US", "USD");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
         String formattedAmount = currencyFormatter.format(price);
         return formattedAmount;

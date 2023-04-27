@@ -2,6 +2,9 @@ package repository;
 
 
 import model.Model;
+import model.Order;
+import model.Rental;
+import model.User;
 import service.FileService;
 
 import java.io.IOException;

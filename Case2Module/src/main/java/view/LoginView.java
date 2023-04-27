@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class LoginView {
     private final String FILE_PATH_USER = "Case2Module/src/main/data/user.csv";
-    private final String FILE_PATH_USERUSE = "Case2Module/src/main/data/userUse.csv.csv";
+    private final String FILE_PATH_USERUSE = "Case2Module/src/main/data/userUse.csv";
     private Menu menu;
     private UserService userService;
     private FileService fileService;

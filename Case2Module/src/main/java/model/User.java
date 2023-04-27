@@ -1,9 +1,8 @@
 package model;
 
-import jdk.jshell.execution.Util;
 import repository.IModel;
 import utils.ValidateUtils;
-import java.text.DateFormat;
+
 import java.util.Date;
 
 public class User implements IModel<User> {

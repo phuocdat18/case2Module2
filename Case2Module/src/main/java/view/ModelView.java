@@ -605,59 +605,62 @@ public class ModelView {
         System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
         System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", "ID", "Model's name", "Quantity", "Price", "Type Of Model").println();
         System.out.println("            ╠═══════╬══════════════════════════════╬═══════════╬════════════════╬═══════════════════╣");
-        for (int i = 0; i < 10; i++) {
-            System.out.printf(models.get(i).modelView()).println();
+        for (Model model : models) {
+//            System.out.printf(models.get(i).modelView()).println();
+
+            System.out.printf("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", model.getIdModel(),  CurrencyFormat.convertPriceToString(model.getPriceModel()), model.getNameModel(), model.getAge(), model.getHeight()).println();
+
         }
         System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
         boolean checkShow = false;
 
-        int size = models.size()-10;
-        int index = 10;
-        while (size >= 10) {
-            do {
-                noChange();
-                System.out.println("Nhấn Enter để xem tiếp!");
-                String s = scanner.nextLine();
-                if(s.equals("0")){
-                    checkShow = true;
-                    launcher();
-                }
-                if (s.equals("")) {
-                    System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-                    for (int i = index; i < index + 10; i++) {
-                        if(size>=10){
-                            System.out.printf(models.get(i).modelView()).println();
-                        }
-                    }
-                    System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
-                    index += 10;
-                    size -= 10;
-                    checkShow = true;
-                }else {
-                    checkShow = false;
-                }
-            }while (!checkShow);
-        }
-        boolean checkShow2 = false;
-        do {
-            System.out.println("Nhấn Enter để xem tiếp!");
-            String s = scanner.nextLine();
-            if(s.equals("0")){
-                checkShow2 = true;
-                launcher();
-            }
-            if (s.equals("")) {
-                System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
-                for (int i = size; i > 0; i--) {
-                    System.out.printf(models.get(models.size() - i).modelView()).println();
-                }
-                System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
-                checkShow2 = true;
-            }else {
-                checkShow2 = false;
-            }
-        }while (!checkShow2);
-        System.out.println("Finished!");
+//        int size = models.size()-10;
+//        int index = 10;
+//        while (size >= 10) {
+//            do {
+//                noChange();
+//                System.out.println("Nhấn Enter để xem tiếp!");
+//                String s = scanner.nextLine();
+//                if(s.equals("0")){
+//                    checkShow = true;
+//                    launcher();
+//                }
+//                if (s.equals("")) {
+//                    System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
+//                    for (int i = index; i < index + 10; i++) {
+//                        if(size>=10){
+//                            System.out.printf(models.get(i).modelView()).println();
+//                        }
+//                    }
+//                    System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
+//                    index += 10;
+//                    size -= 10;
+//                    checkShow = true;
+//                }else {
+//                    checkShow = false;
+//                }
+//            }while (!checkShow);
+//        }
+//        boolean checkShow2 = false;
+//        do {
+//            System.out.println("Nhấn Enter để xem tiếp!");
+//            String s = scanner.nextLine();
+//            if(s.equals("0")){
+//                checkShow2 = true;
+//                launcher();
+//            }
+//            if (s.equals("")) {
+//                System.out.println("            ╔═══════╦══════════════════════════════╦═══════════╦════════════════╦═══════════════════╗");
+//                for (int i = size; i > 0; i--) {
+//                    System.out.printf(models.get(models.size() - i).modelView()).println();
+//                }
+//                System.out.println("            ╚═══════╩══════════════════════════════╩═══════════╩════════════════╩═══════════════════╝");
+//                checkShow2 = true;
+//            }else {
+//                checkShow2 = false;
+//            }
+//        }while (!checkShow2);
+//        System.out.println("Finished!");
 
         modelView();
     }
@@ -987,55 +990,57 @@ public class ModelView {
 
     public void searchModelByHeightRange() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
-        boolean checkRange = false;
+        List<Model> results = new ArrayList<>();
+
+        boolean checkHeight = false;
         do {
             noChange();
-            System.out.println("Nhập khoảng chiều cao muốn tìm kiếm (ví dụ: 1.55 1.65): ");
-            String input = scanner.nextLine();
-            String[] heightRange = input.split(" ");
-            double lowerBound = Double.parseDouble(heightRange[0]);
-            double upperBound = Double.parseDouble(heightRange[1]);
-            if(lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 3) {
-                System.out.println("Khoảng chiều cao không hợp lệ, vui lòng nhập lại!");
-                checkRange = false;
-            }else {
+            System.out.println("Nhập chiều cao tối thiểu (m): ");
+            String minHeightString = scanner.nextLine();
+            double minHeight = Double.parseDouble(minHeightString);
+            System.out.println("Nhập chiều cao tối đa (m): ");
+            String maxHeightString = scanner.nextLine();
+            double maxHeight = Double.parseDouble(maxHeightString);
+            if (minHeight > maxHeight) {
+                System.out.println("Chiều cao tối thiểu phải nhỏ hơn chiều cao tối đa!");
+            } else {
                 boolean checkOut = false;
                 for (int i = 0; i < models.size(); i++) {
-                    if (models.get(i).getHeight() >= lowerBound && models.get(i).getHeight() <= upperBound) {
+                    String heightString = models.get(i).getHeight();
+                    double height = Double.parseDouble(heightString);
+                    if (height >= minHeight && height <= maxHeight) {
                         results.add(models.get(i));
                         checkOut = true;
                     }
                 }
-                if(!checkOut) {
-                    System.out.println("Không tìm thấy Model, vui lòng nhập lại khoảng chiều cao!");
-                    checkRange = false;
-                }else {
-                    checkRange = true;
+                if (!checkOut) {
+                    System.out.println("Không tìm thấy model trong khoảng chiều cao này!");
                 }
+                checkHeight = true;
             }
-        }while (!checkRange);
+        } while (!checkHeight);
         showModelList(results);
     }
 
     public void searchModelByWeightRange() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
+        List<Model> results = new ArrayList<>();
+
         boolean checkWeight = false;
         do {
             noChange();
-            System.out.println("Nhập cân nặng tối thiểu: ");
-            double minWeight = scanner.nextDouble();
-            System.out.println("Nhập cân nặng tối đa: ");
-            double maxWeight = scanner.nextDouble();
+            System.out.println("Nhập cân nặng tối thiểu (kg): ");
+            int minWeight = scanner.nextInt();
+            System.out.println("Nhập cân nặng tối đa (kg): ");
+            int maxWeight = scanner.nextInt();
             if (minWeight > maxWeight) {
                 System.out.println("Cân nặng tối thiểu phải nhỏ hơn cân nặng tối đa!");
             } else {
                 boolean checkOut = false;
                 for (int i = 0; i < models.size(); i++) {
-                    double weight = models.get(i).getWeight();
+                    int weight = models.get(i).getWeight();
                     if (weight >= minWeight && weight <= maxWeight) {
                         results.add(models.get(i));
                         checkOut = true;
@@ -1049,6 +1054,7 @@ public class ModelView {
         } while (!checkWeight);
         showModelList(results);
     }
+
 
 
 

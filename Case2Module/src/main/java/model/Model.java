@@ -1,15 +1,17 @@
 package model;
 
 import utils.CurrencyFormat;
+import repository.IModel;
 
-public class Model {
+
+public class Model implements IModel<Model> {
     private int idModel;
     private double priceModel;
     private EGender type;
     private String nameModel;
     private int age;
-    private double height;
-    private double weight;
+    private String height;
+    private int weight;
     private int quantityModel;
     private String phoneNumberModel;
     private String addressModel;
@@ -19,7 +21,7 @@ public class Model {
     public Model() {
     }
 
-    public Model(int id, double price, EGender type, String name, int age, double height, double weight, int quantity, String phoneNumber, String address, String description) {
+    public Model(int id, double price, EGender type, String name, int age, String height, int weight, int quantity, String phoneNumber, String address, String description) {
         this.idModel = id;
         this.priceModel = price;
         this.type = type;
@@ -65,19 +67,19 @@ public class Model {
         this.age = age;
     }
 
-    public double getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
@@ -124,6 +126,16 @@ public class Model {
     }
 
 
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+    @Override
     public void update(Model obj) {
         this.idModel = obj.idModel;
         this.priceModel = obj.priceModel;
@@ -138,8 +150,8 @@ public class Model {
         this.description = obj.description;
     }
 
-
-    public Model parseData1(String line) {
+    @Override
+    public Model parseData(String line) {
         Model model = new Model();
         String[] strings = line.split(";");
         int idModel = Integer.parseInt(strings[0]);
@@ -147,8 +159,8 @@ public class Model {
         EGender type = EGender.getEGenderByName(strings[2]);
         String nameModel = strings[3];
         int age = Integer.parseInt(strings[4]);
-        Double height = Double.parseDouble(strings[5]);
-        Double weight = Double.parseDouble(strings[6]);
+        String height = strings[5];
+        int weight = Integer.parseInt(strings[6]);
         int quantityModel = Integer.parseInt(strings[7]);
         String phoneNumberModel = strings[8];
         String addressModel = strings[9];
@@ -169,10 +181,10 @@ public class Model {
         return model;
     }
     public String modelView() {
-        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idModel, this.type, this.nameModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type.getName());
+        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type, this.nameModel, this.age);
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", this.idModel, this.type, this.nameModel, CurrencyFormat.parseInteger(this.priceModel), this.type.getName());
+        return String.format("%s,%s,%s,%s,%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age);
     }
 }
