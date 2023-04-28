@@ -306,6 +306,8 @@ public class RentalView {
         }
 
         String startDateString = "";
+        Date startDateInput = null;
+        Date endDateInput = null;
         boolean isInvalidDate = true;
         while (isInvalidDate) {
             try {
@@ -316,12 +318,33 @@ public class RentalView {
                 LocalDate date = LocalDate.parse(startDateString, formatter);
                 LocalDate endDate = date.plusDays(numberOfDays);
 
+                startDateInput = FormatDateModel.parseDate(startDateString);
+                String endDateString = formatter.format(endDate);
+                endDateInput = FormatDateModel.parseDate(endDateString);
                 // Kiểm tra ngày kết thúc có vượt quá 30 ngày kể từ ngày bắt đầu hay không.
                 if (endDate.isAfter(date.plusDays(30))) {
                     throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
                 }
+                for (Rental rental : rentals) {
+                    if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput)) {
 
-                isInvalidDate = false;
+                        isInvalidDate = true;
+                        System.out.println("Ngày thuê đã bị trùng");
+                        break;
+                    }else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0 ) {
+
+                        isInvalidDate = true;
+                        System.out.println("Ngày thuê đã bị trùng");
+                        break;
+                    }
+                }
+                if (compareTwoDate(new Date(), startDateInput)) {
+                    System.out.println("Ngày thuê đã bị quá hạn");
+                    isInvalidDate = true;
+                }else if (startDateInput.compareTo(new Date()) < 0) {
+                    System.out.println("Ngày thuê đã bị quá");
+                    isInvalidDate = true;
+                }
             } catch (DateTimeParseException e) {
                 System.out.println("Định dạng ngày không hợp lệ");
             } catch (IllegalArgumentException e) {
@@ -329,10 +352,10 @@ public class RentalView {
             }
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-        LocalDate date = LocalDate.parse(startDateString, formatter);
-        LocalDate endDate = date.plusDays(numberOfDays - 1);
-        String result = formatter.format(endDate);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+//        LocalDate date = LocalDate.parse(startDateString, formatter);
+//        LocalDate endDate = date.plusDays(numberOfDays - 1);
+//        String result = formatter.format(endDate);
         Rental rental = new Rental();
         ModelService modelService = new ModelService();
         Model model = modelService.searchId(idModel);
@@ -340,8 +363,8 @@ public class RentalView {
 //        rental.setIdRental(rentals.get(rentals.size()-1).getId() + 1);
         rental.setIdRental(model.getIdModel());
         rental.setNameModel(model.getNameModel());
-        rental.setStartDate(FormatDateModel.parseDate(startDateString));
-        rental.setEndDate(FormatDateModel.parseDate(result));
+        rental.setStartDate(startDateInput);
+        rental.setEndDate(endDateInput);
         rental.setPrice(model.getPriceModel());
         double totalPrice = numberOfDays * model.getPriceModel();
         rental.setTotalPrice(totalPrice);
@@ -349,7 +372,7 @@ public class RentalView {
 
         rentals.add(rental);
         fileService.writeData(FILE_PATH_MODEL, rentals);
-        showModelRental(idModel);
+//        showModelRental(idModel);
         System.out.println(rental.rentalView());
         printMonth(rentals, rental.getStartDate(), rental.getEndDate());
     }
