@@ -9,11 +9,12 @@ import service.ModelService;
 import service.OrderService;
 import service.UserService;
 import utils.CurrencyFormat;
-import utils.DateFormat;
+import utils.FormatDateModel;
 import utils.SortOderById;
 import utils.ValidateUtils;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class OrderView {
         scanner = new Scanner(System.in);
     }
 
-    public void addModelInOderByIdCustomer() throws IOException {
+    public void addModelInOderByIdCustomer() throws IOException, ParseException {
 //        int idOder, String nameCustomer, String nameModel, int quantityModel, double priceModel, double totalMoney, Date createDateOder
         CustomerView customerView = new CustomerView();
         ModelView modelView = new ModelView();
@@ -264,7 +265,7 @@ public class OrderView {
         System.out.println("✔ Bạn đã thêm món thành công ✔\n");
     }
 
-    public void editQuantityModelInOderByIdOder() throws IOException {
+    public void editQuantityModelInOderByIdOder() throws IOException, ParseException {
 
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
@@ -384,7 +385,7 @@ public class OrderView {
 
     }
 
-    public void deleteModelOutOderByIdOder() throws IOException {
+    public void deleteModelOutOderByIdOder() throws IOException, ParseException {
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
         List<Order> orderAll = orderService.getAllOrderAll();
@@ -464,7 +465,7 @@ public class OrderView {
         }
     }
 
-    public void findOderById() throws IOException {
+    public void findOderById() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         List<Order> orderAll = orderService.getAllOrderAll();
         noChange();
@@ -520,7 +521,7 @@ public class OrderView {
 
     }
 
-    public void showHistoryOder() throws IOException {
+    public void showHistoryOder() throws IOException, ParseException {
         CustomerView customerView = new CustomerView();
         List<Order> orders = orderService.getAllOrder();
         List<User> users = userService.getAllUserUse();
@@ -587,7 +588,7 @@ public class OrderView {
         }
     }
 
-    public void payOder() throws IOException {
+    public void payOder() throws IOException, ParseException {
         FileService fileService = new FileService();
         CustomerView customerView = new CustomerView();
         List<Order> orders = orderService.getAllOrder();
@@ -653,7 +654,7 @@ public class OrderView {
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
     }
 
-    public void showRevenueByDay() throws IOException {
+    public void showRevenueByDay() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         noChange();
         List<Order> orderAll = orderService.getAllOrderAll();
@@ -676,7 +677,7 @@ public class OrderView {
             } while (!checkDate);
             int count = 0;
             for (int i = 0; i < orderAll.size(); i++) {
-                if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+                if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
                     count += 1;
                 }
             }
@@ -688,7 +689,7 @@ public class OrderView {
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
                 for (int i = 0; i < orderAll.size(); i++) {
-                    if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+                    if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
                         totalRevenueByDay += orderAll.get(i).getTotalMoney();
                         System.out.printf(orderAll.get(i).oderView()).println();
                     }
@@ -700,7 +701,7 @@ public class OrderView {
         }
     }
 
-    public void showRevenueByMonth() throws IOException {
+    public void showRevenueByMonth() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         noChange();
         List<Order> orderAll = orderService.getAllOrderAll();
@@ -723,7 +724,7 @@ public class OrderView {
             } while (!checkMonth);
             int count = 0;
             for (int i = 0; i < orderAll.size(); i++) {
-                if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+                if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
                     count += 1;
                 }
             }
@@ -735,7 +736,7 @@ public class OrderView {
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
                 for (int i = 0; i < orderAll.size(); i++) {
-                    if (DateFormat.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+                    if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
                         totalRevenueByMonth += orderAll.get(i).getTotalMoney();
                         System.out.printf(orderAll.get(i).oderView()).println();
                     }

@@ -181,10 +181,11 @@ public class Model implements IModel<Model> {
         return model;
     }
     public String modelView() {
-        return String.format("            ║%7s║%-30s║ %-10s║ %-15s║ %-18s║", this.idModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type, this.nameModel, this.age);
+        return String.format("            ║%7s║%-30s║ %-10s║ %-30s║ %-10s tuổi║%15s║%-15s║ %-18s║ %-20s║", this.idModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type, this.nameModel, this.age, this.height, this.weight, this.phoneNumberModel, this.addressModel);
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age);
+        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age, this.height, this.weight, this.quantityModel, this.phoneNumberModel, this.addressModel, this.description);
+
     }
 }

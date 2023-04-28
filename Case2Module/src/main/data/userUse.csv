@@ -1,0 +1,1 @@
+User{id=2, username='customer', password='customer', fullName='Văn Nghĩa', phoneNumber='0325841686', gender=male, birthDay=Tue Sep 15 00:00:00 ICT 1992, email='vannghia92@gmail.com', address='Huế', Role=customer}

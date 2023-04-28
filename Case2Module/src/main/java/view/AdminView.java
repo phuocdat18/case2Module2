@@ -3,6 +3,7 @@ package view;
 import service.FileService;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class AdminView {
@@ -27,7 +28,7 @@ public class AdminView {
         System.out.println("                               ║                                 [5] Đăng xuất                                     ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcher() throws IOException {
+    public void launcher() throws IOException, ParseException {
         LoginView loginView = new LoginView();
         int select = 0;
         boolean checkAction = false;
@@ -83,7 +84,7 @@ public class AdminView {
         System.out.println("                               ║                       [5] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherOder() throws IOException {
+    public void launcherOder() throws IOException, ParseException {
         OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;
@@ -137,7 +138,7 @@ public class AdminView {
         System.out.println("                               ║                       [4] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherRevenue() throws IOException {
+    public void launcherRevenue() throws IOException, ParseException {
         OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;

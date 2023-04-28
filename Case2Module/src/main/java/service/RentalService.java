@@ -1,6 +1,6 @@
 package service;
 
-import model.Order;
+import model.Model;
 import model.Rental;
 import repository.RentalRepository;
 
@@ -13,7 +13,7 @@ public class RentalService
     public RentalService() {
         rentalRepository = new RentalRepository();
     }
-    public List<Rental> getAllOrder() throws IOException {
+    public List<Rental> getAllRental() throws IOException {
         return rentalRepository.getAll();
     }
 //    public List<Rental> getAllOrderAll() throws IOException {
@@ -32,4 +32,19 @@ public class RentalService
         rentalRepository.deleteById(id);
     }
 
+    public Rental searchIdRental(int idModelRental) throws IOException {
+        List<Rental> allRental = getAllRental();
+        for (int i = 0; i < allRental.size(); i++) {
+            if(allRental.get(i).getIdRental() == idModelRental) {
+                return allRental.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) throws IOException {
+        RentalService rentalService = new RentalService();
+        rentalService.getAllRental();
+        System.out.println(rentalService.getAllRental().get(0));
+    }
 }

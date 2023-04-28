@@ -2,7 +2,6 @@ package view;
 
 import model.Rental;
 
-import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +11,7 @@ import java.util.Locale;
 public class RentalCalendar {
 
 
-    public static void showRental1(List<Rental> rentals, Date startDate, Date endDate) {
+    public static void showCalendar(List<Rental> rentals, Date startDate, Date endDate) {
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
         int startMonth = startCal.get(Calendar.MONTH);
@@ -73,6 +72,4 @@ public class RentalCalendar {
             }
         }
     }
-
-
 }

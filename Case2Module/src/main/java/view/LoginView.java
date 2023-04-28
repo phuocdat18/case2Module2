@@ -5,11 +5,12 @@ import model.Role;
 import model.User;
 import service.FileService;
 import service.UserService;
-import utils.DateFormat;
+import utils.FormatDateModel;
 import utils.SortUserById;
 import utils.ValidateUtils;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -53,7 +54,7 @@ public class LoginView {
         System.out.println();
     }
 
-    public void loginAdmin() throws IOException {
+    public void loginAdmin() throws IOException, ParseException {
         int count = 0;
         menuLoginAdmin();
         do {
@@ -85,7 +86,7 @@ public class LoginView {
         }
     }
 
-    public void loginCustomer() throws IOException {
+    public void loginCustomer() throws IOException, ParseException {
         int count = 0;
         menuLoginCustomer();
         do {
@@ -121,7 +122,7 @@ public class LoginView {
         }
     }
 
-    public void signUp() throws IOException {
+    public void signUp() throws IOException, ParseException {
         List<User> userList = userService.getAllUser();
         userList.sort(new SortUserById());
         User user = new User();
@@ -189,7 +190,7 @@ public class LoginView {
         user.setId(userList.get(userList.size() - 1).getId() + 1);
         user.setPassword(password);
         user.setGender(EGender.getEGenderByName(gender));
-        user.setBirthDay(DateFormat.parseDate(date));
+        user.setBirthDay(FormatDateModel.parseDate(date));
         user.setAddress(address);
         user.setRole(Role.customer);
         userList.add(user);
@@ -198,7 +199,7 @@ public class LoginView {
     }
 
 
-    public void inputEmail(User user) throws IOException {
+    public void inputEmail(User user) throws IOException, ParseException {
         String email;
         boolean checkValid = false;
         boolean checkEmail = false;
@@ -256,7 +257,7 @@ public class LoginView {
 //        user.setCccd(cccd);
 //    }
 
-    public void inputPhoneNumber(User user) throws IOException {
+    public void inputPhoneNumber(User user) throws IOException, ParseException {
         String phoneNumber = null;
         boolean checkValid = false;
         boolean checkPhoneNumber = false;
@@ -284,7 +285,7 @@ public class LoginView {
         } while (!checkPhoneNumber);
         user.setPhoneNumber(phoneNumber);
     }
-    public void inputFullName(User user) throws IOException {
+    public void inputFullName(User user) throws IOException, ParseException {
         Menu menu = new Menu();
         String fullName = null;
         boolean checkValid = false;
@@ -308,7 +309,7 @@ public class LoginView {
         } while (!checkFullName);
         user.setFullName(fullName);
     }
-    public void inputUserName(User user) throws IOException {
+    public void inputUserName(User user) throws IOException, ParseException {
         Menu menu = new Menu();
         String username = null;
         boolean checkValid = false;
@@ -337,7 +338,7 @@ public class LoginView {
         } while (!checkUserName);
         user.setUsername(username);
     }
-    public void editFullName() throws IOException {
+    public void editFullName() throws IOException, ParseException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
         String fullName = null;

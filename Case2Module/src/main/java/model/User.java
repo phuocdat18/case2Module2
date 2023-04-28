@@ -1,6 +1,7 @@
 package model;
 
 import repository.IModel;
+import utils.FormatDateModel;
 import utils.ValidateUtils;
 
 import java.util.Date;
@@ -58,7 +59,7 @@ public class User implements IModel<User> {
         String fullName = strings[3];
         String phoneNumber = strings[4];
         EGender eGender = EGender.getEGenderByName(strings[5]);
-        Date birthDay = utils.DateFormat.parseDate(strings[6]);
+        Date birthDay = FormatDateModel.parseDate(strings[6]);
         String email = strings[7];
         String address = ValidateUtils.parseCharToComma(strings[8]);
         Role role = Role.getRoleByName(strings[9]);
@@ -163,7 +164,7 @@ public class User implements IModel<User> {
     }
 
     public String userView() {
-        return String.format("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), utils.DateFormat.convertDateToString(this.birthDay), this.email, this.address);
+        return String.format("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
     }
 
     @Override

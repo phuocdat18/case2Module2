@@ -1,6 +1,8 @@
 package service;
 
 import model.Model;
+import model.Rental;
+import model.User;
 import repository.ModelRepository;
 import repository.ModelUpdateRepository;
 
@@ -31,6 +33,15 @@ public class ModelService {
     }
     public void deleteModelUpdateById(int id) throws IOException {
         modelUpdateRepository.deleteById(id);
+    }
+    public Model searchId(int idModel) throws IOException {
+        List<Model> allModel = getAllModel();
+        for (int i = 0; i < allModel.size(); i++) {
+            if(allModel.get(i).getIdModel() == idModel) {
+                return allModel.get(i);
+            }
+        }
+        return null;
     }
 
 }

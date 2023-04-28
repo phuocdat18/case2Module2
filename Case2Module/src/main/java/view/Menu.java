@@ -1,6 +1,7 @@
 package view;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class Menu {
@@ -22,7 +23,7 @@ public class Menu {
         System.out.println();
     }
 
-    public void login() throws IOException {
+    public void login() throws IOException, ParseException {
         int select;
         boolean checkAction = false;
         do {
@@ -57,18 +58,18 @@ public class Menu {
         } while (!checkAction);
     }
 
-    public void signUp() throws IOException {
+    public void signUp() throws IOException, ParseException {
         LoginView loginView = new LoginView();
         loginView.signUp();
     }
 
-    public void admin() throws IOException {
+    public void admin() throws IOException, ParseException {
         LoginView loginView = new LoginView();
         loginView.loginAdmin();
 
     }
 
-    public void customer() throws IOException {
+    public void customer() throws IOException, ParseException {
         LoginView loginView = new LoginView();
         loginView.loginCustomer();
     }

@@ -2,7 +2,8 @@ package model;
 
 import repository.IModel;
 import utils.CurrencyFormat;
-import utils.DateFormat;
+import utils.FormatDateModel;
+import utils.ValidateUtils;
 
 import java.util.Date;
 
@@ -106,11 +107,11 @@ public class Rental implements IModel<Rental> {
         String[] strings = line.split(";");
         int idRental = Integer.parseInt(strings[0]);
         String nameModel = strings[1];
-        Date starDate = utils.DateFormat.parseDate(strings[2]);
-        Date endDate = utils.DateFormat.parseDate(strings[3]);
+        Date starDate = FormatDateModel.parseDate(strings[2]);
+        Date endDate = FormatDateModel.parseDate(strings[3]);
         Double priceModel = Double.parseDouble(strings[4]);
         Double totalPrice = Double.parseDouble(strings[5]);
-        Date createBill = utils.DateFormat.parseDate(strings[6]);
+        Date createBill = FormatDateModel.parseDate2(strings[6]);
 
 
         rental.setIdRental(idRental);
@@ -124,18 +125,10 @@ public class Rental implements IModel<Rental> {
     }
 
     public String rentalView() {
-        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║", this.idRental, this.nameModel, DateFormat.convertDateToString(this.startDate), DateFormat.convertDateToString(this.endDate), CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), DateFormat.convertDateToString2(this.createBill));
+        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║", this.idRental, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill));
     }
     @Override
     public String toString() {
-        return
-                "idRental=" + idRental +
-                ", nameModel='" + nameModel + '\'' +
-                ", starDate=" + startDate +
-                ", endDate=" + endDate +
-                ", price=" + price +
-                ", totalPrice=" + totalPrice +
-                ", createBill=" + createBill
-                ;
+        return idRental + ";" + nameModel + ";" + FormatDateModel.convertDateToString(this.startDate) + ";" + FormatDateModel.convertDateToString(this.endDate) + ";" + CurrencyFormat.parseInteger(this.price) + ";" + CurrencyFormat.parseInteger(this.totalPrice) + ";" +  FormatDateModel.convertDateToString2(this.createBill);
     }
 }

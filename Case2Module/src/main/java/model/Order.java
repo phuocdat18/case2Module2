@@ -2,7 +2,7 @@ package model;
 
 import repository.IModel;
 import utils.CurrencyFormat;
-import utils.DateFormat;
+import utils.FormatDateModel;
 
 import java.util.Date;
 
@@ -138,7 +138,7 @@ public class Order implements IModel<Order> {
         int quantityModel = Integer.parseInt(strings[4]);
         double priceModel = Double.parseDouble(strings[5]);
         double totalMoney = Double.parseDouble(strings[6]);
-        Date createDateOder = DateFormat.parseDate2(strings[7]);
+        Date createDateOder = FormatDateModel.parseDate2(strings[7]);
         Status Status = model.Status.getStatusByName(strings[8]);
         order.setIdOrder(idOder);
         order.setIdCustomer(idCustomer);
@@ -152,10 +152,10 @@ public class Order implements IModel<Order> {
         return order;
     }
     public String oderView() {
-        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", this.idOrder, this.idCustomer, this.nameCustomer, this.nameModel, CurrencyFormat.convertPriceToString(this.priceModel), CurrencyFormat.convertPriceToString(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
+        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", this.idOrder, this.idCustomer, this.nameCustomer, this.nameModel, CurrencyFormat.convertPriceToString(this.priceModel), CurrencyFormat.convertPriceToString(this.totalMoney), FormatDateModel.convertDateToString2(this.createDateOder), this.status.getName());
     }
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", this.idOrder, this.idCustomer, this.nameCustomer, this.nameModel, CurrencyFormat.parseInteger(this.priceModel), CurrencyFormat.parseInteger(this.totalMoney), DateFormat.convertDateToString2(this.createDateOder), this.status.getName());
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", this.idOrder, this.idCustomer, this.nameCustomer, this.nameModel, CurrencyFormat.parseInteger(this.priceModel), CurrencyFormat.parseInteger(this.totalMoney), FormatDateModel.convertDateToString2(this.createDateOder), this.status.getName());
     }
 }
