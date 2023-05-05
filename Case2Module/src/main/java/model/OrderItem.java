@@ -91,14 +91,6 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", orderId=" + orderId +
-                ", productId=" + productId +
-                ", productName='" + productName + '\'' +
-                ", total=" + total +
-                '}';
+        return String.format("%s;%s;%s;%s;%s;%s;%s", this.id, this.price, this.quantity, this.orderId, this.productId, this.productName, this.total);
     }
 }

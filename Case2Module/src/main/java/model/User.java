@@ -18,7 +18,9 @@ public class User implements IModel<User> {
     private String address;
     private Role Role;
 
-    public User(int id, String username, String password, String fullName, String phoneNumber, EGender gender, String cccd, Date birthDay, String email, String address, Role Role) {
+
+
+    public User(int id, String username, String password, String fullName, String phoneNumber, EGender gender, Date birthDay, String email, String address, Role Role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -169,17 +171,6 @@ public class User implements IModel<User> {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", gender=" + gender +
-                ", birthDay=" + birthDay +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", Role=" + Role +
-                '}';
+        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.id, this.username, this.password, this.fullName, this.phoneNumber, this.gender, FormatDateModel.convertDateToString(birthDay), this.email, this.address, this.Role);
     }
 }

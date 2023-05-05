@@ -316,7 +316,7 @@ public class RentalView {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
                 LocalDate date = LocalDate.parse(startDateString, formatter);
-                LocalDate endDate = date.plusDays(numberOfDays);
+                LocalDate endDate = date.plusDays(numberOfDays -1);
 
                 startDateInput = FormatDateModel.parseDate(startDateString);
                 String endDateString = formatter.format(endDate);
@@ -326,22 +326,24 @@ public class RentalView {
                     throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
                 }
                 for (Rental rental : rentals) {
-                    if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput)) {
+                    if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
 
                         isInvalidDate = true;
                         System.out.println("Ngày thuê đã bị trùng");
                         break;
-                    }else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0 ) {
+                    } else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(startDateInput) > 0 || rental.getStartDate().compareTo(endDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0) {
 
                         isInvalidDate = true;
                         System.out.println("Ngày thuê đã bị trùng");
                         break;
+                    }else {
+                        isInvalidDate = false;
                     }
                 }
                 if (compareTwoDate(new Date(), startDateInput)) {
                     System.out.println("Ngày thuê đã bị quá hạn");
                     isInvalidDate = true;
-                }else if (startDateInput.compareTo(new Date()) < 0) {
+                } else if (startDateInput.compareTo(new Date()) < 0) {
                     System.out.println("Ngày thuê đã bị quá");
                     isInvalidDate = true;
                 }

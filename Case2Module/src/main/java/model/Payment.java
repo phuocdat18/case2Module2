@@ -95,14 +95,6 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", quantity=" + quantity +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", money='" + money + '\'' +
-                ", revenue=" + revenue +
-                '}';
+        return String.format("%s;%s;%s;%s;%s;%s;%s", this.id, this.quantity, this.name, this.phoneNumber, this.address, this.money, this.revenue);
     }
 }

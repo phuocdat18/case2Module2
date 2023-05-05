@@ -92,9 +92,9 @@ public class CustomerView {
                     checkAction = checkActionContinue();
                     break;
                 case 9:
-                    fileService.clearData(FILE_PATH_USERUSE);
                     Menu menu = new Menu();
                     menu.login();
+                    fileService.clearData(FILE_PATH_USERUSE);
                     break;
                 default:
                     System.out.println("Nhập sai chức năng, vui lòng nhập lại!");

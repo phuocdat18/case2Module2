@@ -9,7 +9,7 @@ public class Model implements IModel<Model> {
     private double priceModel;
     private EGender type;
     private String nameModel;
-    private int age;
+    private int  age;
     private String height;
     private int weight;
     private int quantityModel;
@@ -133,7 +133,7 @@ public class Model implements IModel<Model> {
 
     @Override
     public String getName() {
-        return null;
+        return nameModel;
     }
     @Override
     public void update(Model obj) {
@@ -180,8 +180,11 @@ public class Model implements IModel<Model> {
         model.setDescription(description);
         return model;
     }
+    public String modelViewAdmin() {
+        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, this.height, this.weight, this.phoneNumberModel, this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
+    }
     public String modelView() {
-        return String.format("            ║%7s║%-30s║ %-10s║ %-30s║ %-10s tuổi║%15s║%-15s║ %-18s║ %-20s║", this.idModel, CurrencyFormat.convertPriceToString(this.priceModel), this.type, this.nameModel, this.age, this.height, this.weight, this.phoneNumberModel, this.addressModel);
+        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, this.height, this.weight, this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
     }
     @Override
     public String toString() {
