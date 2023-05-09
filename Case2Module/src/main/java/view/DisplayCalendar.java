@@ -35,12 +35,4 @@ public class DisplayCalendar {
             }
         }
     }
-
-
-
-
-
-
-
-
 }

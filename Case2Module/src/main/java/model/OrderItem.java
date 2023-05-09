@@ -23,7 +23,7 @@ public class OrderItem {
     }
 
     public OrderItem(String record) {
-        String[] fields = record.split(",");
+        String[] fields = record.split(";");
         this.id = Long.parseLong(fields[0]);
         this.price = Double.parseDouble(fields[1]);
         this.quantity = Integer.parseInt(fields[2]);

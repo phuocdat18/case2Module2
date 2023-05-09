@@ -1,17 +1,8 @@
 package view;
 
-import model.Status;
-import model.Model;
-import model.Order;
-import model.User;
-import service.FileService;
-import service.ModelService;
-import service.OrderService;
-import service.UserService;
-import utils.CurrencyFormat;
-import utils.FormatDateModel;
-import utils.SortOderById;
-import utils.ValidateUtils;
+import model.*;
+import service.*;
+import utils.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,9 +15,11 @@ public class OrderView {
     private static final String FILE_PATH_MODEL = "Case2Module/src/main/data/model.csv";
     private final String FILE_PATH_ORDER = "Case2Module/src/main/data/order.csv";
     private final String FILE_PATH_ODERALL = "Case2Module/src/main/data/orderAll.csv";
+    private final String FILE_PATH_RENTAL = "Case2Module/src/main/data/rental.csv";
     private ModelService modelService;
     private UserService userService;
     private OrderService orderService;
+    private RentalService rentalService;
     private FileService fileService;
     private Scanner scanner;
 
@@ -35,6 +28,7 @@ public class OrderView {
         userService = new UserService();
         orderService = new OrderService();
         fileService = new FileService();
+        rentalService = new RentalService();
         scanner = new Scanner(System.in);
     }
 
@@ -45,18 +39,18 @@ public class OrderView {
         modelView.showModelList();
         List<Model> models = modelService.getAllModel();
         List<User> users = userService.getAllUserUse();
-        List<Order> orderAll = orderService.getAllOrderAll();
-        List<Order> orders = orderService.getAllOrder();
-        orderAll.sort(new SortOderById());
-        Order order = new Order();
-        Order orderNew = new Order();
+        List<Rental> orderAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
+        orderAll.sort(new SortRentalById());
+        Rental rental = new Rental();
+        Rental rentalNew = new Rental();
         int idModel = 0;
         String nameModel = null;
         boolean checkId = false;
         do {
             noChange();
             boolean checkAction = false;
-            System.out.println("Nhập ID đồ uống, thức ăn bạn muốn oder:");
+            System.out.println("Nhập ID người mẫu bạn muốn oder:");
             String inputID = scanner.nextLine();
             if (inputID.equals("0")) {
                 checkId = true;
@@ -75,25 +69,25 @@ public class OrderView {
                             nameModel = models.get(i).getNameModel();
                         }
                     }
-                    if (!orders.isEmpty()) {
+                    if (!rentals.isEmpty()) {
                         int index = 0;
                         boolean checkNameModelAvailable = false;
-                        for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getNameModel().equals(nameModel) && users.get(0).getId() == orders.get(i).getIdCustomer()) {
+                        for (int i = 0; i < rentals.size(); i++) {
+                            if (rentals.get(i).getNameModel().equals(nameModel) && users.get(0).getId() == rentals.get(i).getIdCustomer()) {
                                 index = i;
                                 checkNameModelAvailable = true;
                             }
                         }
                         if (checkNameModelAvailable) {
                             noChange();
-                            System.out.println("Sản phẩm đã có, mời bạn thêm số lượng");
+//                            System.out.println("Sản phẩm đã có, mời bạn thêm số lượng");
                             int quantity = 0;
                             boolean checkValid = false;
                             boolean checkQuantity = false;
                             do {
                                 noChange();
-                                System.out.println("Nhập số lượng:");
-                                String inputQuantity = scanner.nextLine();
+//                                System.out.println("Nhập số lượng:");
+                                String inputQuantity = "1";
                                 if (inputQuantity.equals("0")) {
                                     checkId = true;
                                     customerView.launcher();
@@ -108,31 +102,31 @@ public class OrderView {
                                             if (quantity <= models.get(j).getQuantityModel()) {
                                                 checkQuantity = true;
                                             } else {
-                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
+//                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
                                                 checkQuantity = false;
                                             }
                                         }
                                     }
                                 }
                             } while (!checkQuantity);
-                            int quantityNew = orders.get(index).getQuantityModel() + quantity;
-                            double total = orders.get(index).getPriceModel() * quantityNew;
-                            order.setIdOrder(orders.get(index).getIdOrder());
-                            order.setIdCustomer(orders.get(index).getIdCustomer());
-                            order.setNameCustomer(orders.get(index).getNameCustomer());
-                            order.setNameModel(nameModel);
-                            order.setQuantityModel(quantityNew);
-                            order.setPriceModel(orders.get(index).getPriceModel());
-                            order.setTotalMoney(total);
-                            order.setCreateDateOder(new Date());
-                            order.setStatus(orders.get(index).getStatus());
-                            orders.set(index, order);
+                            int quantityNew = rentals.get(index).getQuantityModel() + quantity;
+                            double total = rentals.get(index).getPrice() * quantityNew;
+                            rental.setIdRental(rentals.get(index).getIdRental());
+                            rental.setIdCustomer(rentals.get(index).getIdCustomer());
+                            rental.setNameCustomer(rentals.get(index).getNameCustomer());
+                            rental.setNameModel(nameModel);
+                            rental.setQuantityModel(quantityNew);
+                            rental.setPrice(rentals.get(index).getPrice());
+                            rental.setTotalPrice(total);
+                            rental.setCreateBill(new Date());
+                            rental.setStatus(rentals.get(index).getStatus());
+                            rentals.set(index, rental);
                             for (int j = 0; j < models.size(); j++) {
                                 if (models.get(j).getNameModel().equals(nameModel)) {
                                     models.get(j).setQuantityModel(models.get(j).getQuantityModel() - quantity);
                                 }
                             }
-                            fileService.writeData(FILE_PATH_ORDER, orders);
+                            fileService.writeData(FILE_PATH_ORDER, rentals);
                             fileService.writeData(FILE_PATH_MODEL, models);
                             for (int j = 0; j < orderAll.size(); j++) {
                                 if (orderAll.get(j).getIdCustomer() == users.get(0).getId() && orderAll.get(j).getNameModel().equals(nameModel) && orderAll.get(j).getStatus().equals(Status.BUSY)) {
@@ -147,8 +141,8 @@ public class OrderView {
                             boolean checkQuantity = false;
                             do {
                                 noChange();
-                                System.out.println("Nhập số lượng:");
-                                String inputQuantity = scanner.nextLine();
+//                                System.out.println("Nhập số lượng:");
+                                String inputQuantity = "1";
                                 if (inputQuantity.equals("0")) {
                                     checkId = true;
                                     customerView.launcher();
@@ -163,7 +157,7 @@ public class OrderView {
                                             if (quantity <= models.get(j).getQuantityModel()) {
                                                 checkQuantity = true;
                                             } else {
-                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
+//                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
                                                 checkQuantity = false;
                                             }
                                         }
@@ -177,29 +171,31 @@ public class OrderView {
                                     models.get(j).setQuantityModel(models.get(j).getQuantityModel() - quantity);
                                 }
                             }
+
+
                             double totalMoney = quantity * price;
-                            order.setIdOrder(orders.get(orders.size() - 1).getIdOrder() + 1);
-                            order.setIdCustomer(users.get(0).getId());
-                            order.setNameCustomer(users.get(0).getFullName());
-                            order.setNameModel(nameModel);
-                            order.setQuantityModel(quantity);
-                            order.setPriceModel(price);
-                            order.setTotalMoney(totalMoney);
-                            order.setCreateDateOder(new Date());
-                            order.setStatus(Status.BUSY);
-                            orders.add(order);
-                            fileService.writeData(FILE_PATH_ORDER, orders);
+                            rental.setIdRental(rentals.get(rentals.size() - 1).getIdRental() + 1);
+                            rental.setIdCustomer(users.get(0).getId());
+                            rental.setNameCustomer(users.get(0).getFullName());
+                            rental.setNameModel(nameModel);
+                            rental.setQuantityModel(quantity);
+                            rental.setPrice(price);
+                            rental.setTotalPrice(totalMoney);
+                            rental.setCreateBill(new Date());
+                            rental.setStatus(Status.BUSY);
+                            rentals.add(rental);
+                            fileService.writeData(FILE_PATH_ORDER, rentals);
                             fileService.writeData(FILE_PATH_MODEL, models);
                         }
-                    } else if (orders.isEmpty()) {
+                    } else if (rentals.isEmpty()) {
 
                         int quantity = 0;
                         boolean checkValid = false;
                         boolean checkQuantity = false;
                         do {
                             noChange();
-                            System.out.println("Nhập số lượng:");
-                            String inputQuantity = scanner.nextLine();
+//                            System.out.println("Nhập số lượng:");
+                            String inputQuantity = "1";
                             if (inputQuantity.equals("exit")) {
                                 checkId = true;
                                 customerView.launcher();
@@ -214,7 +210,7 @@ public class OrderView {
                                         if (quantity <= models.get(j).getQuantityModel()) {
                                             checkQuantity = true;
                                         } else {
-                                            System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
+//                                            System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại! Nhỏ hơn hoặc bằng " + models.get(j).getQuantityModel());
                                             checkQuantity = false;
                                         }
                                     }
@@ -229,17 +225,17 @@ public class OrderView {
                             }
                         }
                         double totalMoney = quantity * price;
-                        order.setIdOrder(1);
-                        order.setIdCustomer(users.get(0).getId());
-                        order.setNameCustomer(users.get(0).getFullName());
-                        order.setNameModel(nameModel);
-                        order.setQuantityModel(quantity);
-                        order.setPriceModel(price);
-                        order.setTotalMoney(totalMoney);
-                        order.setCreateDateOder(new Date());
-                        order.setStatus(Status.BUSY);
-                        orders.add(order);
-                        fileService.writeData(FILE_PATH_ORDER, orders);
+                        rental.setIdRental(1);
+                        rental.setIdCustomer(users.get(0).getId());
+                        rental.setNameCustomer(users.get(0).getFullName());
+                        rental.setNameModel(nameModel);
+                        rental.setQuantityModel(quantity);
+                        rental.setPrice(price);
+                        rental.setTotalPrice(totalMoney);
+                        rental.setCreateBill(new Date());
+                        rental.setStatus(Status.BUSY);
+                        rentals.add(rental);
+                        fileService.writeData(FILE_PATH_ORDER, rentals);
                         fileService.writeData(FILE_PATH_MODEL, models);
                     }
                     checkId = true;
@@ -250,19 +246,19 @@ public class OrderView {
                     break;
             }
         } while (!checkId);
-        orderNew.setIdOrder(orderAll.get(orderAll.size() - 1).getIdOrder() + 1);
-        orderNew.setIdCustomer(order.getIdCustomer());
-        orderNew.setNameCustomer(order.getNameCustomer());
-        orderNew.setNameModel(order.getNameModel());
-        orderNew.setQuantityModel(order.getQuantityModel());
-        orderNew.setPriceModel(order.getPriceModel());
-        orderNew.setTotalMoney(order.getTotalMoney());
-        orderNew.setCreateDateOder(order.getCreateDateOder());
-        orderNew.setStatus(order.getStatus());
-        orderAll.add(orderNew);
+        rentalNew.setIdRental(orderAll.get(orderAll.size() - 1).getIdRental() + 1);
+        rentalNew.setIdCustomer(rental.getIdCustomer());
+        rentalNew.setNameCustomer(rental.getNameCustomer());
+        rentalNew.setNameModel(rental.getNameModel());
+        rentalNew.setQuantityModel(rental.getQuantityModel());
+        rentalNew.setPrice(rental.getPrice());
+        rentalNew.setTotalPrice(rental.getTotalPrice());
+        rentalNew.setCreateBill(rental.getCreateBill());
+        rentalNew.setStatus(rental.getStatus());
+        orderAll.add(rentalNew);
         fileService.writeData(FILE_PATH_ODERALL, orderAll);
         showOderNow();
-        System.out.println("✔ Bạn đã thêm món thành công ✔\n");
+        System.out.println("✔ Bạn đã thêm người mẫu thành công ✔\n");
     }
 
     public void editQuantityModelInOderByIdOder() throws IOException, ParseException {
@@ -279,10 +275,10 @@ public class OrderView {
             }
         }
         if (count == 0) {
-            System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
+            System.out.println("Bạn chưa Book người mẫu để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để book người mẫu hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
@@ -330,8 +326,8 @@ public class OrderView {
                         boolean checkValid = false;
                         boolean checkQuantity = false;
                         do {
-                            System.out.println("Nhập số lượng bạn muốn sửa: Số lượng từ 1-1000");
-                            String inputQuantity = scanner.nextLine();
+//                            System.out.println("Nhập số lượng bạn muốn sửa: Số lượng từ 1-1000");
+                            String inputQuantity = "1";
                             if (inputQuantity.equals("0")) {
                                 checkId = true;
                                 customerView.launcher();
@@ -351,7 +347,7 @@ public class OrderView {
                                                 models.get(i).setQuantityModel(models.get(i).getQuantityModel() + orders.get(i).getQuantityModel() - quantity);
                                                 checkQuantity = true;
                                             } else if (quantity > models.get(j).getQuantityModel() + orders.get(i).getQuantityModel()) {
-                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
+//                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
                                                 checkQuantity = false;
                                             }
                                         }
@@ -380,7 +376,7 @@ public class OrderView {
             fileService.writeData(FILE_PATH_ODERALL, orderAll);
             fileService.writeData(FILE_PATH_MODEL, models);
 //            showOderNow();
-            System.out.println("✔ Bạn đã cập nhật số lượng thành công ✔\n");
+//            System.out.println("✔ Bạn đã cập nhật số lượng thành công ✔\n");
         }
 
     }
@@ -398,10 +394,10 @@ public class OrderView {
             }
         }
         if (count == 0) {
-            System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
+            System.out.println("Bạn chưa book người mẫu để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để book người mẫu hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
@@ -461,7 +457,7 @@ public class OrderView {
                 }
             } while (!checkId);
 //            showOderNow();
-            System.out.println("✔ Bạn đã xóa món thành công ✔\n");
+            System.out.println("✔ Bạn đã xóa người mẫu thành công ✔\n");
         }
     }
 
@@ -472,7 +468,7 @@ public class OrderView {
         int idOrder = 0;
         boolean checkIdOrder = false;
         do {
-            System.out.println("Nhập ID order, thức ăn bạn muốn tìm");
+            System.out.println("Nhập ID book người mẫu bạn muốn tìm");
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkIdOrder = true;
@@ -524,18 +520,19 @@ public class OrderView {
     public void showHistoryOder() throws IOException, ParseException {
         CustomerView customerView = new CustomerView();
         List<Order> orders = orderService.getAllOrder();
+        List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
         int count = 0;
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
         if (count == 0) {
-            System.out.println("Chưa có đơn hàng, mời bạn thêm món để thực hiện chức năng này!");
+            System.out.println("Chưa có đơn hàng, mời bạn thêm Book người mẫu để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để book hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
@@ -555,9 +552,9 @@ public class OrderView {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orders.size(); i++) {
-                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                    System.out.printf(orders.get(i).oderView()).println();
+            for (int i = 0; i < rentals.size(); i++) {
+                if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
+                    System.out.printf(rentals.get(i).rentalView()).println();
                 }
             }
             System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
@@ -567,21 +564,22 @@ public class OrderView {
     public void showHistoryOderPaid() throws IOException {
         List<Order> orderAll = orderService.getAllOrderAll();
         List<User> users = userService.getAllUserUse();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
         int count = 0;
-        for (int i = 0; i < orderAll.size(); i++) {
-            if (orderAll.get(i).getIdCustomer() == users.get(0).getId() && orderAll.get(i).getStatus().equals(Status.FREE)) {
+        for (int i = 0; i < rentalAll.size(); i++) {
+            if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.FREE)) {
                 count += 1;
             }
         }
         if (count == 0) {
-            System.out.println("Bạn chưa có đơn hàng nào đã thanh toán. Không thể xem lịch sử mua hàng!");
+            System.out.println("Bạn chưa có đơn hàng nào đã thanh toán. Không thể xem book!");
         } else {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (orderAll.get(i).getIdCustomer() == users.get(0).getId() && orderAll.get(i).getStatus().equals(Status.FREE)) {
-                    System.out.printf(orderAll.get(i).oderView()).println();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                    System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
             System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
@@ -591,22 +589,22 @@ public class OrderView {
     public void payOder() throws IOException, ParseException {
         FileService fileService = new FileService();
         CustomerView customerView = new CustomerView();
-        List<Order> orders = orderService.getAllOrder();
-        List<Order> ordersNew = new ArrayList<>();
-        List<Order> orderAll = orderService.getAllOrderAll();
         List<User> users = userService.getAllUserUse();
+        List<Rental> rentals = rentalService.getAllRental();
+        List<Rental> rentalsNew = new ArrayList<>();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
         double totalMoney = 0;
         int count = 0;
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
         if (count == 0) {
-            System.out.println("Bạn chưa có món, mời bạn thêm món để thực hiện chức năng này!");
+            System.out.println("Bạn chưa book người mẫu để thực hiện chức năng này!");
             boolean checkEdit = false;
             do {
-                System.out.println("Nhập \"Y\" để thêm món hoăc \"0\" để quay lại! ");
+                System.out.println("Nhập \"Y\" để book hoăc \"0\" để quay lại! ");
                 String input = scanner.nextLine();
                 switch (input.toUpperCase()) {
                     case "Y":
@@ -626,39 +624,39 @@ public class OrderView {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orders.size(); i++) {
-                if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                    totalMoney += orders.get(i).getTotalMoney();
-                    orders.get(i).setStatus(Status.BUSY);
-                    System.out.printf(orders.get(i).oderView()).println();
+            for (int i = 0; i < rentals.size(); i++) {
+                if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
+                    totalMoney += rentals.get(i).getTotalPrice();
+                    rentals.get(i).setStatus(Status.BUSY);
+                    System.out.printf(rentals.get(i).rentalView()).println();
 
                 }
             }
             System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalMoney)).println();
+             System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalMoney)).println();
             System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
-                    orderAll.get(i).setStatus(Status.BUSY);
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (rentalAll.get(i).getIdCustomer() == users.get(0).getId()) {
+                    rentalAll.get(i).setStatus(Status.BUSY);
                 }
             }
 
-            for (int i = 0; i < orders.size(); i++) {
-                if (orders.get(i).getIdCustomer() != users.get(0).getId()) {
-                    ordersNew.add(orders.get(i));
+            for (int i = 0; i < rentals.size(); i++) {
+                if (rentals.get(i).getIdCustomer() != users.get(0).getId()) {
+                    rentalsNew.add(rentals.get(i));
                 }
             }
         }
-        fileService.writeData(FILE_PATH_ORDER, ordersNew);
-        fileService.writeData(FILE_PATH_ODERALL, orderAll);
+        fileService.writeData(FILE_PATH_ORDER, rentalsNew);
+        fileService.writeData(FILE_PATH_ODERALL, rentalAll);
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
     }
 
     public void showRevenueByDay() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
             String date = null;
@@ -676,8 +674,8 @@ public class OrderView {
                 }
             } while (!checkDate);
             int count = 0;
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
                     count += 1;
                 }
             }
@@ -688,10 +686,10 @@ public class OrderView {
                 System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-                for (int i = 0; i < orderAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(date) && orderAll.get(i).getStatus().equals(Status.FREE)) {
-                        totalRevenueByDay += orderAll.get(i).getTotalMoney();
-                        System.out.printf(orderAll.get(i).oderView()).println();
+                for (int i = 0; i < rentalAll.size(); i++) {
+                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                        totalRevenueByDay += rentalAll.get(i).getTotalPrice();
+                        System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
                 }
                 System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
@@ -704,8 +702,8 @@ public class OrderView {
     public void showRevenueByMonth() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         noChange();
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
             String month = null;
@@ -723,8 +721,8 @@ public class OrderView {
                 }
             } while (!checkMonth);
             int count = 0;
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
                     count += 1;
                 }
             }
@@ -735,10 +733,10 @@ public class OrderView {
                 System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-                for (int i = 0; i < orderAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(orderAll.get(i).getCreateDateOder()).contains(month) && orderAll.get(i).getStatus().equals(Status.FREE)) {
-                        totalRevenueByMonth += orderAll.get(i).getTotalMoney();
-                        System.out.printf(orderAll.get(i).oderView()).println();
+                for (int i = 0; i < rentalAll.size(); i++) {
+                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                        totalRevenueByMonth += rentalAll.get(i).getTotalPrice();
+                        System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
                 }
                 System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
@@ -749,20 +747,20 @@ public class OrderView {
     }
 
     public void showTotalRevenue() throws IOException {
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
             double totalRevenue = 0;
-            for (int i = 0; i < orderAll.size(); i++) {
-                totalRevenue += orderAll.get(i).getTotalMoney();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                totalRevenue += rentalAll.get(i).getTotalPrice();
             }
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (orderAll.get(i).getStatus().equals(Status.FREE)) {
-                    System.out.printf(orderAll.get(i).oderView()).println();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                    System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
             System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
@@ -772,31 +770,31 @@ public class OrderView {
     }
 
     public void showOderAll() throws IOException {
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orderAll.size(); i++) {
-                System.out.printf(orderAll.get(i).oderView()).println();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                System.out.printf(rentalAll.get(i).rentalView()).println();
             }
             System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
         }
     }
 
     public void showOderUnPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (orderAll.get(i).getStatus().equals(Status.BUSY)) {
-                    System.out.printf(orderAll.get(i).oderView()).println();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (rentalAll.get(i).getStatus().equals(Status.BUSY)) {
+                    System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
             System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
@@ -804,16 +802,16 @@ public class OrderView {
     }
 
     public void showOderPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOrderAll();
-        if (orderAll.isEmpty()) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
             System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-            for (int i = 0; i < orderAll.size(); i++) {
-                if (orderAll.get(i).getStatus().equals(Status.FREE)) {
-                    System.out.printf(orderAll.get(i).oderView()).println();
+            for (int i = 0; i < rentalAll.size(); i++) {
+                if (rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                    System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
             System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");

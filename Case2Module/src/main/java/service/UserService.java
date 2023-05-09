@@ -1,5 +1,6 @@
 package service;
 
+import model.Model;
 import model.Role;
 import model.User;
 import repository.UserRepository;
@@ -104,7 +105,19 @@ public class UserService {
         return false;
     }
 
+
+
     public List<User> getAllUserUse() throws IOException {
         return userUseRepository.getAll();
     }
+
+//    public User searchIdUser(int idUser) throws IOException {
+//        List<User> allUser = getAllUser();
+//        for (int i = 0; i < allUser.size(); i++) {
+//            if(allUser.get(i).getId() == idUser) {
+//                return allUser.get(i);
+//            }
+//        }
+//        return null;
+//    }
 }

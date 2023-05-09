@@ -21,8 +21,8 @@ public class FileService {
                 T temp = iModel.parseData(line);
                 list.add(temp);
             }
-            bufferedReader.close();
-            reader.close();
+//            bufferedReader.close();
+//            reader.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package model;
 
 import repository.IModel;
+import utils.CurrencyFormat;
 import utils.FormatDateModel;
 import utils.ValidateUtils;
 
@@ -38,6 +39,15 @@ public class User implements IModel<User> {
     }
 
 
+    public int getId() {
+        return id;
+    }
+    @Override
+    public String getName() {
+        return fullName;
+    }
+
+    @Override
     public void update(User obj) {
         this.id = obj.id;
         this.username = obj.username;
@@ -52,6 +62,7 @@ public class User implements IModel<User> {
     }
 
 
+    @Override
     public User parseData(String line) {
         User user = new User();
         String[] strings = line.split(";");
@@ -64,6 +75,7 @@ public class User implements IModel<User> {
         Date birthDay = FormatDateModel.parseDate(strings[6]);
         String email = strings[7];
         String address = ValidateUtils.parseCharToComma(strings[8]);
+//        Role role = Role.getRoleByName(strings[9]);
         Role role = Role.getRoleByName(strings[9]);
 
         user.setId(id);
@@ -80,14 +92,10 @@ public class User implements IModel<User> {
         return user;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    @Override
-    public String getName() {
-        return null;
-    }
+
+
+
 
     public void setId(int id) {
         this.id = id;
@@ -165,8 +173,11 @@ public class User implements IModel<User> {
         Role = role;
     }
 
+
+
+
     public String userView() {
-        return String.format("            ║%7s║%-15s║ %-20s║ %-15s║ %-15s║%-15s║ %-15s║ %-36s║ %-30s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
+        return String.format("            ║%-7s║%-15s║%-20s║%-15s║%-15s║%-15s║%-30s║%-30s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
     }
 
     @Override

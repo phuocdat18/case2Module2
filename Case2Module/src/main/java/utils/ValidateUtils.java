@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidateUtils {
@@ -13,6 +14,26 @@ public class ValidateUtils {
     public static final String FULLNAME_REGEX = "^[\\p{L} \\.'-]+$";
     public static final String NAMEMODEL_REGEX = "^[\\p{L}0-9\\s\\.\\,\\-'()]{1,40}$";
     public static final String ADDREE_REGEX = "^([^. ][.]*[ ]?)+$";
+
+    public static boolean isValidHeight(String height) {
+        // Kiểm tra xem chiều cao có null hay không
+        if (height == null) {
+            return false;
+        }
+        // Kiểm tra định dạng của chiều cao
+        Pattern pattern = Pattern.compile("^1m\\d{2}$");
+        Matcher matcher = pattern.matcher(height);
+        if (!matcher.matches()) {
+            return false;
+        }
+        // Kiểm tra giá trị của chiều cao
+        int h = Integer.parseInt(height.substring(2));
+        if (h <= 0) {
+            return false;
+        }
+        return true;
+    }
+
     public static boolean isNameModel (String nameModel) {
         return Pattern.matches(NAMEMODEL_REGEX, nameModel);
     }

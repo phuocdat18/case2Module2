@@ -1,8 +1,11 @@
 package service;
 
-import model.Model;
+import model.Order;
 import model.Rental;
+import repository.OrderAllRepository;
+import repository.RentalAllRepository;
 import repository.RentalRepository;
+import repository.RentalUpdateRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,8 +13,11 @@ import java.util.List;
 public class RentalService
 {
     private RentalRepository rentalRepository;
+    private RentalUpdateRepository rentalUpdateRepository;
+    private RentalAllRepository rentalAllRepository;
     public RentalService() {
         rentalRepository = new RentalRepository();
+        rentalUpdateRepository = new RentalUpdateRepository();
     }
     public List<Rental> getAllRental() throws IOException {
         return rentalRepository.getAll();
@@ -30,6 +36,14 @@ public class RentalService
 //    }
     public void deleteModelOutOrderById(int id) throws IOException {
         rentalRepository.deleteById(id);
+
+    }
+
+    public List<Rental> getAllRentalAll() throws IOException {
+        return rentalAllRepository.getAll();
+    }
+    public List<Rental> getAllRentalUpdate() throws IOException {
+        return rentalUpdateRepository.getAll();
     }
 
     public Rental searchIdRental(int idModelRental) throws IOException {

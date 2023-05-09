@@ -115,8 +115,12 @@ public class Model implements IModel<Model> {
         this.description = description;
     }
 
-
     public int getIdModel() {
+        return idModel;
+    }
+
+    @Override
+    public int getId() {
         return idModel;
     }
 
@@ -125,11 +129,6 @@ public class Model implements IModel<Model> {
         return nameModel;
     }
 
-
-    @Override
-    public int getId() {
-        return 0;
-    }
 
     @Override
     public String getName() {
@@ -191,4 +190,5 @@ public class Model implements IModel<Model> {
         return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age, this.height, this.weight, this.quantityModel, this.phoneNumberModel, this.addressModel, this.description);
 
     }
+
 }

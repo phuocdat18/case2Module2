@@ -72,7 +72,7 @@ public class CustomerView {
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    modelView.searchModelById();
+                    modelView.searchModelByIdOrder();
                     checkAction = checkActionContinue();
                     break;
                 case 6:
@@ -83,10 +83,6 @@ public class CustomerView {
                     orderView.showHistoryOderPaid();
                     checkAction = checkActionContinue();
                     break;
-//                case 11:
-//                    orderView.payOder();
-//                    checkAction = checkActionContinue();
-//                    break;
                 case 8:
                     launcherAccount();
                     checkAction = checkActionContinue();
