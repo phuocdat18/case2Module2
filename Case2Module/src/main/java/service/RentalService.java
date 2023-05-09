@@ -56,9 +56,9 @@ public class RentalService
         return null;
     }
 
-    public static void main(String[] args) throws IOException {
-        RentalService rentalService = new RentalService();
-        rentalService.getAllRental();
-        System.out.println(rentalService.getAllRental().get(0));
-    }
+//    public static void main(String[] args) throws IOException {
+//        RentalService rentalService = new RentalService();
+//        rentalService.getAllRental();
+//        System.out.println(rentalService.getAllRental().get(0));
+//    }
 }

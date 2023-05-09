@@ -1,7 +1,7 @@
 package model;
 
 public enum Status {
-    FREE(1,"FREE"),BUSY(2,"BUSY");
+    PAIN(1,"PAIN"),UNPAIN(2,"UNPAIN");
     private int id;
     private String name;
     Status(int id, String name) {

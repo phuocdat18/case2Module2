@@ -129,7 +129,7 @@ public class OrderView {
                             fileService.writeData(FILE_PATH_ORDER, rentals);
                             fileService.writeData(FILE_PATH_MODEL, models);
                             for (int j = 0; j < orderAll.size(); j++) {
-                                if (orderAll.get(j).getIdCustomer() == users.get(0).getId() && orderAll.get(j).getNameModel().equals(nameModel) && orderAll.get(j).getStatus().equals(Status.BUSY)) {
+                                if (orderAll.get(j).getIdCustomer() == users.get(0).getId() && orderAll.get(j).getNameModel().equals(nameModel) && orderAll.get(j).getStatus().equals(Status.UNPAIN)) {
                                     orderAll.get(j).setQuantityModel(quantityNew);
                                     fileService.writeData(FILE_PATH_ODERALL, orderAll);
                                 }
@@ -182,7 +182,7 @@ public class OrderView {
                             rental.setPrice(price);
                             rental.setTotalPrice(totalMoney);
                             rental.setCreateBill(new Date());
-                            rental.setStatus(Status.BUSY);
+                            rental.setStatus(Status.UNPAIN);
                             rentals.add(rental);
                             fileService.writeData(FILE_PATH_ORDER, rentals);
                             fileService.writeData(FILE_PATH_MODEL, models);
@@ -233,7 +233,7 @@ public class OrderView {
                         rental.setPrice(price);
                         rental.setTotalPrice(totalMoney);
                         rental.setCreateBill(new Date());
-                        rental.setStatus(Status.BUSY);
+                        rental.setStatus(Status.UNPAIN);
                         rentals.add(rental);
                         fileService.writeData(FILE_PATH_ORDER, rentals);
                         fileService.writeData(FILE_PATH_MODEL, models);
@@ -265,12 +265,12 @@ public class OrderView {
 
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
-        List<Order> orderAll = orderService.getAllOrderAll();
-        List<Order> orders = orderService.getAllOrder();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
         int count = 0;
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
@@ -316,9 +316,9 @@ public class OrderView {
                 int checkIdOrder = orderService.checkIdOrder(idOrder);
                 switch (checkIdOrder) {
                     case 1:
-                        for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getIdOrder() == idOrder) {
-                                nameModel = orders.get(i).getNameModel();
+                        for (int i = 0; i < rentals.size(); i++) {
+                            if (rentals.get(i).getIdRental() == idOrder) {
+                                nameModel = rentals.get(i).getNameModel();
                             }
                         }
                         noChange();
@@ -335,18 +335,18 @@ public class OrderView {
                             checkValid = ValidateUtils.isQuantity(quantity, inputQuantity);
                             if (checkValid) {
                                 quantity = Integer.parseInt(inputQuantity);
-                                for (int i = 0; i < orders.size(); i++) {
+                                for (int i = 0; i < rentals.size(); i++) {
                                     for (int j = 0; j < models.size(); j++) {
-                                        if (models.get(j).getNameModel().equals(nameModel) && orders.get(i).getIdOrder() == idOrder) {
-                                            if (orders.get(i).getQuantityModel() <= quantity && quantity <= models.get(j).getQuantityModel()) {
-                                                orders.get(i).setQuantityModel(quantity);
-                                                models.get(i).setQuantityModel(models.get(i).getQuantityModel() + orders.get(i).getQuantityModel() - quantity);
+                                        if (models.get(j).getNameModel().equals(nameModel) && rentals.get(i).getIdRental() == idOrder) {
+                                            if (rentals.get(i).getQuantityModel() <= quantity && quantity <= models.get(j).getQuantityModel()) {
+                                                rentals.get(i).setQuantityModel(quantity);
+                                                models.get(i).setQuantityModel(models.get(i).getQuantityModel() + rentals.get(i).getQuantityModel() - quantity);
                                                 checkQuantity = true;
-                                            } else if (orders.get(i).getQuantityModel() > quantity) {
-                                                orders.get(i).setQuantityModel(quantity);
-                                                models.get(i).setQuantityModel(models.get(i).getQuantityModel() + orders.get(i).getQuantityModel() - quantity);
+                                            } else if (rentals.get(i).getQuantityModel() > quantity) {
+                                                rentals.get(i).setQuantityModel(quantity);
+                                                models.get(i).setQuantityModel(models.get(i).getQuantityModel() + rentals.get(i).getQuantityModel() - quantity);
                                                 checkQuantity = true;
-                                            } else if (quantity > models.get(j).getQuantityModel() + orders.get(i).getQuantityModel()) {
+                                            } else if (quantity > models.get(j).getQuantityModel() + rentals.get(i).getQuantityModel()) {
 //                                                System.out.println("Số lượng nhập vượt quá số lượng trên menu, vui lòng nhập lại!");
                                                 checkQuantity = false;
                                             }
@@ -358,9 +358,9 @@ public class OrderView {
                             }
                         } while (!checkQuantity);
 
-                        for (int i = 0; i < orderAll.size(); i++) {
-                            if (orderAll.get(i).getNameModel().equals(nameModel) && users.get(0).getId() == orderAll.get(i).getIdCustomer() && orderAll.get(i).getStatus().equals(Status.BUSY)) {
-                                orderAll.get(i).setQuantityModel(quantity);
+                        for (int i = 0; i < rentalAll.size(); i++) {
+                            if (rentalAll.get(i).getNameModel().equals(nameModel) && users.get(0).getId() == rentalAll.get(i).getIdCustomer() && rentalAll.get(i).getStatus().equals(Status.UNPAIN)) {
+                                rentalAll.get(i).setQuantityModel(quantity);
                             }
                         }
                         checkId = true;
@@ -372,8 +372,8 @@ public class OrderView {
                 }
             } while (!checkId);
 
-            fileService.writeData(FILE_PATH_ORDER, orders);
-            fileService.writeData(FILE_PATH_ODERALL, orderAll);
+            fileService.writeData(FILE_PATH_ORDER, rentals);
+            fileService.writeData(FILE_PATH_ODERALL, rentalAll);
             fileService.writeData(FILE_PATH_MODEL, models);
 //            showOderNow();
 //            System.out.println("✔ Bạn đã cập nhật số lượng thành công ✔\n");
@@ -384,12 +384,12 @@ public class OrderView {
     public void deleteModelOutOderByIdOder() throws IOException, ParseException {
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
-        List<Order> orderAll = orderService.getAllOrderAll();
-        List<Order> orders = orderService.getAllOrder();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
         int count = 0;
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                 count += 1;
             }
         }
@@ -437,14 +437,14 @@ public class OrderView {
                 switch (checkIdOrder) {
                     case 1:
                         orderService.deleteModelOutOrderById(idOrder);
-                        for (int i = 0; i < orders.size(); i++) {
-                            if (orders.get(i).getIdOrder() == idOrder) {
-                                nameModel = orders.get(i).getNameModel();
+                        for (int i = 0; i < rentals.size(); i++) {
+                            if (rentals.get(i).getIdRental() == idOrder) {
+                                nameModel = rentals.get(i).getNameModel();
                             }
                         }
-                        for (int i = 0; i < orderAll.size(); i++) {
-                            if (orderAll.get(i).getNameModel().equals(nameModel) && orderAll.get(i).getIdCustomer() == users.get(0).getId()) {
-                                idOderAll = orderAll.get(i).getIdOrder();
+                        for (int i = 0; i < rentalAll.size(); i++) {
+                            if (rentalAll.get(i).getNameModel().equals(nameModel) && rentalAll.get(i).getIdCustomer() == users.get(0).getId()) {
+                                idOderAll = rentalAll.get(i).getIdRental();
                             }
                         }
                         orderService.deleteModelOutOrderAllById(idOderAll);
@@ -463,7 +463,7 @@ public class OrderView {
 
     public void findOderById() throws IOException, ParseException {
         AdminView adminView = new AdminView();
-        List<Order> orderAll = orderService.getAllOrderAll();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
         noChange();
         int idOrder = 0;
         boolean checkIdOrder = false;
@@ -485,9 +485,9 @@ public class OrderView {
                     System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
                     System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                     System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-                    for (int i = 0; i < orderAll.size(); i++) {
-                        if (orderAll.get(i).getIdOrder() == idOrder) {
-                            System.out.printf(orderAll.get(i).oderView()).println();
+                    for (int i = 0; i < rentalAll.size(); i++) {
+                        if (rentalAll.get(i).getIdRental() == idOrder) {
+                            System.out.printf(rentalAll.get(i).rentalView()).println();
                         }
                     }
                     System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
@@ -503,14 +503,14 @@ public class OrderView {
     }
 
     public void showOderNow() throws IOException {
-        List<Order> orders = orderService.getAllOrder();
+        List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
         System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
         System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
         System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
-        for (int i = 0; i < orders.size(); i++) {
-            if (orders.get(i).getIdCustomer() == users.get(0).getId()) {
-                System.out.printf(orders.get(i).oderView()).println();
+        for (int i = 0; i < rentals.size(); i++) {
+            if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
+                System.out.printf(rentals.get(i).rentalView()).println();
             }
         }
         System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
@@ -519,7 +519,6 @@ public class OrderView {
 
     public void showHistoryOder() throws IOException, ParseException {
         CustomerView customerView = new CustomerView();
-        List<Order> orders = orderService.getAllOrder();
         List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
         int count = 0;
@@ -562,12 +561,11 @@ public class OrderView {
     }
 
     public void showHistoryOderPaid() throws IOException {
-        List<Order> orderAll = orderService.getAllOrderAll();
         List<User> users = userService.getAllUserUse();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
         int count = 0;
         for (int i = 0; i < rentalAll.size(); i++) {
-            if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+            if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                 count += 1;
             }
         }
@@ -578,7 +576,7 @@ public class OrderView {
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                if (rentalAll.get(i).getIdCustomer() == users.get(0).getId() && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
@@ -627,7 +625,7 @@ public class OrderView {
             for (int i = 0; i < rentals.size(); i++) {
                 if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                     totalMoney += rentals.get(i).getTotalPrice();
-                    rentals.get(i).setStatus(Status.BUSY);
+                    rentals.get(i).setStatus(Status.UNPAIN);
                     System.out.printf(rentals.get(i).rentalView()).println();
 
                 }
@@ -637,7 +635,7 @@ public class OrderView {
             System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getIdCustomer() == users.get(0).getId()) {
-                    rentalAll.get(i).setStatus(Status.BUSY);
+                    rentalAll.get(i).setStatus(Status.UNPAIN);
                 }
             }
 
@@ -675,7 +673,7 @@ public class OrderView {
             } while (!checkDate);
             int count = 0;
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                     count += 1;
                 }
             }
@@ -687,7 +685,7 @@ public class OrderView {
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
                 for (int i = 0; i < rentalAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                         totalRevenueByDay += rentalAll.get(i).getTotalPrice();
                         System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
@@ -722,7 +720,7 @@ public class OrderView {
             } while (!checkMonth);
             int count = 0;
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                     count += 1;
                 }
             }
@@ -734,7 +732,7 @@ public class OrderView {
                 System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
                 System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
                 for (int i = 0; i < rentalAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                         totalRevenueByMonth += rentalAll.get(i).getTotalPrice();
                         System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
@@ -759,7 +757,7 @@ public class OrderView {
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                if (rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
@@ -793,7 +791,7 @@ public class OrderView {
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (rentalAll.get(i).getStatus().equals(Status.BUSY)) {
+                if (rentalAll.get(i).getStatus().equals(Status.UNPAIN)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
@@ -810,7 +808,7 @@ public class OrderView {
             System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
             System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (rentalAll.get(i).getStatus().equals(Status.FREE)) {
+                if (rentalAll.get(i).getStatus().equals(Status.PAIN)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
