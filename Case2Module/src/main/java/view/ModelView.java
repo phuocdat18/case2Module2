@@ -106,10 +106,27 @@ public class ModelView {
         }
     }
 
-    public boolean checkActionContinue() {
+    public boolean checkActionContinueAdmin() {
         boolean checkActionContinue = false;
         do {
             System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Admin!");
+            String choice = scanner.nextLine().trim().toUpperCase();
+            switch (choice) {
+                case "Y":
+                    return false;
+                case "N":
+                    return true;
+                default:
+                    checkActionContinue = false;
+            }
+        } while (!checkActionContinue);
+        return true;
+    }
+
+    public boolean checkActionContinue() {
+        boolean checkActionContinue = false;
+        do {
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Customer!");
             String choice = scanner.nextLine().trim().toUpperCase();
             switch (choice) {
                 case "Y":
@@ -275,10 +292,10 @@ public class ModelView {
                                                 System.out.println("Chiều cao bạn nhập không hợp lệ, vui lòng nhập lại!");
                                             }
                                         } while (!checkValidHeight);
-                                        models.get(i).setHeight(height);
+                                        models.get(i).setHeight(Integer.parseInt(height));
                                         for (int j = 0; j < modelsUpdate.size(); j++) {
                                             if (modelsUpdate.get(j).getIdModel() == searchId) {
-                                                modelsUpdate.get(j).setHeight(height);
+                                                modelsUpdate.get(j).setHeight(Integer.parseInt(height));
                                             }
                                         }
                                         checkAction = true;
@@ -696,18 +713,23 @@ public class ModelView {
                         }
                     } while (!isValidAge);
 
-                    String height = null;
+
+                    int height = 0;
                     boolean isValidHeight = false;
                     do {
                         noChange();
                         System.out.println("Nhập chiều cao (cm):");
                         String input = scanner.nextLine();
-                        String numericValue = input.replaceAll("[^\\d.]", "");
-                        if (!numericValue.isEmpty()) {
-                            height = input;
-                            isValidHeight = true;
-                        } else {
+                        try {
+                            height = Integer.parseInt(input);
+                        } catch (NumberFormatException e) {
                             System.out.println("Chiều cao không hợp lệ. Vui lòng nhập lại.");
+                            continue;
+                        }
+                        if (height <= 0) {
+                            System.out.println("Chiều cao phải lớn hơn 0. Vui lòng nhập lại.");
+                        } else {
+                            isValidHeight = true;
                         }
                     } while (!isValidHeight);
 
@@ -1345,25 +1367,36 @@ public class ModelView {
             System.out.println("Nhập khoảng giá muốn tìm kiếm (ví dụ: 1000 1500): ");
             String input = scanner.nextLine();
             String[] priceRange = input.split(" ");
-            int lowerBound = Integer.parseInt(priceRange[0]);
-            int upperBound = Integer.parseInt(priceRange[1]);
-            if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound) {
-                System.out.println("Khoảng giá không hợp lệ, vui lòng nhập lại!");
-                checkRange = false;
-            } else {
-                boolean checkOut = false;
-                for (int i = 0; i < models.size(); i++) {
-                    if (models.get(i).getPriceModel() >= lowerBound && models.get(i).getPriceModel() <= upperBound) {
-                        results.add(models.get(i));
-                        checkOut = true;
-                    }
+            try {
+                int lowerBound = Integer.parseInt(priceRange[0]);
+                int upperBound = Integer.parseInt(priceRange[1]);
+                if (input.equals("0")) {
+                    checkRange = true;
+                    customerView.launcher();
                 }
-                if (!checkOut) {
-                    System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
+                if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound) {
+                    System.out.println("Khoảng giá không hợp lệ, vui lòng nhập lại!");
                     checkRange = false;
                 } else {
-                    checkRange = true;
+                    boolean checkOut = false;
+                    for (int i = 0; i < models.size(); i++) {
+                        if (models.get(i).getPriceModel() >= lowerBound && models.get(i).getPriceModel() <= upperBound) {
+                            results.add(models.get(i));
+                            checkOut = true;
+                        }
+                    }
+                    if (!checkOut) {
+                        System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
+                        checkRange = false;
+                    } else {
+                        checkRange = true;
+                    }
                 }
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.out.println("Cú pháp không hợp lệ, vui lòng nhập lại!");
+                checkRange = false;
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkRange);
         showModelList(results);
@@ -1385,8 +1418,7 @@ public class ModelView {
                 int upperBound = Integer.parseInt(ageRange[1]);
                 if (input.equals("0")) {
                     checkRange = true;
-                    ModelView modelView = new ModelView();
-                    modelView.searchModel();
+                    customerView.launcher();
                 }
                 if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
                     System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
@@ -1423,29 +1455,39 @@ public class ModelView {
 
         boolean checkHeight = false;
         do {
-            noChange();
-            System.out.println("Nhập chiều cao tối thiểu (Vd 1m45): ");
-            String minHeightString = scanner.nextLine();
-            double minHeight = Double.parseDouble(minHeightString);
-            System.out.println("Nhập chiều cao tối đa (Vd 1m55): ");
-            String maxHeightString = scanner.nextLine();
-            double maxHeight = Double.parseDouble(maxHeightString);
-            if (minHeight > maxHeight) {
-                System.out.println("Chiều cao tối thiểu phải nhỏ hơn chiều cao tối đa!");
-            } else {
-                boolean checkOut = false;
-                for (int i = 0; i < models.size(); i++) {
-                    String heightString = models.get(i).getHeight();
-                    double height = Double.parseDouble(heightString);
-                    if (height >= minHeight && height <= maxHeight) {
-                        results.add(models.get(i));
-                        checkOut = true;
+            try {
+                noChange();
+                System.out.println("Nhập chiều cao tối thiểu (Cm): ");
+                int minHeight = Integer.parseInt(scanner.nextLine());
+                String minHeightString = "" + minHeight;
+                if (minHeightString.equals("0")) {
+                    checkHeight = true;
+                    customerView.launcher();
+                }
+                System.out.println("Nhập chiều cao tối đa (Cm): ");
+                int maxHeight = Integer.parseInt(scanner.nextLine());
+                if (minHeight > maxHeight) {
+                    System.out.println("Chiều cao tối thiểu phải nhỏ hơn chiều cao tối đa!");
+                } else if (minHeight < 0 || minHeight > 200 || maxHeight < 0 || maxHeight > 200) {
+                    System.out.println("Chiều cao phải lớn hơn 0 và nhỏ hơn 200, vui lòng nhập lại!");
+                } else {
+                    boolean checkOut = false;
+                    for (int i = 0; i < models.size(); i++) {
+                        int height = models.get(i).getHeight();
+                        if (height >= minHeight && height <= maxHeight) {
+                            results.add(models.get(i));
+                            checkOut = true;
+                        }
                     }
+                    if (!checkOut) {
+                        System.out.println("Không tìm thấy model trong khoảng chiều cao này!");
+                    }
+                    checkHeight = true;
                 }
-                if (!checkOut) {
-                    System.out.println("Không tìm thấy model trong khoảng chiều cao này!");
-                }
-                checkHeight = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Chiều cao phải là 1 số, vui lòng nhập lại!");
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkHeight);
         showModelList(results);
@@ -1458,26 +1500,39 @@ public class ModelView {
 
         boolean checkWeight = false;
         do {
-            noChange();
-            System.out.println("Nhập cân nặng tối thiểu (kg): ");
-            int minWeight = scanner.nextInt();
-            System.out.println("Nhập cân nặng tối đa (kg): ");
-            int maxWeight = scanner.nextInt();
-            if (minWeight > maxWeight) {
-                System.out.println("Cân nặng tối thiểu phải nhỏ hơn cân nặng tối đa!");
-            } else {
-                boolean checkOut = false;
-                for (int i = 0; i < models.size(); i++) {
-                    int weight = models.get(i).getWeight();
-                    if (weight >= minWeight && weight <= maxWeight) {
-                        results.add(models.get(i));
-                        checkOut = true;
+            try {
+                noChange();
+                System.out.println("Nhập cân nặng tối thiểu (Kg): ");
+                int minWeight = Integer.parseInt(scanner.nextLine());
+                String minHeightString = "" + minWeight;
+                if (minHeightString.equals("0")) {
+                    checkWeight = true;
+                    customerView.launcher();
+                }
+                System.out.println("Nhập cân nặng tối đa (Kg): ");
+                int maxWeight = Integer.parseInt(scanner.nextLine());
+                if (minWeight > maxWeight) {
+                    System.out.println("Cân nặng tối thiểu phải nhỏ hơn cân nặng tối đaa!");
+                } else if (minWeight < 0 || minWeight > 120 || maxWeight < 0 || maxWeight > 120) {
+                    System.out.println("Cân nặng phải lớn hơn 0 và nhỏ hơn 120, vui lòng nhập lại!");
+                } else {
+                    boolean checkOut = false;
+                    for (int i = 0; i < models.size(); i++) {
+                        int weight = models.get(i).getWeight();
+                        if (weight >= minWeight && weight <= maxWeight) {
+                            results.add(models.get(i));
+                            checkOut = true;
+                        }
                     }
+                    if (!checkOut) {
+                        System.out.println("Không tìm thấy model trong khoảng cân nặng này!");
+                    }
+                    checkWeight = true;
                 }
-                if (!checkOut) {
-                    System.out.println("Không tìm thấy model trong khoảng cân nặng này!");
-                }
-                checkWeight = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Cân nặng phải là 1 số, vui lòng nhập lại!");
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkWeight);
         showModelList(results);

@@ -2,6 +2,8 @@ package model;
 
 import utils.CurrencyFormat;
 import repository.IModel;
+import utils.HeightFormat;
+import utils.WeightFormat;
 
 
 public class Model implements IModel<Model> {
@@ -10,7 +12,7 @@ public class Model implements IModel<Model> {
     private EGender type;
     private String nameModel;
     private int  age;
-    private String height;
+    private int height;
     private int weight;
     private int quantityModel;
     private String phoneNumberModel;
@@ -21,7 +23,7 @@ public class Model implements IModel<Model> {
     public Model() {
     }
 
-    public Model(int id, double price, EGender type, String name, int age, String height, int weight, int quantity, String phoneNumber, String address, String description) {
+    public Model(int id, double price, EGender type, String name, int age, int height, int weight, int quantity, String phoneNumber, String address, String description) {
         this.idModel = id;
         this.priceModel = price;
         this.type = type;
@@ -67,11 +69,11 @@ public class Model implements IModel<Model> {
         this.age = age;
     }
 
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -158,7 +160,7 @@ public class Model implements IModel<Model> {
         EGender type = EGender.getEGenderByName(strings[2]);
         String nameModel = strings[3];
         int age = Integer.parseInt(strings[4]);
-        String height = strings[5];
+        int height = Integer.parseInt(strings[5]);
         int weight = Integer.parseInt(strings[6]);
         int quantityModel = Integer.parseInt(strings[7]);
         String phoneNumberModel = strings[8];
@@ -180,14 +182,14 @@ public class Model implements IModel<Model> {
         return model;
     }
     public String modelViewAdmin() {
-        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, this.height, this.weight, this.phoneNumberModel, this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
+        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, HeightFormat.formatHeight(this.height), WeightFormat.weightFormat(this.weight), this.phoneNumberModel, this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
     }
     public String modelView() {
-        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, this.height, this.weight, this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
+        return String.format("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", this.idModel, this.nameModel, this.type, this.age, HeightFormat.formatHeight(this.height), WeightFormat.weightFormat(this.weight), this.addressModel, CurrencyFormat.convertPriceToString(this.priceModel));
     }
     @Override
     public String toString() {
-        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age, this.height, this.weight, this.quantityModel, this.phoneNumberModel, this.addressModel, this.description);
+        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idModel, CurrencyFormat.parseInteger(this.priceModel), this.type, this.nameModel, this.age, HeightFormat.formatHeight(this.height), WeightFormat.weightFormat(this.weight), this.quantityModel, this.phoneNumberModel, this.addressModel, this.description);
 
     }
 

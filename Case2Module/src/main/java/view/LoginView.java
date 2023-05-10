@@ -127,8 +127,6 @@ public class LoginView {
         List<User> userList = userService.getAllUser();
         userList.sort(new SortUserById());
         User user = new User();
-//        int id, String username, String password, String fullName, String phoneNumber, EGender gender,
-//        long cccd, Date birthDay, String email, String address, ERole eRole
         System.out.println("Nhập các thông tin của bạn!");
         inputUserName(user);
         noChange();
@@ -165,7 +163,6 @@ public class LoginView {
             }
         } while (!checkGender);
 
-//        inputCCCD(user);
         boolean checkBirthDay = false;
         String date = null;
         do {
