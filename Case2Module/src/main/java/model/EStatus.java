@@ -1,10 +1,10 @@
 package model;
 
-public enum Status {
-    PAIN(1,"PAIN"),UNPAIN(2,"UNPAIN");
+public enum EStatus {
+    PAID(1,"PAID"),UNPAID(2,"UNPAID");
     private int id;
     private String name;
-    Status(int id, String name) {
+    EStatus(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -24,18 +24,18 @@ public enum Status {
     public void setName(String name) {
         this.name = name;
     }
-    public static Status getStatusById(int id) {
-        for (Status status : values()) {
+    public static EStatus getStatusById(int id) {
+        for (EStatus status : values()) {
             if (status.getId() == id) {
                 return status;
             }
         }
         return null;
     }
-    public static Status getStatusByName(String name) {
-        for (Status status : values()) {
-            if (status.getName().equals(name)) {
-                return status;
+    public static EStatus getStatusByName(String name) {
+        for (EStatus Status : values()) {
+            if (Status.getName().equals(name)) {
+                return Status;
             }
         }
         throw new IllegalArgumentException("Please re-enter");

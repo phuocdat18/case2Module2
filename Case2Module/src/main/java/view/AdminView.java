@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 public class AdminView {
-    private static final String FILE_ODER = "src/main/data/order.csv";
+    private static final String FILE_RENTAL = "src/main/data/rental.csv";
     private ModelView modelView;
     private OrderView orderView;
     private FileService fileService;

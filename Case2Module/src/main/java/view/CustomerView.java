@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 public class CustomerView {
-    private  final String FILE_PATH_ODER = "./src/main/data/order.csv";
+    private  final String FILE_PATH_RENTAL = "./src/main/data/rental.csv";
     private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv.csv";
     private UserService userService;
     private OrderView orderView;
@@ -30,15 +30,16 @@ public class CustomerView {
     public  void menuCustomerView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                                    Giao diện Customer                             ║");
-        System.out.println("                               ║                   [1] Xem danh sách người mẫu                                     ║");
-        System.out.println("                               ║                   [2] Tìm kiếm người mẫu                                          ║");
-        System.out.println("                               ║                   [3] Book người mẫu                                              ║");
-        System.out.println("                               ║                   [4] Chỉnh sửa danh sách người mẫu đã order                      ║");
-        System.out.println("                               ║                   [5] Xem lịch trình của người mẫu                                ║");
-        System.out.println("                               ║                   [6] Xem lịch sử Book                                            ║");
-        System.out.println("                               ║                   [7] Đơn hàng đã thanh toán                                      ║");
-        System.out.println("                               ║                   [8] Quản lý tài khoản                                           ║");
-        System.out.println("                               ║                   [9] Đăng xuất                                                   ║");
+        System.out.println("                               ║                   [1]  Xem danh sách người mẫu                                     ║");
+        System.out.println("                               ║                   [2]  Tìm kiếm người mẫu                                          ║");
+        System.out.println("                               ║                   [3]  Book người mẫu                                              ║");
+        System.out.println("                               ║                   [4]  Chỉnh sửa danh sách người mẫu đã order                      ║");
+        System.out.println("                               ║                   [5]  Xem lịch trình của người mẫu                                ║");
+        System.out.println("                               ║                   [6]  Xem lịch sử Book                                            ║");
+        System.out.println("                               ║                   [7]  Thanh toán                                                  ║");
+        System.out.println("                               ║                   [8]  Đơn hàng đã thanh toán                                      ║");
+        System.out.println("                               ║                   [9]  Quản lý tài khoản                                           ║");
+        System.out.println("                               ║                   [10] Đăng xuất                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcher() throws IOException, ParseException {
@@ -80,14 +81,18 @@ public class CustomerView {
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    orderView.showHistoryOderPaid();
+                    orderView.payOder();
                     checkAction = checkActionContinue();
                     break;
                 case 8:
-                    launcherAccount();
+                    orderView.showHistoryOderPaid();
                     checkAction = checkActionContinue();
                     break;
                 case 9:
+                    launcherAccount();
+                    checkAction = checkActionContinue();
+                    break;
+                case 10:
                     Menu menu = new Menu();
                     menu.login();
                     fileService.clearData(FILE_PATH_USERUSE);

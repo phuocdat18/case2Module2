@@ -8,6 +8,7 @@ import service.ModelService;
 import service.RentalService;
 import utils.*;
 
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -1309,8 +1310,9 @@ public class ModelView {
         boolean checkKW = false;
         do {
             noChange();
-            System.out.println("Nhập keyword bạn muốn tìm kiếm: ");
-            String kw = scanner.nextLine();
+            System.out.println("Nhập tên người mẫu bạn muốn tìm kiếm: ");
+//            String kw = scanner.nextLine();
+            String kw = scanner.nextLine().toUpperCase();
             if (kw.equals("0")) {
                 checkKW = true;
                 customerView.launcher();
@@ -1323,7 +1325,7 @@ public class ModelView {
                 }
             }
             if (!checkOut) {
-                System.out.println("Không tìm thấy món, vui lòng nhập lại!");
+                System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
                 checkKW = false;
             } else {
                 checkKW = true;
@@ -1331,6 +1333,7 @@ public class ModelView {
         } while (!checkKW);
         showModelList(results);
     }
+
 
     public void searchModelByPriceRange() throws IOException {
         CustomerView customerView = new CustomerView();
@@ -1366,6 +1369,7 @@ public class ModelView {
         showModelList(results);
     }
 
+
     public void searchModelByAgeRange() throws IOException {
         CustomerView customerView = new CustomerView();
         List<Model> results = new ArrayList<>();
@@ -1376,25 +1380,37 @@ public class ModelView {
             System.out.println("Nhập khoảng tuổi muốn tìm kiếm (ví dụ: 16 20): ");
             String input = scanner.nextLine();
             String[] ageRange = input.split(" ");
-            int lowerBound = Integer.parseInt(ageRange[0]);
-            int upperBound = Integer.parseInt(ageRange[1]);
-            if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
-                System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
-                checkRange = false;
-            } else {
-                boolean checkOut = false;
-                for (int i = 0; i < models.size(); i++) {
-                    if (models.get(i).getAge() >= lowerBound && models.get(i).getAge() <= upperBound) {
-                        results.add(models.get(i));
-                        checkOut = true;
-                    }
+            try {
+                int lowerBound = Integer.parseInt(ageRange[0]);
+                int upperBound = Integer.parseInt(ageRange[1]);
+                if (input.equals("0")) {
+                    checkRange = true;
+                    ModelView modelView = new ModelView();
+                    modelView.searchModel();
                 }
-                if (!checkOut) {
-                    System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
+                if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
+                    System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
                     checkRange = false;
                 } else {
-                    checkRange = true;
+                    boolean checkOut = false;
+                    for (int i = 0; i < models.size(); i++) {
+                        if (models.get(i).getAge() >= lowerBound && models.get(i).getAge() <= upperBound) {
+                            results.add(models.get(i));
+                            checkOut = true;
+                        }
+                    }
+                    if (!checkOut) {
+                        System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
+                        checkRange = false;
+                    } else {
+                        checkRange = true;
+                    }
                 }
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.out.println("Cú pháp không hợp lệ, vui lòng nhập lại!");
+                checkRange = false;
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkRange);
         showModelList(results);

@@ -1,8 +1,7 @@
 package service;
 
-import model.Order;
+
 import model.Rental;
-import repository.OrderAllRepository;
 import repository.RentalAllRepository;
 import repository.RentalRepository;
 import repository.RentalUpdateRepository;
@@ -18,22 +17,20 @@ public class RentalService
     public RentalService() {
         rentalRepository = new RentalRepository();
         rentalUpdateRepository = new RentalUpdateRepository();
+        rentalAllRepository = new RentalAllRepository();
     }
     public List<Rental> getAllRental() throws IOException {
         return rentalRepository.getAll();
     }
-//    public List<Rental> getAllOrderAll() throws IOException {
-//        return orderAllRepository.getAll();
-//    }
-//    public int checkIdOrderAll(int id) throws IOException {
-//        return orderAllRepository.checkID(id);
-//    }
+    public int checkIdRentalAll(int id) throws IOException {
+        return rentalAllRepository.checkID(id);
+    }
     public int checkIdOrder(int id) throws IOException {
         return rentalRepository.checkID(id);
     }
-//    public void deleteModelOutOrderAllById(int id) throws IOException {
-//        orderAllRepository.deleteById(id);
-//    }
+    public void deleteModelOutRentalAllById(int id) throws IOException {
+        rentalAllRepository.deleteById(id);
+    }
     public void deleteModelOutOrderById(int id) throws IOException {
         rentalRepository.deleteById(id);
 
@@ -56,9 +53,4 @@ public class RentalService
         return null;
     }
 
-//    public static void main(String[] args) throws IOException {
-//        RentalService rentalService = new RentalService();
-//        rentalService.getAllRental();
-//        System.out.println(rentalService.getAllRental().get(0));
-//    }
 }

@@ -3,7 +3,6 @@ package model;
 import repository.IModel;
 import utils.CurrencyFormat;
 import utils.FormatDateModel;
-import utils.ValidateUtils;
 
 import java.util.Date;
 
@@ -18,14 +17,15 @@ public class Rental implements IModel<Rental> {
     private double price;
     private double totalPrice;
     private Date createBill;
-    private Status status;
+    private EStatus status;
+
 
 
 
     public Rental() {
     }
 
-    public Rental(int idRental,int idCustomer, String nameCustomer, String nameModel, Date starDate, Date endDate, int quantityModel, double price, double totalPrice, Date createBill, Status status) {
+    public Rental(int idRental,int idCustomer, String nameCustomer, String nameModel, Date starDate, Date endDate, int quantityModel, double price, double totalPrice, Date createBill, EStatus status) {
         this.idRental = idRental;
         this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
@@ -113,11 +113,11 @@ public class Rental implements IModel<Rental> {
         this.nameCustomer = nameCustomer;
     }
 
-    public Status getStatus() {
+    public EStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(EStatus status) {
         this.status = status;
     }
 
@@ -129,6 +129,7 @@ public class Rental implements IModel<Rental> {
         this.quantityModel = quantityModel;
     }
 
+
     @Override
     public int getId() {
         return idRental;
@@ -137,7 +138,7 @@ public class Rental implements IModel<Rental> {
 
     @Override
     public String getName() {
-        return null;
+        return nameModel;
     }
 
     @Override
@@ -170,7 +171,8 @@ public class Rental implements IModel<Rental> {
         double priceModel = Double.parseDouble(strings[7]);
         double totalPrice = Double.parseDouble(strings[8]);
         Date createBill = FormatDateModel.parseDate2(strings[9]);
-        Status Status = model.Status.getStatusByName(strings[10]);
+        EStatus status = EStatus.getStatusByName(strings[10]);
+
 
 
         rental.setIdRental(idRental);
@@ -183,7 +185,7 @@ public class Rental implements IModel<Rental> {
         rental.setPrice(priceModel);
         rental.setTotalPrice(totalPrice);
         rental.setCreateBill(createBill);
-        rental.setStatus(Status);
+        rental.setStatus(status);
         return rental;
     }
 
@@ -193,7 +195,7 @@ public class Rental implements IModel<Rental> {
 
     @Override
     public String toString() {
-        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idRental, this.idCustomer, this.nameCustomer, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), this.quantityModel, CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill), this.status);
+        return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idRental, this.idCustomer, this.nameCustomer, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), this.quantityModel, CurrencyFormat.parseInteger(this.price), CurrencyFormat.parseInteger(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill), this.status);
     }
 }
 

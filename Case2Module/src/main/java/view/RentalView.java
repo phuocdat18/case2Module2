@@ -16,7 +16,7 @@ import java.util.*;
 
 
     public class RentalView {
-        private  final String FILE_PATH_MODEL = "Case2Module/src/main/data/rental.csv";
+        private  final String FILE_PATH_RENTAL = "Case2Module/src/main/data/rental.csv";
         private  FileService fileService;
         private  RentalService rentalService;
         private  Scanner scanner;
@@ -120,18 +120,18 @@ import java.util.*;
                 int m = 0;
                 int y = 0;
                 try {
-                    System.out.print("Please enter a month between 1 and 12 (e.g. 5): ");
+                    System.out.print("Vui lòng nhập tháng từ 1 đến 12 (Vd: 5): ");
                     m = input.nextInt();
                     if (m <= 0 || m > 12) {
-                        throw new IllegalArgumentException("Month must be between 1 and 12");
+                        throw new IllegalArgumentException("Số tháng phải nằm trong khoảng từ 1 đến 12");
                     }
-                    System.out.print("Please enter a full year (e.g. 2018): ");
+                    System.out.print("Vui lòng nhập số năm (Vd: 2023): ");
                     y = input.nextInt();
                     if (y <= 0) {
-                        throw new IllegalArgumentException("Year must be greater than 0");
+                        throw new IllegalArgumentException("Số năm phải lớn hơn 0");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number.");
+                    System.out.println("Dữ liệu nhập vào phải là 1 con số");
                     input.nextLine();
                     continue;
                 } catch (IllegalArgumentException e) {
@@ -209,7 +209,7 @@ import java.util.*;
                         throw new IllegalArgumentException("Số năm phải lớn hơn 0");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Dữ liệu nhập vào phải là 1 con số.");
+                    System.out.println("Dữ liệu nhập vào phải là 1 con số");
                     input.nextLine();
                     continue;
                 } catch (IllegalArgumentException e) {
@@ -274,16 +274,23 @@ import java.util.*;
         public void orderModel() throws ParseException, IOException {
             List<Rental> results = new ArrayList<>();
             List<Rental> rentals = rentalService.getAllRental();
+            CustomerView customerView = new CustomerView();
             int idModel = 0;
             boolean isInvalidId = true;
             while (isInvalidId) {
                 try {
+                    noChange();
                     System.out.println("Vui lòng nhap ID người mẫu");
                     idModel = Integer.parseInt(scanner.nextLine());
+                    String strIdModel = "" + idModel;
+                    if (strIdModel.equals("0")) {
+                        idModel = 3;
+                        customerView.launcher();
+                    }
                     if (idModel < 0) {
                         throw new IllegalArgumentException("ID không hợp lệ");
+
                     }
-                    // Kiểm tra ID có tồn tại trong cơ sở dữ liệu không.
                     ModelService modelService = new ModelService();
                     Model model = modelService.searchId(idModel);
                     if (model == null) {
@@ -336,19 +343,22 @@ import java.util.*;
                         throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
                     }
                     for (Rental rental : rentals) {
-                        if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
+                        if (rental.getIdRental() == idModel) {
+                            if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
 
-                            isInvalidDate = true;
-                            System.out.println("Ngày thuê đã bị trùng");
-                            break;
-                        } else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(startDateInput) > 0 || rental.getStartDate().compareTo(endDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0) {
+                                isInvalidDate = true;
+                                System.out.println("Ngày thuê đã bị trùng");
+                                break;
+                            } else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(startDateInput) > 0 || rental.getStartDate().compareTo(endDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0) {
 
-                            isInvalidDate = true;
-                            System.out.println("Ngày thuê đã bị trùng");
-                            break;
-                        }else {
-                            isInvalidDate = false;
+                                isInvalidDate = true;
+                                System.out.println("Ngày thuê đã bị trùng");
+                                break;
+                            }else {
+                                isInvalidDate = false;
+                            }
                         }
+
                     }
                     if (compareTwoDate(new Date(), startDateInput)) {
                         System.out.println("Ngày thuê đã bị quá hạn");
@@ -364,29 +374,24 @@ import java.util.*;
                 }
             }
 
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-//        LocalDate date = LocalDate.parse(startDateString, formatter);
-//        LocalDate endDate = date.plusDays(numberOfDays - 1);
-//        String result = formatter.format(endDate);
             Rental rental = new Rental();
             ModelService modelService = new ModelService();
             Model model = modelService.searchId(idModel);
             rentals.sort(new SortRentalById());
-//        rental.setIdRental(rentals.get(rentals.size()-1).getId() + 1);
             rental.setIdRental(model.getIdModel());
+            rental.setIdCustomer(UserService.userLoginning.getId());
+            rental.setNameCustomer(UserService.userLoginning.getName());
             rental.setNameModel(model.getName());
             rental.setStartDate(startDateInput);
             rental.setEndDate(endDateInput);
+            rental.setQuantityModel(model.getQuantityModel());
             rental.setPrice(model.getPriceModel());
             double totalPrice = numberOfDays * model.getPriceModel();
             rental.setTotalPrice(totalPrice);
             rental.setCreateBill(new Date());
-
-
-
-
+            rental.setStatus(EStatus.UNPAID);
             rentals.add(rental);
-            fileService.writeData(FILE_PATH_MODEL, rentals);
+            fileService.writeData(FILE_PATH_RENTAL, rentals);
 //        showModelRental(idModel);
             System.out.println(rental.rentalView());
             printMonth(rentals, rental.getStartDate(), rental.getEndDate(), idModel);

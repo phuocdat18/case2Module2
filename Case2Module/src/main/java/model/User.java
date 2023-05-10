@@ -42,7 +42,7 @@ public class User implements IModel<User> {
     public int getId() {
         return id;
     }
-    @Override
+
     public String getName() {
         return fullName;
     }
@@ -75,7 +75,6 @@ public class User implements IModel<User> {
         Date birthDay = FormatDateModel.parseDate(strings[6]);
         String email = strings[7];
         String address = ValidateUtils.parseCharToComma(strings[8]);
-//        Role role = Role.getRoleByName(strings[9]);
         Role role = Role.getRoleByName(strings[9]);
 
         user.setId(id);

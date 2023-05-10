@@ -23,7 +23,7 @@ public class RentalCalendar {
         int endYear = endCal.get(Calendar.YEAR);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        System.out.println("Rental calendar from " + dateFormat.format(startDate) + " to " + dateFormat.format(endDate));
+        System.out.println("Cho thuê từ ngày " + dateFormat.format(startDate) + " tới ngày " + dateFormat.format(endDate));
 
         for (int year = startYear; year <= endYear; year++) {
             int startMonthOfYear = (year == startYear) ? startMonth : Calendar.JANUARY;
