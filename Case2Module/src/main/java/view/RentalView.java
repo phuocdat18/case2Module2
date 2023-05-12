@@ -95,9 +95,11 @@ public class RentalView {
     }
 
 
-    public void printMonth(List<Rental> rentals, Date startDate, Date endDate, int idModel) throws IOException, ParseException, InterruptedException {
+    public void printMonth(List<Rental> rentals,List<Rental> rentalAll, Date startDate, Date endDate, int idModel) throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
+        UserService userService = new UserService();
         List<Rental> results = new ArrayList<>();
+        List<User> users = userService.getAllUserUse();
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
         int startMonth = startCal.get(Calendar.MONTH);
@@ -109,7 +111,11 @@ public class RentalView {
         int endYear = endCal.get(Calendar.YEAR);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        System.out.println("Rental calendar from " + dateFormat.format(startDate) + " to " + dateFormat.format(endDate));
+        System.out.println();
+        System.out.println("Bạn đã book người mẫu từ ngày " + dateFormat.format(startDate) + " đến ngày " + dateFormat.format(endDate));
+        System.out.println();
+        Thread.sleep(1000);
+        System.out.println("Kiểm tra lại lịch trình bằng tháng");
 
 
         boolean checkMonth = false;
@@ -121,6 +127,11 @@ public class RentalView {
             try {
                 System.out.print("Vui lòng nhập tháng từ 1 đến 12 (Vd: 5): ");
                 m = input.nextInt();
+                String number = "" + m;
+                if (number.equals("0")) {
+                    checkMonth = true;
+                    customerView.launcherCustomer();
+                }
                 if (m <= 0 || m > 12) {
                     throw new IllegalArgumentException("Số tháng phải nằm trong khoảng từ 1 đến 12");
                 }
@@ -156,22 +167,53 @@ public class RentalView {
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month - 1, i);
                 boolean isRentalDay = false;
-                for (Rental rental : rentals) {
+                List<Rental> rentals1 = new ArrayList<>();
+                List<Rental> rentalsAll1 = new ArrayList<>();
+                for (Rental rental : rentalAll) {
                     if (rental.getIdRental() == idModel) {
                         if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
                             isRentalDay = true;
+                            rentalsAll1.add(rental);
                             break;
                         } else {
                             if ((rental.getStartDate().compareTo(cal.getTime()) < 0 && rental.getEndDate().compareTo(cal.getTime()) > 0)) {
                                 isRentalDay = true;
+                                rentalsAll1.add(rental);
                                 break;
                             }
                         }
                     }
-
+                }
+                for (Rental rental : rentals) {
+                    if (rental.getIdRental() == idModel) {
+                        if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
+                            isRentalDay = true;
+                            rentals1.add(rental);
+                            break;
+                        } else {
+                            if ((rental.getStartDate().compareTo(cal.getTime()) < 0 && rental.getEndDate().compareTo(cal.getTime()) > 0)) {
+                                isRentalDay = true;
+                                rentals1.add(rental);
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (isRentalDay) {
-                    System.out.print("\u001B[31m");
+                    for (Rental rental : rentals1) {
+                        if (rental.getIdCustomer() == users.get(0).getId()) {
+                            System.out.print("\u001B[32m");
+                        } else {
+                            System.out.print("\u001B[31m");
+                        }
+                    }
+                    for (Rental rental : rentalsAll1) {
+                        if (rental.getIdCustomer() == users.get(0).getId()) {
+                            System.out.print("\u001B[32m");
+                        } else {
+                            System.out.print("\u001B[31m");
+                        }
+                    }
                 }
                 System.out.printf("%-4d", i);
                 if (isRentalDay) {
@@ -181,12 +223,11 @@ public class RentalView {
         }
         while (checkMonth);
         System.out.println();
-        customerView.launcherCustomer();
+        printMonthFind(rentalAll, rentals, idModel);
 
     }
 
     public void printMonthFind(List<Rental> rentalAll, List<Rental> rentals, int searchId) throws IOException, ParseException {
-
         CustomerView customerView = new CustomerView();
         UserService userService = new UserService();
         List<Rental> results = new ArrayList<>();
@@ -275,28 +316,26 @@ public class RentalView {
                         }
                     }
                 }
-
-                    if (isRentalDay) {
-                        for (Rental rental : rentals1) {
-                                if (rental.getIdCustomer() == users.get(0).getId()) {
-                                    System.out.print("\u001B[32m");
-                                }else {
-                                    System.out.print("\u001B[31m");
-                            }
-                        }
-                        for (Rental rental : rentalsAll1) {
-                                if (rental.getIdCustomer() == users.get(0).getId()) {
-                                    System.out.print("\u001B[32m");
-                                }else {
-                                    System.out.print("\u001B[31m");
-                            }
+                if (isRentalDay) {
+                    for (Rental rental : rentals1) {
+                        if (rental.getIdCustomer() == users.get(0).getId()) {
+                            System.out.print("\u001B[32m");
+                        } else {
+                            System.out.print("\u001B[31m");
                         }
                     }
+                    for (Rental rental : rentalsAll1) {
+                        if (rental.getIdCustomer() == users.get(0).getId()) {
+                            System.out.print("\u001B[32m");
+                        } else {
+                            System.out.print("\u001B[31m");
+                        }
+                    }
+                }
                 System.out.printf("%-4d", i);
                 if (isRentalDay) {
                     System.out.print("\u001B[0m");
                 }
-
             }
         }
         while (checkMonth);
@@ -315,7 +354,6 @@ public class RentalView {
     }
 
     public void orderModel() throws ParseException, IOException, InterruptedException {
-        List<Rental> results = new ArrayList<>();
         List<Rental> rentals = rentalService.getAllRental();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
         CustomerView customerView = new CustomerView();
@@ -328,7 +366,6 @@ public class RentalView {
                 idModel = Integer.parseInt(scanner.nextLine());
                 String strIdModel = "" + idModel;
                 if (strIdModel.equals("0")) {
-                    idModel = 3;
                     customerView.launcherCustomer();
                 }
                 if (idModel < 0) {
@@ -402,7 +439,6 @@ public class RentalView {
                             isInvalidDate = false;
                         }
                     }
-
                 }
                 if (compareTwoDate(new Date(), startDateInput)) {
                     System.out.println("Ngày thuê đã bị quá hạn");
@@ -436,18 +472,26 @@ public class RentalView {
         rental.setStatus(EStatus.UNPAID);
         rentals.add(rental);
         fileService.writeData(FILE_PATH_RENTAL, rentals);
-//        showModelRental(idModel);
+
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         System.out.println(rental.rentalView());
-        printMonth(rentals, rental.getStartDate(), rental.getEndDate(), idModel);
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
+        printMonth(rentals, rentalAll, rental.getStartDate(), rental.getEndDate(), idModel);
     }
 
     public void showModelRental(int idModel) throws IOException {
         List<Rental> rentals = rentalService.getAllRental();
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         for (Rental rental : rentals) {
             if (rental.getIdRental() == idModel) {
                 System.out.println(rental.rentalView());
             }
         }
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
     }
 
     public static void noChange() {
