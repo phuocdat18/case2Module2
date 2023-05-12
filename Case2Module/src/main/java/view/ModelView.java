@@ -78,7 +78,7 @@ public class ModelView {
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
-    public void launcher() throws IOException, ParseException {
+    public void launcher() throws IOException, ParseException, InterruptedException {
         boolean checkAction = false;
         int select = 0;
         do {
@@ -157,7 +157,7 @@ public class ModelView {
     }
 
 
-    public void editModelById() throws IOException, ParseException {
+    public void editModelById() throws IOException, ParseException, InterruptedException {
         showModelList();
         Model model = new Model();
         List<Model> results = new ArrayList<>();
@@ -467,7 +467,7 @@ public class ModelView {
         showModelListAdmin(models);
     }
 
-    public void findModelById() throws IOException, ParseException {
+    public void findModelById() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
         boolean checkAction = false;
         noChange();
@@ -512,7 +512,7 @@ public class ModelView {
         } while (!checkAction);
     }
 
-    public void deleteModelById() throws IOException, ParseException {
+    public void deleteModelById() throws IOException, ParseException, InterruptedException {
         showModelList();
         List<Model> models = modelService.getAllModel();
         List<Model> modelsUpdate = modelService.getAllModelUpdate();
@@ -560,7 +560,7 @@ public class ModelView {
     }
 
 
-    public void addModel() throws IOException, ParseException {
+    public void addModel() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
         List<Model> modelsUpdate = modelService.getAllModelUpdate();
         Model model = new Model();
@@ -840,7 +840,7 @@ public class ModelView {
         System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
-    public void showModelListStepModelAdmin() throws IOException, ParseException {
+    public void showModelListStepModelAdmin() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
         System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
         System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Kinh nghiệm").println();
@@ -854,7 +854,7 @@ public class ModelView {
         modelViewAdmin();
     }
 
-    public void showModelListStepModel() throws IOException, ParseException {
+    public void showModelListStepModel() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
         System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
         System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
@@ -934,7 +934,7 @@ public class ModelView {
         rentalView.printMonthFind(rentalAll,rentals, searchId);
     }
 
-    public void showModelListByTypeAdmin() throws IOException, ParseException {
+    public void showModelListByTypeAdmin() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
 
         String typeOfModel;
@@ -973,7 +973,7 @@ public class ModelView {
         System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
-    public void showModelListByType() throws IOException, ParseException {
+    public void showModelListByType() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
 
         String typeOfModel;
@@ -1026,7 +1026,7 @@ public class ModelView {
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
-    public void modelViewAdmin() throws IOException, ParseException {
+    public void modelViewAdmin() throws IOException, ParseException, InterruptedException {
 //        LoginView loginView = new LoginView();
         int select = 0;
         boolean checkAction = false;
@@ -1080,7 +1080,7 @@ public class ModelView {
         }
     }
 
-    public void modelView() throws IOException, ParseException {
+    public void modelView() throws IOException, ParseException, InterruptedException {
 //        LoginView loginView = new LoginView();
         int select = 0;
         boolean checkAction = false;
@@ -1215,7 +1215,7 @@ public class ModelView {
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
-    public void searchModel() throws IOException, ParseException {
+    public void searchModel() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
 
         String typeOfModel;
@@ -1317,7 +1317,7 @@ public class ModelView {
 
 
 
-    public void searchModelById() throws IOException, ParseException {
+    public void searchModelById() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
         List<Model> results = new ArrayList<>();
@@ -1365,7 +1365,7 @@ public class ModelView {
     }
 
 
-    public void searchModelByKeyword() throws IOException, ParseException {
+    public void searchModelByKeyword() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
@@ -1438,6 +1438,8 @@ public class ModelView {
                 checkRange = false;
             } catch (ParseException e) {
                 throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkRange);
         showModelList(results);
@@ -1482,7 +1484,7 @@ public class ModelView {
             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 System.out.println("Cú pháp không hợp lệ, vui lòng nhập lại!");
                 checkRange = false;
-            } catch (ParseException e) {
+            } catch (ParseException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         } while (!checkRange);
@@ -1529,6 +1531,8 @@ public class ModelView {
                 System.out.println("Chiều cao phải là 1 số, vui lòng nhập lại!");
             } catch (ParseException e) {
                 throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         } while (!checkHeight);
         showModelList(results);
@@ -1573,6 +1577,8 @@ public class ModelView {
             } catch (NumberFormatException e) {
                 System.out.println("Cân nặng phải là 1 số, vui lòng nhập lại!");
             } catch (ParseException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         } while (!checkWeight);

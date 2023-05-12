@@ -30,7 +30,7 @@ public class OrderView {
     }
 
 
-    public void deleteModelOutOderByIdOder() throws IOException, ParseException {
+    public void deleteModelOutOderByIdOder() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
@@ -111,7 +111,7 @@ public class OrderView {
         }
     }
 
-    public void findOderById() throws IOException, ParseException {
+    public void findOderById() throws IOException, ParseException, InterruptedException {
         AdminView adminView = new AdminView();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
         List<Rental> rentals = rentalService.getAllRental();
@@ -173,7 +173,7 @@ public class OrderView {
 
     }
 
-    public void showHistoryOder() throws IOException, ParseException {
+    public void showHistoryOder() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
@@ -242,7 +242,7 @@ public class OrderView {
         }
     }
 
-    public void payOder() throws IOException, ParseException {
+    public void payOder() throws IOException, ParseException, InterruptedException {
         FileService fileService = new FileService();
         CustomerView customerView = new CustomerView();
         List<Rental> rentals = rentalService.getAllRental();
@@ -309,7 +309,7 @@ public class OrderView {
         System.out.println("✔ Bạn đã thanh toán thành công ✔\n");
     }
 
-    public void showRevenueByDay() throws IOException, ParseException {
+    public void showRevenueByDay() throws IOException, ParseException, InterruptedException {
         AdminView adminView = new AdminView();
         noChange();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
@@ -356,7 +356,7 @@ public class OrderView {
         }
     }
 
-    public void showRevenueByMonth() throws IOException, ParseException {
+    public void showRevenueByMonth() throws IOException, ParseException, InterruptedException {
         AdminView adminView = new AdminView();
         noChange();
         List<Rental> rentalAll = rentalService.getAllRentalAll();

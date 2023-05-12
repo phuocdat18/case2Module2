@@ -175,8 +175,12 @@ public class User implements IModel<User> {
 
 
 
+    public String userViewAdmin() {
+        return String.format("            ║%-7s║%-22s║%-13s║%-22s║%-13s║%-13s║%-13s║%-20s║%-25s║", this.id, this.username, this.password, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
+    }
+
     public String userView() {
-        return String.format("            ║%-7s║%-18s║%-18s║%-25s║%-15s║%-15s║%-15s║%-25s║%-25s║", this.id, this.username, this.password, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
+        return String.format("            ║%-7s║%-22s║%-22s║%-13s║%-13s║%-13s║%-20s║%-25s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
     }
 
     @Override

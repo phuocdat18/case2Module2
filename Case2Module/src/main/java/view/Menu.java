@@ -23,7 +23,7 @@ public class Menu {
         System.out.println();
     }
 
-    public void login() throws IOException, ParseException {
+    public void login() throws IOException, ParseException, InterruptedException {
         int select;
         boolean checkAction = false;
         do {
@@ -58,18 +58,18 @@ public class Menu {
         } while (!checkAction);
     }
 
-    public void signUp() throws IOException, ParseException {
+    public void signUp() throws IOException, ParseException, InterruptedException {
         LoginView loginView = new LoginView();
         loginView.signUp();
     }
 
-    public void admin() throws IOException, ParseException {
+    public void admin() throws IOException, ParseException, InterruptedException {
         LoginView loginView = new LoginView();
         loginView.loginAdmin();
 
     }
 
-    public void customer() throws IOException, ParseException {
+    public void customer() throws IOException, ParseException, InterruptedException {
         LoginView loginView = new LoginView();
         loginView.loginCustomer();
     }

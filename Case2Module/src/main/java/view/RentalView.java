@@ -45,7 +45,7 @@ public class RentalView {
         return true;
     }
 
-    public void showCalendarModel() throws IOException, ParseException {
+    public void showCalendarModel() throws IOException, ParseException, InterruptedException {
         int number = 0;
         boolean checkAction = false;
         String type = null;
@@ -95,7 +95,7 @@ public class RentalView {
     }
 
 
-    public void printMonth(List<Rental> rentals, Date startDate, Date endDate, int idModel) throws IOException, ParseException {
+    public void printMonth(List<Rental> rentals, Date startDate, Date endDate, int idModel) throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Rental> results = new ArrayList<>();
         Calendar startCal = Calendar.getInstance();
@@ -219,7 +219,7 @@ public class RentalView {
                 System.out.println("Dữ liệu nhập vào phải là 1 con số");
                 input.nextLine();
                 continue;
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | InterruptedException e) {
                 System.out.println(e.getMessage());
                 continue;
             }
@@ -314,7 +314,7 @@ public class RentalView {
         return sameDay;
     }
 
-    public void orderModel() throws ParseException, IOException {
+    public void orderModel() throws ParseException, IOException, InterruptedException {
         List<Rental> results = new ArrayList<>();
         List<Rental> rentals = rentalService.getAllRental();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
@@ -345,6 +345,8 @@ public class RentalView {
                 System.out.println("ID phải là số nguyên");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
 

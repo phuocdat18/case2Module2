@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class CustomerView {
     private  final String FILE_PATH_RENTAL = "./src/main/data/rental.csv";
-    private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv.csv";
+    private final String FILE_PATH_USERUSE = "./src/main/data/userUse.csv";
     private UserService userService;
     private OrderView orderView;
     private ModelView modelView;
@@ -44,7 +44,7 @@ public class CustomerView {
         System.out.println("                               ║                   [10] Đăng xuất                                                  ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherCustomer() throws IOException, ParseException {
+    public void launcherCustomer() throws IOException, ParseException, InterruptedException {
         int select = 0;
         boolean checkAction = false;
         do {
@@ -124,15 +124,9 @@ public class CustomerView {
         System.out.println("                               ║                         [9] Quay lại                                              ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherAccount() throws IOException, ParseException {
-//        CustomerView customerView = new CustomerView();
-//        boolean checkAction = false;
-//        List<User> users = userService.getAllUserUse();
-//        List<User> user = userService.getAllUser();
-//        int idUser = UserService.userLoginning.getId();
+    public void launcherAccount() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
-        int idUser = 2;
-//        int idUser = UserService.userLoginning.getId();
+        int idUser = UserService.userLoginning.getId();
         boolean checkAction = false;
         int select;
         do {
@@ -155,27 +149,27 @@ public class CustomerView {
                     checkAction = checkActionContinue();
                     break;
                 case 3:
-                    loginView.editUsername();
+                    loginView.editUsername(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 4:
-                    loginView.editPassWord();
+                    loginView.editPassWord(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    loginView.editPhoneNumber();
+                    loginView.editPhoneNumber(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 6:
-                    loginView.editBirthday();
+                    loginView.editBirthday(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    loginView.editEmail();
+                    loginView.editEmail(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 8:
-                    loginView.editAddress();
+                    loginView.editAddress(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 9:

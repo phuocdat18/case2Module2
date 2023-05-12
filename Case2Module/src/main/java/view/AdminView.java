@@ -28,7 +28,7 @@ public class AdminView {
         System.out.println("                               ║                                 [5] Đăng xuất                                     ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherAdmin() throws IOException, ParseException {
+    public void launcherAdmin() throws IOException, ParseException, InterruptedException {
         LoginView loginView = new LoginView();
         int select = 0;
         boolean checkAction = false;
@@ -84,7 +84,7 @@ public class AdminView {
         System.out.println("                               ║                       [5] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherOder() throws IOException, ParseException {
+    public void launcherOder() throws IOException, ParseException, InterruptedException {
         OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;
@@ -141,7 +141,7 @@ public class AdminView {
     }
 
 
-    public void launcherUser() throws IOException, ParseException {
+    public void launcherUser() throws IOException, ParseException, InterruptedException {
         OrderView orderView = new OrderView();
         LoginView loginView = new LoginView();
         int select = 0;
@@ -191,7 +191,7 @@ public class AdminView {
         System.out.println("                               ║                       [4] Quay lại                                                ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcherRevenue() throws IOException, ParseException {
+    public void launcherRevenue() throws IOException, ParseException, InterruptedException {
         OrderView orderView = new OrderView();
         int select = 0;
         boolean checkAction = false;
@@ -233,7 +233,7 @@ public class AdminView {
         }
     }
 
-    public void launcherAccount(int idUser) throws IOException, ParseException {
+    public void launcherAccount(int idUser) throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         LoginView loginView = new LoginView();
         boolean checkAction = false;
@@ -250,7 +250,7 @@ public class AdminView {
             }
             switch (select) {
                 case 1:
-                    loginView.showInfoAccount(idUser);
+                    loginView.showInfoAccountAdmin(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 2:
@@ -258,27 +258,27 @@ public class AdminView {
                     checkAction = checkActionContinue();
                     break;
                 case 3:
-                    loginView.editUsername();
+                    loginView.editUsername(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 4:
-                    loginView.editPassWord();
+                    loginView.editPassWord(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    loginView.editPhoneNumber();
+                    loginView.editPhoneNumber(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 6:
-                    loginView.editBirthday();
+                    loginView.editBirthday(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    loginView.editEmail();
+                    loginView.editEmail(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 8:
-                    loginView.editAddress();
+                    loginView.editAddress(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 9:
