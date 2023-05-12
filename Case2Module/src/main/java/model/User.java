@@ -176,7 +176,7 @@ public class User implements IModel<User> {
 
 
     public String userView() {
-        return String.format("            ║%-7s║%-15s║%-20s║%-15s║%-15s║%-15s║%-30s║%-30s║", this.id, this.username, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
+        return String.format("            ║%-7s║%-18s║%-18s║%-25s║%-15s║%-15s║%-15s║%-25s║%-25s║", this.id, this.username, this.password, this.fullName, this.phoneNumber, this.gender.getName(), FormatDateModel.convertDateToString(this.birthDay), this.email, this.address);
     }
 
     @Override

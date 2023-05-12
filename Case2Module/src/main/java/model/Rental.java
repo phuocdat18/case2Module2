@@ -14,8 +14,8 @@ public class Rental implements IModel<Rental> {
     private Date startDate;
     private Date endDate;
     private int quantityModel;
-    private double price;
-    private double totalPrice;
+    private int price;
+    private int totalPrice;
     private Date createBill;
     private EStatus status;
 
@@ -25,7 +25,7 @@ public class Rental implements IModel<Rental> {
     public Rental() {
     }
 
-    public Rental(int idRental,int idCustomer, String nameCustomer, String nameModel, Date starDate, Date endDate, int quantityModel, double price, double totalPrice, Date createBill, EStatus status) {
+    public Rental(int idRental,int idCustomer, String nameCustomer, String nameModel, Date starDate, Date endDate, int quantityModel, int price, int totalPrice, Date createBill, EStatus status) {
         this.idRental = idRental;
         this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
@@ -73,19 +73,19 @@ public class Rental implements IModel<Rental> {
         this.endDate = endDate;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public double getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -168,8 +168,8 @@ public class Rental implements IModel<Rental> {
         Date starDate = FormatDateModel.parseDate(strings[4]);
         Date endDate = FormatDateModel.parseDate(strings[5]);
         int quantityModel = Integer.parseInt(strings[6]);
-        double priceModel = Double.parseDouble(strings[7]);
-        double totalPrice = Double.parseDouble(strings[8]);
+        int priceModel = Integer.parseInt(strings[7]);
+        int totalPrice = Integer.parseInt(strings[8]);
         Date createBill = FormatDateModel.parseDate2(strings[9]);
         EStatus status = EStatus.getStatusByName(strings[10]);
 
@@ -190,7 +190,7 @@ public class Rental implements IModel<Rental> {
     }
 
     public String rentalView() {
-        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-15s║ %-15s║ %-14s║%-15s║", this.idRental, this.idCustomer, this.nameCustomer, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), this.quantityModel, CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill), this.status);
+        return String.format("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", this.idRental, this.idCustomer, this.nameCustomer, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill), this.status);
     }
 
     @Override
@@ -198,137 +198,3 @@ public class Rental implements IModel<Rental> {
         return String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", this.idRental, this.idCustomer, this.nameCustomer, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), this.quantityModel, CurrencyFormat.parseInteger(this.price), CurrencyFormat.parseInteger(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill), this.status);
     }
 }
-
-
-
-
-
-//public class Rental implements IModel<Rental> {
-//    private  int idRental;
-//    private String nameModel;
-//    private Date startDate;
-//    private Date endDate;
-//    private double price;
-//    private double totalPrice;
-//    private Date createBill;
-//
-//
-//    public Rental() {
-//    }
-//
-//    public Rental(int idRental, String nameModel, Date starDate, Date endDate, double price, double totalPrice, Date createBill) {
-//        this.idRental = idRental;
-//        this.nameModel = nameModel;
-//        this.startDate = starDate;
-//        this.endDate = endDate;
-//        this.price = price;
-//        this.totalPrice = totalPrice;
-//        this.createBill = createBill;
-//    }
-//
-//
-//
-//    public int getIdRental() {
-//        return idRental;
-//    }
-//
-//    public void setIdRental(int idRental) {
-//        this.idRental = idRental;
-//    }
-//
-//    public String getNameModel() {
-//        return nameModel;
-//    }
-//
-//    public void setNameModel(String nameModel) {
-//        this.nameModel = nameModel;
-//    }
-//
-//    public Date getStartDate() {
-//        return startDate;
-//    }
-//
-//    public void setStartDate(Date startDate) {
-//        this.startDate = startDate;
-//    }
-//
-//    public Date getEndDate() {
-//        return endDate;
-//    }
-//
-//    public void setEndDate(Date endDate) {
-//        this.endDate = endDate;
-//    }
-//
-//    public double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(double price) {
-//        this.price = price;
-//    }
-//
-//    public double getTotalPrice() {
-//        return totalPrice;
-//    }
-//
-//    public void setTotalPrice(double totalPrice) {
-//        this.totalPrice = totalPrice;
-//    }
-//
-//    public Date getCreateBill() {
-//        return createBill;
-//    }
-//
-//    public void setCreateBill(Date createBill) {
-//        this.createBill = createBill;
-//    }
-//
-//
-//    @Override
-//    public int getId() {
-//        return 0;
-//    }
-//
-//
-//    @Override
-//    public String getName() {
-//        return nameModel;
-//    }
-//
-//    @Override
-//    public void update(Rental obj) {
-//
-//    }
-//
-//    @Override
-//    public Rental parseData(String line) {
-//        Rental rental = new Rental();
-//        String[] strings = line.split(";");
-//        int idRental = Integer.parseInt(strings[0]);
-//        String nameModel = strings[1];
-//        Date starDate = FormatDateModel.parseDate(strings[2]);
-//        Date endDate = FormatDateModel.parseDate(strings[3]);
-//        Double priceModel = Double.parseDouble(strings[4]);
-//        Double totalPrice = Double.parseDouble(strings[5]);
-//        Date createBill = FormatDateModel.parseDate2(strings[6]);
-//
-//
-//        rental.setIdRental(idRental);
-//        rental.setNameModel(nameModel);
-//        rental.setStartDate(starDate);
-//        rental.setEndDate(endDate);
-//        rental.setPrice(priceModel);
-//        rental.setTotalPrice(totalPrice);
-//        rental.setCreateBill(createBill);
-//        return rental;
-//    }
-//
-//    public String rentalView() {
-//        return String.format("            ║ %-6s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║", this.idRental, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill));
-//    }
-//    @Override
-//    public String toString() {
-//        return String.format("%s;%s;%s;%s;%s;%s;%s", this.idRental, this.nameModel, FormatDateModel.convertDateToString(this.startDate), FormatDateModel.convertDateToString(this.endDate), CurrencyFormat.convertPriceToString(this.price), CurrencyFormat.convertPriceToString(this.totalPrice), FormatDateModel.convertDateToString2(this.createBill));
-//    }
-//}

@@ -51,7 +51,7 @@ public class OrderView {
             String inputID = scanner.nextLine();
             if (inputID.equals("0")) {
                 checkId = true;
-                customerView.launcher();
+                customerView.launcherCustomer();
             }
             if (ValidateUtils.isId(idModel, inputID)) {
                 idModel = Integer.parseInt(inputID);
@@ -87,7 +87,7 @@ public class OrderView {
                                 String inputQuantity = "1";
                                 if (inputQuantity.equals("0")) {
                                     checkId = true;
-                                    customerView.launcher();
+                                    customerView.launcherCustomer();
                                 }
                                 checkValid = ValidateUtils.isQuantity(quantity, inputQuantity);
                                 if (!checkValid) {
@@ -107,7 +107,7 @@ public class OrderView {
                                 }
                             } while (!checkQuantity);
                             int quantityNew = rentals.get(index).getQuantityModel() + quantity;
-                            double total = rentals.get(index).getPrice() * quantityNew;
+                            int total = rentals.get(index).getPrice() * quantityNew;
                             rental.setIdRental(rentals.get(index).getIdRental());
                             rental.setIdCustomer(rentals.get(index).getIdCustomer());
                             rental.setNameCustomer(rentals.get(index).getNameCustomer());
@@ -142,7 +142,7 @@ public class OrderView {
                                 String inputQuantity = "1";
                                 if (inputQuantity.equals("0")) {
                                     checkId = true;
-                                    customerView.launcher();
+                                    customerView.launcherCustomer();
                                 }
                                 checkValid = ValidateUtils.isQuantity(quantity, inputQuantity);
                                 if (!checkValid) {
@@ -161,7 +161,7 @@ public class OrderView {
                                     }
                                 }
                             } while (!checkQuantity);
-                            double price = 0;
+                            int price = 0;
                             for (int j = 0; j < models.size(); j++) {
                                 if (models.get(j).getIdModel() == idModel) {
                                     price = models.get(j).getPriceModel();
@@ -170,7 +170,7 @@ public class OrderView {
                             }
 
 
-                            double totalMoney = quantity * price;
+                            int totalMoney = quantity * price;
                             rental.setIdRental(rentals.get(rentals.size() - 1).getIdRental() + 1);
                             rental.setIdCustomer(users.get(0).getId());
                             rental.setNameCustomer(users.get(0).getFullName());
@@ -195,7 +195,7 @@ public class OrderView {
                             String inputQuantity = "1";
                             if (inputQuantity.equals("exit")) {
                                 checkId = true;
-                                customerView.launcher();
+                                customerView.launcherCustomer();
                             }
                             checkValid = ValidateUtils.isQuantity(quantity, inputQuantity);
                             if (!checkValid) {
@@ -214,14 +214,14 @@ public class OrderView {
                                 }
                             }
                         } while (!checkQuantity);
-                        double price = 0;
+                        int price = 0;
                         for (int j = 0; j < models.size(); j++) {
                             if (models.get(j).getIdModel() == idModel) {
                                 price = models.get(j).getPriceModel();
                                 models.get(j).setQuantityModel(models.get(j).getQuantityModel() - quantity);
                             }
                         }
-                        double totalMoney = quantity * price;
+                        int totalMoney = quantity * price;
                         rental.setIdRental(1);
                         rental.setIdCustomer(users.get(0).getId());
                         rental.setNameCustomer(users.get(0).getFullName());
@@ -284,7 +284,7 @@ public class OrderView {
                         break;
                     case "0":
                         checkEdit = true;
-                        customerView.launcher();
+                        customerView.launcherCustomer();
                         break;
                     default:
                         checkEdit = false;
@@ -303,7 +303,7 @@ public class OrderView {
                 String inputID = scanner.nextLine();
                 if (inputID.equals("0")) {
                     checkId = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 if (ValidateUtils.isId(idOrder, inputID)) {
                     idOrder = Integer.parseInt(inputID);
@@ -327,7 +327,7 @@ public class OrderView {
                             String inputQuantity = "1";
                             if (inputQuantity.equals("0")) {
                                 checkId = true;
-                                customerView.launcher();
+                                customerView.launcherCustomer();
                             }
                             checkValid = ValidateUtils.isQuantity(quantity, inputQuantity);
                             if (checkValid) {
@@ -403,7 +403,7 @@ public class OrderView {
                         break;
                     case "0":
                         checkEdit = true;
-                        customerView.launcher();
+                        customerView.launcherCustomer();
                         break;
                     default:
                         checkEdit = false;
@@ -423,7 +423,7 @@ public class OrderView {
                 String inputID = scanner.nextLine();
                 if (inputID.equals("0")) {
                     checkId = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 if (ValidateUtils.isId(idOrder, inputID)) {
                     idOrder = Integer.parseInt(inputID);
@@ -461,6 +461,7 @@ public class OrderView {
     public void findOderById() throws IOException, ParseException {
         AdminView adminView = new AdminView();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
         noChange();
         int idOrder = 0;
         boolean checkIdOrder = false;
@@ -479,15 +480,20 @@ public class OrderView {
             int select = rentalService.checkIdRentalAll(idOrder);
             switch (select) {
                 case 1:
-                    System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-                    System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-                    System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                    System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+                    System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+                    System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
                     for (int i = 0; i < rentalAll.size(); i++) {
                         if (rentalAll.get(i).getIdRental() == idOrder) {
                             System.out.printf(rentalAll.get(i).rentalView()).println();
                         }
                     }
-                    System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+                    for (int i = 0; i < rentals.size(); i++) {
+                        if (rentals.get(i).getIdRental() == idOrder) {
+                            System.out.printf(rentals.get(i).rentalView()).println();
+                        }
+                    }
+                    System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
                     checkIdOrder = true;
                     break;
                 case -1:
@@ -502,15 +508,15 @@ public class OrderView {
     public void showOderNow() throws IOException {
         List<Rental> rentals = rentalService.getAllRental();
         List<User> users = userService.getAllUserUse();
-        System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-        System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-        System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         for (int i = 0; i < rentals.size(); i++) {
             if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                 System.out.printf(rentals.get(i).rentalView()).println();
             }
         }
-        System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
 
     }
 
@@ -538,7 +544,7 @@ public class OrderView {
                         break;
                     case "0":
                         checkEdit = true;
-                        customerView.launcher();
+                        customerView.launcherCustomer();
                         break;
                     default:
                         checkEdit = false;
@@ -546,15 +552,15 @@ public class OrderView {
                 }
             } while (!checkEdit);
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentals.size(); i++) {
                 if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                     System.out.printf(rentals.get(i).rentalView()).println();
                 }
             }
-            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+            System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         }
     }
 
@@ -571,15 +577,15 @@ public class OrderView {
         if (count == 0) {
             System.out.println("Bạn chưa có đơn hàng nào đã thanh toán. Không thể xem book!");
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getIdCustomer() == user.getId() && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
-            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+            System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         }
     }
 
@@ -590,7 +596,7 @@ public class OrderView {
         List<Rental> rentalsNew = new ArrayList<>();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
         List<User> users = userService.getAllUserUse();
-        double totalMoney = 0;
+        int totalMoney = 0;
         int count = 0;
         for (int i = 0; i < rentals.size(); i++) {
             if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
@@ -611,7 +617,7 @@ public class OrderView {
                         break;
                     case "0":
                         checkEdit = true;
-                        customerView.launcher();
+                        customerView.launcherCustomer();
                         break;
                     default:
                         checkEdit = false;
@@ -619,9 +625,9 @@ public class OrderView {
                 }
             } while (!checkEdit);
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME FOOD", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentals.size(); i++) {
                 if (rentals.get(i).getIdCustomer() == users.get(0).getId()) {
                     totalMoney += rentals.get(i).getTotalPrice();
@@ -630,9 +636,9 @@ public class OrderView {
                     rentalAll.add(rentals.get(i));
                 }
             }
-            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                TỔNG TIỀN CẦN THANH TOÁN                                                ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalMoney)).println();
-            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            System.out.println("            ╠══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╬═════════════╬═════════════════════════╩══════════╣");
+            System.out.printf("            ║                                          TỔNG TIỀN CẦN THANH TOÁN                                   ║%-13s║                                    ║", CurrencyFormat.convertPriceToString(totalMoney)).println();
+            System.out.println("            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════╩═════════════╩════════════════════════════════════╝");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getIdRental() == users.get(0).getId()) {
                     rentalAll.get(i).setStatus(EStatus.PAID);
@@ -660,7 +666,7 @@ public class OrderView {
             String date = null;
             boolean checkDate = false;
             do {
-                System.out.println("Nhập ngày tháng năm bạn muốn xem doanh thu: dd-MM-yyyy");
+                System.out.println("Nhập ngày tháng năm bạn muốn xem doanh thu: dd/MM/yyyy");
                 date = scanner.nextLine();
                 if (date.equals("0")) {
                     checkDate = true;
@@ -668,31 +674,31 @@ public class OrderView {
                 }
                 checkDate = ValidateUtils.isDay(date);
                 if (!checkDate) {
-                    System.out.println("Ngày tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: dd-MM-yyyy");
+                    System.out.println("Ngày tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: dd/MM/yyyy");
                 }
             } while (!checkDate);
             int count = 0;
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
+                if (FormatDateModel.convertDateToString(rentalAll.get(i).getEndDate()).contains(date) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                     count += 1;
                 }
             }
             if (count == 0) {
                 System.out.println("Ngày bạn muốn xem không có doanh thu!");
             } else {
-                double totalRevenueByDay = 0;
-                System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-                System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-                System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                int totalRevenueByDay = 0;
+                System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+                System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+                System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
                 for (int i = 0; i < rentalAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(date) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
+                    if (FormatDateModel.convertDateToString(rentalAll.get(i).getEndDate()).contains(date) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                         totalRevenueByDay += rentalAll.get(i).getTotalPrice();
                         System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
                 }
-                System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalRevenueByDay)).println();
-                System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+                System.out.println("            ╠══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╬═════════════╬═════════════════════════╩══════════╣");
+                System.out.printf("            ║                                          TỔNG DOANH THU THEO NGÀY                                   ║%-13s║                                    ║", CurrencyFormat.convertPriceToString(totalRevenueByDay)).println();
+                System.out.println("            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════╩═════════════╩════════════════════════════════════╝");
             }
         }
     }
@@ -707,7 +713,7 @@ public class OrderView {
             String month = null;
             boolean checkMonth = false;
             do {
-                System.out.println("Nhập tháng năm bạn muốn xem doanh thu: MM-yyyy");
+                System.out.println("Nhập tháng năm bạn muốn xem doanh thu: MM/yyyy");
                 month = scanner.nextLine();
                 if (month.equals("0")) {
                     checkMonth = true;
@@ -715,31 +721,31 @@ public class OrderView {
                 }
                 checkMonth = ValidateUtils.isMonth(month);
                 if (!checkMonth) {
-                    System.out.println("Tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: MM-yyyy");
+                    System.out.println("Tháng năm bạn nhập không hợp lệ, vui lòng nhập lại: MM/yyyy");
                 }
             } while (!checkMonth);
             int count = 0;
             for (int i = 0; i < rentalAll.size(); i++) {
-                if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
+                if (FormatDateModel.convertDateToString(rentalAll.get(i).getEndDate()).contains(month) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                     count += 1;
                 }
             }
             if (count == 0) {
                 System.out.println("Tháng bạn muốn xem không có doanh thu!");
             } else {
-                double totalRevenueByMonth = 0;
-                System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-                System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-                System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+                int totalRevenueByMonth = 0;
+                System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+                System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+                System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
                 for (int i = 0; i < rentalAll.size(); i++) {
-                    if (FormatDateModel.convertDateToString2(rentalAll.get(i).getCreateBill()).contains(month) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
+                    if (FormatDateModel.convertDateToString(rentalAll.get(i).getEndDate()).contains(month) && rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                         totalRevenueByMonth += rentalAll.get(i).getTotalPrice();
                         System.out.printf(rentalAll.get(i).rentalView()).println();
                     }
                 }
-                System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-                System.out.printf("            ║                                                  TỔNG DOANH THU THEO NGÀY                                              ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalRevenueByMonth)).println();
-                System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+                System.out.println("            ╠══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╬═════════════╬═════════════════════════╩══════════╣");
+                System.out.printf("            ║                                          TỔNG DOANH THU THEO THÁNG                                  ║%-13s║                                    ║", CurrencyFormat.convertPriceToString(totalRevenueByMonth)).println();
+                System.out.println("            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════╩═════════════╩════════════════════════════════════╝");
             }
         }
     }
@@ -749,53 +755,63 @@ public class OrderView {
         if (rentalAll.isEmpty()) {
             System.out.println("Doanh thu hiện tại không có!");
         } else {
-            double totalRevenue = 0;
+            int totalRevenue = 0;
             for (int i = 0; i < rentalAll.size(); i++) {
                 totalRevenue += rentalAll.get(i).getTotalPrice();
             }
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
-            System.out.println("            ╠═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╬═══════════════╬═══════════════════════════════╩════════════════╣");
-            System.out.printf("            ║                                                            TỔNG DOANH THU                                              ║ %-13s ║                                                ║", CurrencyFormat.convertPriceToString(totalRevenue)).println();
-            System.out.println("            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╩═══════════════╩════════════════════════════════════════════════╝");
+            System.out.println("            ╠══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╬═════════════╬═════════════════════════╩══════════╣");
+            System.out.printf("            ║                                                TỔNG DOANH THU                                       ║%-13s║                                    ║", CurrencyFormat.convertPriceToString(totalRevenue)).println();
+            System.out.println("            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════╩═════════════╩════════════════════════════════════╝");
         }
     }
 
     public void showOderAll() throws IOException {
         List<Rental> rentalAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
         if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
                 System.out.printf(rentalAll.get(i).rentalView()).println();
             }
-            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+            for (int i = 0; i < rentals.size(); i++) {
+                System.out.printf(rentals.get(i).rentalView()).println();
+            }
+            System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         }
     }
 
     public void showOderUnPaid() throws IOException {
         List<Rental> rentalAll = rentalService.getAllRentalAll();
+        List<Rental> rentals = rentalService.getAllRental();
         if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getStatus().equals(EStatus.UNPAID)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
-            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+            for (int i = 0; i < rentals.size(); i++) {
+                if (rentals.get(i).getStatus().equals(EStatus.UNPAID)) {
+                    System.out.printf(rentals.get(i).rentalView()).println();
+                }
+            }
+            System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         }
     }
 
@@ -804,15 +820,15 @@ public class OrderView {
         if (rentalAll.isEmpty()) {
             System.out.println("Hiện tại chưa có đơn hàng nào!");
         } else {
-            System.out.println("            ╔═══════╦═══════════════╦══════════════════════════════╦═══════════════════════════════╦════════════════╦════════════════╦═══════════════╦═══════════════════════════════╦════════════════╗");
-            System.out.printf("            ║%7s║ %-14s║ %-29s║ %-30s║ %-15s║ %-15s║ %-14s║ %-30s║ %-15s║", "ID ODER", "ID CUSTOMER", "NAME CUSTOMER", "NAME MODEL", "QUANTITY", "PRICE", "TOTAL MONEY", "CREATE DATE ODER", "STATUS").println();
-            System.out.println("            ╠═══════╬═══════════════╬══════════════════════════════╬═══════════════════════════════╬════════════════╬════════════════╬═══════════════╬═══════════════════════════════╬════════════════╣");
+            System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+            System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+            System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
             for (int i = 0; i < rentalAll.size(); i++) {
                 if (rentalAll.get(i).getStatus().equals(EStatus.PAID)) {
                     System.out.printf(rentalAll.get(i).rentalView()).println();
                 }
             }
-            System.out.println("            ╚═══════╩═══════════════╩══════════════════════════════╩═══════════════════════════════╩════════════════╩════════════════╩═══════════════╩═══════════════════════════════╩════════════════╝");
+            System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         }
     }
 

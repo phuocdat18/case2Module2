@@ -6,23 +6,21 @@ import model.Rental;
 import service.FileService;
 import service.ModelService;
 import service.RentalService;
+import service.UserService;
 import utils.*;
 
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.*;
 
 public class ModelView {
     private final String FILE_PATH_MODEL = "Case2Module/src/main/data/model.csv";
     private final String FILE_PATH_MODEL_UPDATE = "Case2Module/src/main/data/modelUpdate.csv";
-    private FileService fileService;
-    private ModelService modelService;
-    private Scanner scanner;
-    private RentalService rentalService;
+    private final FileService fileService;
+    private final ModelService modelService;
+    private final Scanner scanner;
+    private final RentalService rentalService;
 
     public ModelView() {
         fileService = new FileService();
@@ -31,6 +29,40 @@ public class ModelView {
         rentalService = new RentalService();
     }
 
+
+    public boolean checkActionContinueAdmin() {
+        boolean checkActionContinue = false;
+        do {
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Admin!");
+            String choice = scanner.nextLine().trim().toUpperCase();
+            switch (choice) {
+                case "Y":
+                    return false;
+                case "N":
+                    return true;
+                default:
+                    checkActionContinue = false;
+            }
+        } while (!checkActionContinue);
+        return true;
+    }
+
+    public boolean checkActionContinue() {
+        boolean checkActionContinue = false;
+        do {
+            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Customer!");
+            String choice = scanner.nextLine().trim().toUpperCase();
+            switch (choice) {
+                case "Y":
+                    return false;
+                case "N":
+                    return true;
+                default:
+                    checkActionContinue = false;
+            }
+        } while (!checkActionContinue);
+        return true;
+    }
 
 
     public void menuModelAdminView() {
@@ -86,7 +118,7 @@ public class ModelView {
                     break;
                 case 7:
                     AdminView adminView = new AdminView();
-                    adminView.launcher();
+                    adminView.launcherAdmin();
                     checkAction = checkActionContinue();
                     break;
                 case 8:
@@ -102,43 +134,10 @@ public class ModelView {
         } while (!checkAction);
         if (checkAction) {
             AdminView adminView = new AdminView();
-            adminView.launcher();
+            adminView.launcherAdmin();
         }
     }
 
-    public boolean checkActionContinueAdmin() {
-        boolean checkActionContinue = false;
-        do {
-            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Admin!");
-            String choice = scanner.nextLine().trim().toUpperCase();
-            switch (choice) {
-                case "Y":
-                    return false;
-                case "N":
-                    return true;
-                default:
-                    checkActionContinue = false;
-            }
-        } while (!checkActionContinue);
-        return true;
-    }
-
-    public boolean checkActionContinue() {
-        boolean checkActionContinue = false;
-        do {
-            System.out.println("Nhập \"Y\" để quay về giao diện trước đó, nhập \"N\" để quay về giao diện Customer!");
-            String choice = scanner.nextLine().trim().toUpperCase();
-            switch (choice) {
-                case "Y":
-                    return false;
-                case "N":
-                    return true;
-                default:
-                    checkActionContinue = false;
-            }
-        } while (!checkActionContinue);
-        return true;
-    }
 
     public void menuEditModelView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
@@ -368,7 +367,7 @@ public class ModelView {
                                     checkAction = true;
                                     break;
                                     case 7:
-                                        double price = 0;
+                                        int price = 0;
                                         boolean checkValidPrice = false;
                                         do {
                                             noChange();
@@ -379,7 +378,7 @@ public class ModelView {
                                                 launcher();
                                             }
                                             try {
-                                                price = Double.parseDouble(input1);
+                                                price = Integer.parseInt(input1);
                                             } catch (NumberFormatException numberFormatException) {
                                                 System.out.println("Nhập lỗi, giá phải là một số, vui lòng nhập lại!");
                                                 price = 0;
@@ -421,7 +420,7 @@ public class ModelView {
                                         break;
                                     case 10:
                                         AdminView adminView = new AdminView();
-                                        adminView.launcher();
+                                        adminView.launcherAdmin();
                                         checkAction = true;
                                         break;
                                     case 11:
@@ -456,17 +455,16 @@ public class ModelView {
     public void sortByPriceIncrease() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByPriceIncrease());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByPriceIncreaseAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByPriceIncrease());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
-//        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelListAdmin(models);
     }
 
     public void findModelById() throws IOException, ParseException {
@@ -671,7 +669,7 @@ public class ModelView {
                         }
                     } while (!checkValidQuantity2);
 
-                    double price = 0;
+                    int price = 0;
                     boolean checkValidPrice = false;
                     do {
                         noChange();
@@ -682,7 +680,7 @@ public class ModelView {
                             launcher();
                         }
                         try {
-                            price = Double.parseDouble(input);
+                            price = Integer.parseInt(input);
                         } catch (NumberFormatException numberFormatException) {
                             System.out.println("Nhập lỗi, giá phải là một số, vui lòng nhập lại");
                             price = 0;
@@ -822,76 +820,118 @@ public class ModelView {
 
     public void showModelListAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╣");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (Model model : models) {
             System.out.printf(model.modelViewAdmin()).println();
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
     public void showModelList() throws IOException {
         List<Model> models = modelService.getAllModel();
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╣");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (Model model : models) {
             System.out.printf(model.modelView()).println();
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
     public void showModelListStepModelAdmin() throws IOException, ParseException {
         List<Model> models = modelService.getAllModel();
         System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
-         System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Mô tả").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╣");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (Model model : models) {
             System.out.printf(model.modelViewAdmin()).println();
 
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
         boolean checkShow = false;
         modelViewAdmin();
     }
 
     public void showModelListStepModel() throws IOException, ParseException {
         List<Model> models = modelService.getAllModel();
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╣");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (Model model : models) {
             System.out.printf(model.modelView()).println();
 
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
         boolean checkShow = false;
         modelView();
     }
 
     public void showModelList(List<Model> models) throws IOException {
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╣");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (Model model : models) {
             System.out.printf(model.modelView()).println();
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
+    }
+
+    public void showModelListAdmin(List<Model> models) throws IOException {
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
+        for (Model model : models) {
+            System.out.printf(model.modelView()).println();
+        }
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
 
-    public  void showModelRental(int searchId) throws IOException, ParseException {
+    public  void showModelRental1(int searchId) throws IOException, ParseException {
         RentalService rentalService = new RentalService();
         List<Rental> rentals = rentalService.getAllRental();
-        for (Rental rental : rentals) {
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
+        for (Rental rental : rentalAll) {
             if (rental.getIdRental() == searchId) {
                 System.out.println(rental.rentalView());
             }
         }
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         Rental rental = new Rental();
         RentalView rentalView = new RentalView();
-        rentalView.printMonthFind(rentals, searchId);
+        rentalView.printMonthFind(rentalAll,rentals, searchId);
+    }
+
+
+    public void showModelRental(int searchId) throws IOException, ParseException {
+        RentalService rentalService = new RentalService();
+        List<Rental> rentals = rentalService.getAllRental();
+        List<Rental> rentalAll = rentalService.getAllRentalAll();
+        Date currentDate = new Date(); // Ngày hiện tại
+
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
+        for (Rental rental : rentals) {
+            Date rentalDate = rental.getEndDate(); // Ngày thuê của rental
+            if (rental.getIdRental() == searchId && rentalDate.after(currentDate) && rental.getIdCustomer() == UserService.userLoginning.getId()) {
+                System.out.println(rental.rentalView());
+            }
+        }
+        for (Rental rental : rentalAll) {
+            Date rentalDate = rental.getEndDate(); // Ngày thuê của rental
+            if (rental.getIdRental() == searchId && rentalDate.after(currentDate) && rental.getIdCustomer() == UserService.userLoginning.getId()) {
+                System.out.println(rental.rentalView());
+            }
+        }
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
+        RentalView rentalView = new RentalView();
+        rentalView.printMonthFind(rentalAll,rentals, searchId);
     }
 
     public void showModelListByTypeAdmin() throws IOException, ParseException {
@@ -921,16 +961,16 @@ public class ModelView {
             }
         } while (!checkType);
         models.sort(new SortModelByIDIncrease());
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá").println();
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╗");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (int i = 0; i < models.size(); i++) {
             if (models.get(i).getType().getName().equals(typeOfModel)) {
                 System.out.printf(models.get(i).modelViewAdmin()).println();
             }
 
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
     public void showModelListByType() throws IOException, ParseException {
@@ -960,16 +1000,16 @@ public class ModelView {
             }
         } while (!checkType);
         models.sort(new SortModelByIDIncrease());
-        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá").println();
-        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╣");
+        System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+        System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (int i = 0; i < models.size(); i++) {
             if (models.get(i).getType().getName().equals(typeOfModel)) {
                 System.out.printf(models.get(i).modelView()).println();
             }
 
         }
-        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╝");
+        System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
     }
 
 
@@ -1023,7 +1063,7 @@ public class ModelView {
                     break;
                 case 6:
                     AdminView adminView = new AdminView();
-                    adminView.launcher();
+                    adminView.launcherAdmin();
                     break;
                 case 7:
                     Menu menu = new Menu();
@@ -1077,7 +1117,7 @@ public class ModelView {
                     break;
                 case 6:
                     CustomerView customerView = new CustomerView();
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                     break;
                 case 7:
                     Menu menu = new Menu();
@@ -1090,71 +1130,72 @@ public class ModelView {
             }
         } while (!checkAction);
         if (checkAction) {
-            launcher();
+            CustomerView customerView = new CustomerView();
+            customerView.launcherCustomer();
         }
     }
 
     public void sortByNameIncreaseAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByName());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelListAdmin();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelListAdmin(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByNameIncrease() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByName());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByAgeIncreaseAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByAge());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelListAdmin();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelListAdmin(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByAgeIncrease() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByAge());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByHeightIncreaseAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByHeight());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelListAdmin();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelListAdmin(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByHeightIncrease() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByHeight());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByWeightIncreaseAdmin() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByWeight());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelListAdmin();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelListAdmin(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
     public void sortByWeightIncrease() throws IOException {
         List<Model> models = modelService.getAllModel();
         models.sort(new SortModelByWeight());
-        fileService.writeData(FILE_PATH_MODEL, models);
-        showModelList();
+//        fileService.writeData(FILE_PATH_MODEL, models);
+        showModelList(models);
 //        System.out.println("✔ Bạn đã sắp xếp sản phẩm thành công ✔\n");
     }
 
@@ -1221,7 +1262,7 @@ public class ModelView {
                     break;
                 case 8:
                     CustomerView customerView = new CustomerView();
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                     checkAction = checkActionContinue();
                     break;
                 case 9:
@@ -1306,11 +1347,11 @@ public class ModelView {
                 case 1:
                     for (int i = 0; i < models.size(); i++) {
                         if (models.get(i).getIdModel() == id) {
-                            System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╗");
-                            System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá").println();
-                            System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╣");
+                            System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+                            System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+                            System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
                             System.out.printf(models.get(i).modelView()).println();
-                            System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╝");
+                            System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
                         }
                     }
                     checkAction = true;
@@ -1337,7 +1378,7 @@ public class ModelView {
             String kw = scanner.nextLine().toUpperCase();
             if (kw.equals("0")) {
                 checkKW = true;
-                customerView.launcher();
+                customerView.launcherCustomer();
             }
             boolean checkOut = false;
             for (int i = 0; i < models.size(); i++) {
@@ -1372,7 +1413,7 @@ public class ModelView {
                 int upperBound = Integer.parseInt(priceRange[1]);
                 if (input.equals("0")) {
                     checkRange = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound) {
                     System.out.println("Khoảng giá không hợp lệ, vui lòng nhập lại!");
@@ -1418,7 +1459,7 @@ public class ModelView {
                 int upperBound = Integer.parseInt(ageRange[1]);
                 if (input.equals("0")) {
                     checkRange = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
                     System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
@@ -1462,7 +1503,7 @@ public class ModelView {
                 String minHeightString = "" + minHeight;
                 if (minHeightString.equals("0")) {
                     checkHeight = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 System.out.println("Nhập chiều cao tối đa (Cm): ");
                 int maxHeight = Integer.parseInt(scanner.nextLine());
@@ -1507,7 +1548,7 @@ public class ModelView {
                 String minHeightString = "" + minWeight;
                 if (minHeightString.equals("0")) {
                     checkWeight = true;
-                    customerView.launcher();
+                    customerView.launcherCustomer();
                 }
                 System.out.println("Nhập cân nặng tối đa (Kg): ");
                 int maxWeight = Integer.parseInt(scanner.nextLine());

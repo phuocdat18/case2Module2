@@ -1,20 +1,46 @@
 package utils;
 
 import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Locale;
 
 public class CurrencyFormat {
-    public static String convertPriceToString(double price) {
-        Locale localeVN = new Locale("en", "US", "USD");
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
-        String formattedAmount = currencyFormatter.format(price);
-        return formattedAmount;
+//    public static String convertPriceToString(int price) {
+//        Locale locale = new Locale("en", "US");
+//        Currency currency = Currency.getInstance("USD");
+//
+//        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+//        currencyFormatter.setCurrency(currency);
+//
+//        String formattedAmount = currencyFormatter.format(price);
+//        formattedAmount = formattedAmount.replaceAll("\\D+", "") + currency.getSymbol();
+//        return formattedAmount;
+//    }
+
+
+    public static String convertPriceToString(int price) {
+        StringBuilder formattedAmount = new StringBuilder();
+        formattedAmount.append("$");
+        String priceStr = String.valueOf(price);
+        int digits = priceStr.length();
+        int count = 0;
+        for (int i = digits - 1; i >= 0; i--) {
+            char digit = priceStr.charAt(i);
+            if (count > 0 && count % 3 == 0 && i != 0) {
+                formattedAmount.insert(1, ".");
+            }
+            formattedAmount.insert(1, digit);
+            count++;
+        }
+        return formattedAmount.toString();
     }
-    public static double parseDouble(String price) {
+
+
+    public static int parseDouble(String price) {
         String priceNew = price.replaceAll("\\D+", "");
-        return Double.parseDouble(priceNew);
+        return Integer.parseInt(priceNew);
     }
-    public static int parseInteger(double price) {
+    public static int parseInteger(int price) {
         String price1 = String.valueOf(price);
         String priceNew = price1.replaceAll("\\D+\\d", "");
         return Integer.parseInt(priceNew);

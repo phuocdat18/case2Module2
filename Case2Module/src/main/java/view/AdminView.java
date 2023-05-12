@@ -28,7 +28,7 @@ public class AdminView {
         System.out.println("                               ║                                 [5] Đăng xuất                                     ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
-    public void launcher() throws IOException, ParseException {
+    public void launcherAdmin() throws IOException, ParseException {
         LoginView loginView = new LoginView();
         int select = 0;
         boolean checkAction = false;
@@ -71,7 +71,7 @@ public class AdminView {
             }
         }while (!checkAction);
         if(checkAction) {
-            launcher();
+            launcherAdmin();
         }
     }
     public  void menuOderManager(){
@@ -116,7 +116,7 @@ public class AdminView {
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    launcher();
+                    launcherAdmin();
                     checkAction = checkActionContinue();
                     break;
                 default:
@@ -126,7 +126,7 @@ public class AdminView {
             }
         }while (!checkAction);
         if(checkAction) {
-            launcher();
+            launcherAdmin();
         }
     }
     public  void menuRevenue(){
@@ -166,7 +166,7 @@ public class AdminView {
                     checkAction = checkActionContinue();
                     break;
                 case 4:
-                    launcher();
+                    launcherAdmin();
                     checkAction = checkActionContinue();
                     break;
                 default:
@@ -176,7 +176,7 @@ public class AdminView {
             }
         }while (!checkAction);
         if(checkAction) {
-            launcher();
+            launcherAdmin();
         }
     }
     public boolean checkActionContinue() {

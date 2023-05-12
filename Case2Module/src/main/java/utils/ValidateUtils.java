@@ -8,9 +8,9 @@ public class ValidateUtils {
     public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}$";
-    public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)$"; //01-01-2023
+    public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
     public static final  String BIRTHDAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
-    public static final String MONTH_REGEX = "^(0?[1-9]|1[012])-((19|20)\\d\\d)$"; // 04-2023
+    public static final String MONTH_REGEX = "^(0?[1-9]|1[012])/((19|20)\\d\\d)$"; // 04/2023
     public static final String FULLNAME_REGEX = "^[\\p{L} \\.'-]+$";
     public static final String NAMEMODEL_REGEX = "^[\\p{L}0-9\\s\\.\\,\\-'()]{1,40}$";
     public static final String ADDREE_REGEX = "^([^. ][.]*[ ]?)+$";

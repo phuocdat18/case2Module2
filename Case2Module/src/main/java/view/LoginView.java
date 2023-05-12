@@ -1,7 +1,6 @@
 package view;
 
 import model.EGender;
-import model.Model;
 import model.Role;
 import model.User;
 import service.FileService;
@@ -12,7 +11,9 @@ import utils.ValidateUtils;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,7 +79,7 @@ public class LoginView {
                 count++;
             } else {
                 AdminView adminView = new AdminView();
-                adminView.launcher();
+                adminView.launcherAdmin();
             }
         } while (count != 3);
         if (count == 3) {
@@ -114,7 +115,7 @@ public class LoginView {
                 userList.add(user);
                 fileService.writeData(FILE_PATH_USERUSE, userList);
                 CustomerView customerView = new CustomerView();
-                customerView.launcher();
+                customerView.launcherCustomer();
             }
         } while (count != 3);
         if (count == 3) {
@@ -173,14 +174,14 @@ public class LoginView {
                 menu.login();
             }
             checkBirthDay = ValidateUtils.isBirthDay(date);
-            if(!checkBirthDay) {
+            if (!checkBirthDay) {
                 System.out.println("Nhập lỗi, vui lòng nhập lại!");
             }
-        }while (!checkBirthDay);
+        } while (!checkBirthDay);
         inputEmail(user);
         noChange();
         System.out.println("Nhập địa chỉ của bạn:");
-        String inputAddress = scanner.nextLine() ;
+        String inputAddress = scanner.nextLine();
         if (inputAddress.equals("0")) {
             menu.login();
         }
@@ -219,7 +220,7 @@ public class LoginView {
             if (checkEmailAvailable) {
                 System.out.println("Email đã tồn tại vui lòng nhập lại!");
                 checkEmail = false;
-            }else {
+            } else {
                 checkEmail = true;
             }
         } while (!checkEmail);
@@ -264,7 +265,7 @@ public class LoginView {
                 noChange();
                 System.out.println("Nhập số điện thoại của bạn:");
                 phoneNumber = scanner.nextLine();
-                if(phoneNumber.equals("0")) {
+                if (phoneNumber.equals("0")) {
                     checkPhoneNumber = true;
                     menu.login();
                 }
@@ -277,12 +278,13 @@ public class LoginView {
             if (checkPhoneNumberAvailable) {
                 System.out.println("Số điện thoại đã tồn tại vui lòng nhập lại!");
                 checkPhoneNumber = false;
-            }else {
+            } else {
                 checkPhoneNumber = true;
             }
         } while (!checkPhoneNumber);
         user.setPhoneNumber(phoneNumber);
     }
+
     public void inputFullName(User user) throws IOException, ParseException {
         Menu menu = new Menu();
         String fullName = null;
@@ -300,13 +302,14 @@ public class LoginView {
                 checkValid = ValidateUtils.isFullName(fullName);
                 if (!checkValid) {
                     System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
-                }else {
+                } else {
                     checkFullName = true;
                 }
             } while (!checkValid);
         } while (!checkFullName);
         user.setFullName(fullName);
     }
+
     public void inputUserName(User user) throws IOException, ParseException {
         Menu menu = new Menu();
         String username = null;
@@ -330,12 +333,13 @@ public class LoginView {
             if (checkUserNameAvailable) {
                 System.out.println("UserName đã tồn tại vui lòng nhập lại!");
                 checkUserName = false;
-            }else {
+            } else {
                 checkUserName = true;
             }
         } while (!checkUserName);
         user.setUsername(username);
     }
+
     public void editFullName() throws IOException, ParseException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
@@ -354,7 +358,7 @@ public class LoginView {
                 checkValid = ValidateUtils.isFullName(fullName);
                 if (!checkValid) {
                     System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
-                }else {
+                } else {
                     checkFullName = true;
                 }
             } while (!checkValid);
@@ -369,6 +373,7 @@ public class LoginView {
         fileService.writeData(FILE_PATH_USER, userList);
         System.out.println("✔ Bạn đã thay họ và tên thành công ✔\n");
     }
+
     public void editPassWord() throws IOException {
         Menu menu = new Menu();
         List<User> users = userService.getAllUserUse();
@@ -436,7 +441,7 @@ public class LoginView {
             if (checkPhoneNumberAvailable) {
                 System.out.println("Số điện thoại đã tồn tại vui lòng nhập lại!");
                 checkPhoneNumber = false;
-            }else {
+            } else {
                 checkPhoneNumber = true;
             }
         } while (!checkPhoneNumber);
@@ -450,6 +455,63 @@ public class LoginView {
         fileService.writeData(FILE_PATH_USER, userList);
         System.out.println("✔ Bạn đã thay đổi số điện thoại thành công ✔\n");
     }
+
+    public void editBirthday() throws IOException {
+        List<User> users = userService.getAllUserUse();
+        List<User> userList = userService.getAllUser();
+        Date birthday = null;
+        boolean checkValid = false;
+        boolean checkBirthday = false;
+
+        do {
+            noChange();
+            System.out.println("Nhập ngày sinh mới của bạn:");
+            String birthdayStr = scanner.nextLine();
+
+            if (birthdayStr.equals("0")) {
+                checkBirthday = true;
+                menu.menuLogin();
+            }
+
+            checkValid = ValidateUtils.isBirthDay(birthdayStr);
+
+            if (!checkValid) {
+                System.out.println("Ngày sinh không hợp lệ. Vui lòng nhập lại!");
+            } else {
+                try {
+                    birthday = new SimpleDateFormat("dd/MM/yyyy").parse(birthdayStr);
+                    checkBirthday = true;
+                } catch (ParseException e) {
+                    System.out.println("Lỗi khi chuyển đổi ngày sinh. Vui lòng nhập lại!");
+                }
+            }
+        } while (!checkBirthday);
+
+        users.get(0).setBirthDay(birthday);
+
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
+                userList.get(i).setBirthDay(birthday);
+            }
+        }
+        fileService.writeData(FILE_PATH_USERUSE, users);
+        fileService.writeData(FILE_PATH_USER, userList);
+        System.out.println("✔ Bạn đã thay đổi ngày sinh thành công ✔\n");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void editEmail() throws IOException {
         List<User> users = userService.getAllUserUse();
@@ -510,27 +572,28 @@ public class LoginView {
 
     public void showInfoAccount() throws IOException {
         List<User> users = userService.getAllUserUse();
-        System.out.println("            ╔═══════╦═══════════════╦════════════════════╦═══════════════╦═══════════════╦═══════════════╦══════════════════════════════╦══════════════════════════════╗");
-        System.out.printf("            ║%-7s║%-15s║%-20s║%-15s║%-15s║%-15s║%-30s║%-30s║", "ID", "USERNAME", "FULLNAME", "PHONE NUMBER", "GENDER", "BIRTHDAY", "EMAIL", "ADDRESS").println();
-        System.out.println("            ╠═══════╬═══════════════╬════════════════════╬═══════════════╬═══════════════╬═══════════════╬══════════════════════════════╬══════════════════════════════╣");
+        System.out.println("            ╔═══════╦═════════════════════════╦═════════════════════════╦═══════════════╦═══════════════╦═══════════════╦═════════════════════════╦═════════════════════════╗");
+        System.out.printf("            ║%-7s║%-25s║%-25s║%-15s║%-15s║%-15s║%-25s║%-25s║", "ID", "Tên đăng nhập", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Email", "Địa chỉ").println();
+        System.out.println("            ╠═══════╬═════════════════════════╬═════════════════════════╬═══════════════╬═══════════════╬═══════════════╬═════════════════════════╬═════════════════════════╣");
         System.out.printf(users.get(0).userView()).println();
-        System.out.println("            ╚═══════╩═══════════════╩════════════════════╩═══════════════╩═══════════════╩═══════════════╩══════════════════════════════╩══════════════════════════════╝");
+        System.out.println("            ╚═══════╩═════════════════════════╩═════════════════════════╩═══════════════╩═══════════════╩═══════════════╩═════════════════════════╩═════════════════════════╝");
     }
 
     public void showInfoCustomer() throws IOException {
         List<User> users = userService.getCustomerList();
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             System.out.println("Hiện tại chưa có khách hàng nào đăng kí!");
-        }else {
-            System.out.println("            ╔═══════╦═══════════════╦════════════════════╦═══════════════╦═══════════════╦═══════════════╦══════════════════════════════╦══════════════════════════════╗");
-            System.out.printf("            ║%-7s║%-15s║%-20s║%-15s║%-15s║%-15s║%-30s║%-30s║", "ID", "USERNAME", "FULLNAME", "PHONE NUMBER", "GENDER", "BIRTHDAY", "EMAIL", "ADDRESS").println();
-            System.out.println("            ╠═══════╬═══════════════╬════════════════════╬═══════════════╬═══════════════╬═══════════════╬══════════════════════════════╬══════════════════════════════╣");
-            for (User user : users){
+        } else {
+            System.out.println("            ╔═══════╦══════════════════╦══════════════════╦═════════════════════════╦═══════════════╦═══════════════╦═══════════════╦═════════════════════════╦═════════════════════════╗");
+            System.out.printf("            ║%-7s║%-18s║%-18s║%-25s║%-15s║%-15s║%-15s║%-25s║%-25s║", "ID", "Tên đăng nhập", "Mật khẩu", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Email", "Địa chỉ").println();
+            System.out.println("            ╠═══════╬══════════════════╬══════════════════╬═════════════════════════╬═══════════════╬═══════════════╬═══════════════╬═════════════════════════╬═════════════════════════╣");
+            for (User user : users) {
                 System.out.printf(user.userView()).println();
             }
-            System.out.println("            ╚═══════╩═══════════════╩════════════════════╩═══════════════╩═══════════════╩═══════════════╩══════════════════════════════╩══════════════════════════════╝");
+            System.out.println("            ╚═══════╩══════════════════╩══════════════════╩═════════════════════════╩═══════════════╩═══════════════╩═══════════════╩═════════════════════════╩═════════════════════════╝");
         }
     }
+
     public void noChange() {
         System.out.println(" ⦿ Nếu hủy thao tác, quay lại menu thì nhập: 0 ⦿ ");
     }
