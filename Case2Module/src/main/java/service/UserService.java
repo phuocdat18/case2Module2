@@ -23,6 +23,9 @@ public class UserService {
     public List<User> getAllUser() throws IOException {
         return userRepository.getAll();
     }
+    public int checkIdUser(int id) throws IOException {
+        return userRepository.checkID(id);
+    }
     public boolean checkLoginAdmin(String username, String pass) throws IOException {
         List<User> allUsers = getAllUser();
         for (int i = 0; i < allUsers.size(); i++) {

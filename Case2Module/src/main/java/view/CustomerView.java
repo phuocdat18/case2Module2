@@ -1,10 +1,12 @@
 package view;
 
+import model.User;
 import service.FileService;
 import service.UserService;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public class CustomerView {
@@ -108,21 +110,29 @@ public class CustomerView {
         }
     }
 
-    private void menuAccountManager() {
+    public void menuAccountManager() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                               Giao diện quản lý tài khoản                         ║");
         System.out.println("                               ║                         [1] Hiển thị thông tin tài khoản                          ║");
         System.out.println("                               ║                         [2] Thay đổi họ và tên của bạn                            ║");
-        System.out.println("                               ║                         [3] Thay đổi mật khẩu đăng nhập                           ║");
-        System.out.println("                               ║                         [4] Thay đổi số điện thoại                                ║");
-        System.out.println("                               ║                         [5] Thay đổi ngày sinh                                    ║");
-        System.out.println("                               ║                         [6] Thay đổi email                                        ║");
-        System.out.println("                               ║                         [7] Thay đổi địa chỉ                                      ║");
-        System.out.println("                               ║                         [8] Quay lại                                              ║");
+        System.out.println("                               ║                         [3] Thay đổi Tên đăng nhập                                ║");
+        System.out.println("                               ║                         [4] Thay đổi mật khẩu đăng nhập                           ║");
+        System.out.println("                               ║                         [5] Thay đổi số điện thoại                                ║");
+        System.out.println("                               ║                         [6] Thay đổi ngày sinh                                    ║");
+        System.out.println("                               ║                         [7] Thay đổi email                                        ║");
+        System.out.println("                               ║                         [8] Thay đổi địa chỉ                                      ║");
+        System.out.println("                               ║                         [9] Quay lại                                              ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
     public void launcherAccount() throws IOException, ParseException {
+//        CustomerView customerView = new CustomerView();
+//        boolean checkAction = false;
+//        List<User> users = userService.getAllUserUse();
+//        List<User> user = userService.getAllUser();
+//        int idUser = UserService.userLoginning.getId();
         CustomerView customerView = new CustomerView();
+        int idUser = 2;
+//        int idUser = UserService.userLoginning.getId();
         boolean checkAction = false;
         int select;
         do {
@@ -137,33 +147,38 @@ public class CustomerView {
             }
             switch (select) {
                 case 1:
-                    loginView.showInfoAccount();
+                    loginView.showInfoAccount(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 2:
-                    loginView.editFullName();
+                    loginView.editFullName(idUser);
                     checkAction = checkActionContinue();
                     break;
                 case 3:
-                    loginView.editPassWord();
+                    loginView.editUsername();
                     checkAction = checkActionContinue();
                     break;
                 case 4:
-                    loginView.editPhoneNumber();
+                    loginView.editPassWord();
                     checkAction = checkActionContinue();
                     break;
                 case 5:
-                    loginView.editBirthday();
+                    loginView.editPhoneNumber();
                     checkAction = checkActionContinue();
+                    break;
                 case 6:
-                    loginView.editEmail();
+                    loginView.editBirthday();
                     checkAction = checkActionContinue();
                     break;
                 case 7:
-                    loginView.editAddress();
+                    loginView.editEmail();
                     checkAction = checkActionContinue();
                     break;
                 case 8:
+                    loginView.editAddress();
+                    checkAction = checkActionContinue();
+                    break;
+                case 9:
                     customerView.launcherCustomer();
                     checkAction = checkActionContinue();
                     break;
@@ -177,6 +192,8 @@ public class CustomerView {
             launcherCustomer();
         }
     }
+
+
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {

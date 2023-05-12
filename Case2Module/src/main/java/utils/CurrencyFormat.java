@@ -5,18 +5,6 @@ import java.util.Currency;
 import java.util.Locale;
 
 public class CurrencyFormat {
-//    public static String convertPriceToString(int price) {
-//        Locale locale = new Locale("en", "US");
-//        Currency currency = Currency.getInstance("USD");
-//
-//        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-//        currencyFormatter.setCurrency(currency);
-//
-//        String formattedAmount = currencyFormatter.format(price);
-//        formattedAmount = formattedAmount.replaceAll("\\D+", "") + currency.getSymbol();
-//        return formattedAmount;
-//    }
-
 
     public static String convertPriceToString(int price) {
         StringBuilder formattedAmount = new StringBuilder();

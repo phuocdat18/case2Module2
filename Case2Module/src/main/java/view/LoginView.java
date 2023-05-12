@@ -1,6 +1,7 @@
 package view;
 
 import model.EGender;
+import model.Model;
 import model.Role;
 import model.User;
 import service.FileService;
@@ -340,39 +341,118 @@ public class LoginView {
         user.setUsername(username);
     }
 
-    public void editFullName() throws IOException, ParseException {
+//    public void editFullName(int idUser) throws IOException, ParseException {
+//        List<User> users = userService.getAllUserUse();
+//        List<User> userList = userService.getAllUser();
+//        String fullName = null;
+//        boolean checkValid = false;
+//        boolean checkFullName = false;
+//        do {
+//            do {
+//                noChange();
+//                System.out.println("Nhập họ và tên mới của bạn:");
+//                fullName = scanner.nextLine();
+//                if (fullName.equals("0")) {
+//                    checkFullName = true;
+//                    menu.login();
+//                }
+//                checkValid = ValidateUtils.isFullName(fullName);
+//                if (!checkValid) {
+//                    System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+//                } else {
+//                    checkFullName = true;
+//                }
+//            } while (!checkValid);
+//        } while (!checkFullName);
+//        users.get(idUser-1).setFullName(fullName);
+//        for (int i = 0; i < userList.size(); i++) {
+//            if (userList.get(i).getFullName().equals(users.get(idUser-1).getFullName())) {
+//                userList.get(i).setFullName(fullName);
+//            }
+//        }
+//        fileService.writeData(FILE_PATH_USERUSE, users);
+//        fileService.writeData(FILE_PATH_USER, userList);
+//        System.out.println("✔ Bạn đã thay họ và tên thành công ✔\n");
+//    }
+
+
+    public void editFullName(int idUser) throws IOException, ParseException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
         String fullName = null;
         boolean checkValid = false;
         boolean checkFullName = false;
         do {
-            do {
-                noChange();
-                System.out.println("Nhập họ và tên mới của bạn:");
-                fullName = scanner.nextLine();
-                if (fullName.equals("0")) {
-                    checkFullName = true;
-                    menu.login();
-                }
-                checkValid = ValidateUtils.isFullName(fullName);
-                if (!checkValid) {
-                    System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
-                } else {
-                    checkFullName = true;
-                }
-            } while (!checkValid);
+            noChange();
+            System.out.println("Nhập họ và tên mới của bạn:");
+            fullName = scanner.nextLine();
+            if (fullName.equals("0")) {
+                checkFullName = true;
+                menu.login();
+            }
+            checkValid = ValidateUtils.isFullName(fullName);
+            if (!checkValid) {
+                System.out.println("Tên bạn nhập không hợp lệ, vui lòng nhập lại!");
+            } else {
+                checkFullName = true;
+            }
         } while (!checkFullName);
-        users.get(0).setFullName(fullName);
+//        users.get(0).setFullName(fullName);
         for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getUsername().equals(users.get(0).getUsername())) {
+            if (userList.get(i).getUsername().equals(userList.get(idUser - 1).getUsername())) {
                 userList.get(i).setFullName(fullName);
             }
         }
-        fileService.writeData(FILE_PATH_USERUSE, users);
+//        fileService.writeData(FILE_PATH_USERUSE, users);
         fileService.writeData(FILE_PATH_USER, userList);
         System.out.println("✔ Bạn đã thay họ và tên thành công ✔\n");
     }
+
+
+    public void editUsername() throws IOException {
+        Menu menu = new Menu();
+        List<User> userList = userService.getAllUser();
+
+        String username = null;
+        String usernameNew = null;
+        String usernameNew1 = null;
+        boolean checkUsername = false;
+        do {
+            noChange();
+            System.out.println("Nhập Tên đăng nhập hiện tại của bạn:");
+            username = scanner.nextLine();
+            if (username.equals("0")) {
+                checkUsername = true;
+                menu.menuLogin();
+            }
+            checkUsername = userService.checkUserName(username);
+            if (checkUsername == false) {
+                System.out.println("Tên đăng nhập không đúng, vui lòng nhập lại!");
+            } else if (checkUsername == true) {
+                System.out.println("Nhập Tên đăng nhập mới của bạn:");
+                usernameNew = scanner.nextLine();
+                System.out.println("Nhập lại Tên đăng nhập mới của bạn:");
+                do {
+                    usernameNew1 = scanner.nextLine();
+                    if (!usernameNew.equals(usernameNew1)) {
+                        System.out.println("Tên đăng nhập vừa nhập khác ở trên! Nhập lại Tên đăng nhập mới của bạn:");
+                    }
+                } while (!usernameNew.equals(usernameNew1));
+            }
+        } while (!checkUsername);
+//        users.get(0).setUsername(usernameNew);
+        for (int i = 0; i < userList.size(); i++) {
+            String idUser = "" + userList.get(i).getId();
+            String idUserName = "" + userList.get(0).getUsername();
+            if (idUser.equals(idUserName)) {
+                userList.get(i).setUsername(usernameNew);
+            }
+        }
+//        fileService.writeData(FILE_PATH_USERUSE, users);
+        fileService.writeData(FILE_PATH_USER, userList);
+        System.out.println("✔ Bạn đã thay đổi password thành công ✔\n");
+    }
+
 
     public void editPassWord() throws IOException {
         Menu menu = new Menu();
@@ -500,19 +580,6 @@ public class LoginView {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void editEmail() throws IOException {
         List<User> users = userService.getAllUserUse();
         List<User> userList = userService.getAllUser();
@@ -570,17 +637,68 @@ public class LoginView {
         System.out.println("✔ Bạn đã thay đổi địa chỉ thành công ✔\n");
     }
 
-    public void showInfoAccount() throws IOException {
-        List<User> users = userService.getAllUserUse();
+    public void showInfoAccount(int idUser) throws IOException {
+        List<User> user = userService.getAllUser();
         System.out.println("            ╔═══════╦═════════════════════════╦═════════════════════════╦═══════════════╦═══════════════╦═══════════════╦═════════════════════════╦═════════════════════════╗");
         System.out.printf("            ║%-7s║%-25s║%-25s║%-15s║%-15s║%-15s║%-25s║%-25s║", "ID", "Tên đăng nhập", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Email", "Địa chỉ").println();
         System.out.println("            ╠═══════╬═════════════════════════╬═════════════════════════╬═══════════════╬═══════════════╬═══════════════╬═════════════════════════╬═════════════════════════╣");
-        System.out.printf(users.get(0).userView()).println();
+        System.out.printf(user.get(idUser - 1).userView()).println();
         System.out.println("            ╚═══════╩═════════════════════════╩═════════════════════════╩═══════════════╩═══════════════╩═══════════════╩═════════════════════════╩═════════════════════════╝");
     }
 
-    public void showInfoCustomer() throws IOException {
+
+    public void searchUserById() throws IOException, ParseException {
+        CustomerView customerView = new CustomerView();
+        AdminView adminView = new AdminView();
+        List<User> users = userService.getAllUser();
+        boolean checkAction = false;
+        noChange();
+        int idUser = 0;
+        do {
+            System.out.println("Nhập ID của khách hàng: ");
+            String input = scanner.nextLine();
+            if (input.equals("0")) {
+                checkAction = true;
+                adminView.launcherAdmin();
+            }
+            try {
+                idUser = Integer.parseInt(input);
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Id không hợp lệ vui lòng nhập lại");
+                idUser = 0;
+                continue;
+            }
+            if (idUser < 0) {
+                System.out.println("ID phải lớn hơn 0, vui lòng nhập lại!");
+                idUser = 0;
+                continue;
+            }
+            switch (userService.checkIdUser(idUser)) {
+                case 1:
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).getId() == idUser) {
+//                            System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
+//                            System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Giá", "Kinh nghiệm").println();
+//                            System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
+//                            System.out.printf(users.get(i).userView()).println();
+//                            System.out.println("            ╚═══════╩════════════════════╩═══════════╩══════════╩══════════╩══════════╩═══════════════╩═══════════════╩════════════════════════════════════════╝");
+                            adminView.launcherAccount(idUser);
+                        }
+                    }
+                    checkAction = true;
+                    break;
+                case -1:
+                    System.out.println("Không tìm thấy ID, mời bạn nhập lại:");
+                    checkAction = false;
+                    break;
+            }
+        } while (!checkAction);
+    }
+
+
+    public void showInfoCustomer() throws IOException, ParseException {
         List<User> users = userService.getCustomerList();
+        AdminView adminView = new AdminView();
         if (users.isEmpty()) {
             System.out.println("Hiện tại chưa có khách hàng nào đăng kí!");
         } else {

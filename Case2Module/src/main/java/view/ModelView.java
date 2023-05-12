@@ -1334,7 +1334,7 @@ public class ModelView {
             try {
                 id = Integer.parseInt(input);
             } catch (NumberFormatException numberFormatException) {
-                System.out.println("Số lượng không hợp lệ vui lòng nhập lại");
+                System.out.println("Id không hợp lệ vui lòng nhập lại");
                 id = 0;
                 continue;
             }

@@ -23,7 +23,7 @@ public class AdminView {
         System.out.println("                               ║                                    Giao diện Admin                                ║");
         System.out.println("                               ║                                 [1] Quản lý Model                                 ║");
         System.out.println("                               ║                                 [2] Quản lý đơn hàng                              ║");
-        System.out.println("                               ║                                 [3] Xem danh sách khách hàng                      ║");
+        System.out.println("                               ║                                 [3] Quản lý khách hàng                            ║");
         System.out.println("                               ║                                 [4] Xem doanh thu                                 ║");
         System.out.println("                               ║                                 [5] Đăng xuất                                     ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
@@ -52,7 +52,7 @@ public class AdminView {
                     checkAction = checkActionContinue();
                     break;
                 case 3:
-                    loginView.showInfoCustomer();
+                    launcherUser();
                     checkAction = checkActionContinue();
                     break;
                 case 4:
@@ -129,6 +129,59 @@ public class AdminView {
             launcherAdmin();
         }
     }
+
+
+    public  void menuUser(){
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                              Giao diện quản lý khách hàng                         ║");
+        System.out.println("                               ║                       [1] Hiển thị danh sách khách hàng                           ║");
+        System.out.println("                               ║                       [2] Chỉnh sửa thông tin khách hàng                          ║");
+        System.out.println("                               ║                       [3] Quay lại                                                ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+
+
+    public void launcherUser() throws IOException, ParseException {
+        OrderView orderView = new OrderView();
+        LoginView loginView = new LoginView();
+        int select = 0;
+        boolean checkAction = false;
+        do {
+            menuUser();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    loginView.showInfoCustomer();
+                    checkAction = checkActionContinue();
+                    break;
+                case 2:
+                    loginView.searchUserById();
+                    checkAction = checkActionContinue();
+                    break;
+                case 3:
+                    launcherAdmin();
+                    checkAction = checkActionContinue();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        }while (!checkAction);
+        if(checkAction) {
+            launcherAdmin();
+        }
+    }
+
+
+
     public  void menuRevenue(){
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("                               ║                              Doanh thu                                            ║");
@@ -179,6 +232,71 @@ public class AdminView {
             launcherAdmin();
         }
     }
+
+    public void launcherAccount(int idUser) throws IOException, ParseException {
+        CustomerView customerView = new CustomerView();
+        LoginView loginView = new LoginView();
+        boolean checkAction = false;
+        int select;
+        do {
+            customerView.menuAccountManager();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    loginView.showInfoAccount(idUser);
+                    checkAction = checkActionContinue();
+                    break;
+                case 2:
+                    loginView.editFullName(idUser);
+                    checkAction = checkActionContinue();
+                    break;
+                case 3:
+                    loginView.editUsername();
+                    checkAction = checkActionContinue();
+                    break;
+                case 4:
+                    loginView.editPassWord();
+                    checkAction = checkActionContinue();
+                    break;
+                case 5:
+                    loginView.editPhoneNumber();
+                    checkAction = checkActionContinue();
+                    break;
+                case 6:
+                    loginView.editBirthday();
+                    checkAction = checkActionContinue();
+                    break;
+                case 7:
+                    loginView.editEmail();
+                    checkAction = checkActionContinue();
+                    break;
+                case 8:
+                    loginView.editAddress();
+                    checkAction = checkActionContinue();
+                    break;
+                case 9:
+                    AdminView adminView = new AdminView();
+                    adminView.launcherAdmin();
+                    checkAction = checkActionContinue();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        }while (!checkAction);
+        if(checkAction) {
+            launcherAdmin();
+        }
+    }
+
     public boolean checkActionContinue() {
         boolean checkActionContinue = false;
         do {
