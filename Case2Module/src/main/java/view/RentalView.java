@@ -125,6 +125,7 @@ public class RentalView {
             int m = 0;
             int y = 0;
             try {
+//                noChange();
                 System.out.print("Vui lòng nhập tháng từ 1 đến 12 (Vd: 5): ");
                 m = input.nextInt();
                 String number = "" + m;
@@ -152,6 +153,8 @@ public class RentalView {
             int year = y;
             int month = m;
             YearMonth ym = YearMonth.of(year, month);
+            System.out.println();
+            System.out.println();
             System.out.println("Sun Mon Tue Wed Thu Fri Sat");
             int counter = 1;
 
@@ -223,6 +226,7 @@ public class RentalView {
         }
         while (checkMonth);
         System.out.println();
+        System.out.println();
         printMonthFind(rentalAll, rentals, idModel);
 
     }
@@ -268,6 +272,8 @@ public class RentalView {
             int year = y;
             int month = m;
             YearMonth ym = YearMonth.of(year, month);
+            System.out.println();
+            System.out.println();
             System.out.println("Sun Mon Tue Wed Thu Fri Sat");
             int counter = 1;
 
@@ -339,6 +345,7 @@ public class RentalView {
             }
         }
         while (checkMonth);
+        System.out.println();
         System.out.println();
         printMonthFind(rentalAll, rentals, searchId);
     }
@@ -426,6 +433,21 @@ public class RentalView {
                     throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
                 }
                 for (Rental rental : rentalAll) {
+                    if (rental.getIdRental() == idModel) {
+                        if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
+                            isInvalidDate = true;
+                            System.out.println("Ngày thuê đã bị trùng");
+                            break;
+                        } else if (rental.getStartDate().compareTo(startDateInput) < 0 && rental.getEndDate().compareTo(startDateInput) > 0 || rental.getStartDate().compareTo(endDateInput) < 0 && rental.getEndDate().compareTo(endDateInput) > 0) {
+                            isInvalidDate = true;
+                            System.out.println("Ngày thuê đã bị trùng");
+                            break;
+                        } else {
+                            isInvalidDate = false;
+                        }
+                    }
+                }
+                for (Rental rental : rentals) {
                     if (rental.getIdRental() == idModel) {
                         if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
                             isInvalidDate = true;

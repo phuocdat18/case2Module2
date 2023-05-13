@@ -350,22 +350,22 @@ public class ModelView {
                                         checkAction = true;
                                         break;
                                     case 6:
-                                    String address = null;
-                                    noChange();
-                                    System.out.println("Nhập mô tả của người mẫu:");
-                                    address = scanner.nextLine();
-                                    if (address.equals("0")) {
-                                        checkId = true;
-                                        launcher();
-                                    }
-                                    models.get(i).setAddressModel(address);
-                                    for (int j = 0; j < modelsUpdate.size(); j++) {
-                                        if (modelsUpdate.get(j).getIdModel() == searchId) {
-                                            modelsUpdate.get(j).setAddressModel(address);
+                                        String address = null;
+                                        noChange();
+                                        System.out.println("Nhập mô tả của người mẫu:");
+                                        address = scanner.nextLine();
+                                        if (address.equals("0")) {
+                                            checkId = true;
+                                            launcher();
                                         }
-                                    }
-                                    checkAction = true;
-                                    break;
+                                        models.get(i).setAddressModel(address);
+                                        for (int j = 0; j < modelsUpdate.size(); j++) {
+                                            if (modelsUpdate.get(j).getIdModel() == searchId) {
+                                                modelsUpdate.get(j).setAddressModel(address);
+                                            }
+                                        }
+                                        checkAction = true;
+                                        break;
                                     case 7:
                                         int price = 0;
                                         boolean checkValidPrice = false;
@@ -571,7 +571,7 @@ public class ModelView {
             noChange();
             System.out.println("Nhập danh mục cần thêm! \"male\" or \"female\":");
             typeOfModel = scanner.nextLine();
-            if(typeOfModel.equals("0")){
+            if (typeOfModel.equals("0")) {
                 checkType = true;
                 launcher();
             }
@@ -587,7 +587,7 @@ public class ModelView {
                     System.out.println("Nhập sai, xin mời nhập lại! \"male\" or \"female\":");
                     break;
             }
-        }while (!checkType);
+        } while (!checkType);
         boolean checkNameModel = false;
         do {
             String nameModel = null;
@@ -616,11 +616,11 @@ public class ModelView {
 //                        noChange();
 //                        System.out.println("Nhập số lượng");
                         String input = "1";
-                        if(input.equals("0")) {
+                        if (input.equals("0")) {
                             checkNameModel = true;
                             launcher();
                         }
-                        checkValid = ValidateUtils.isQuantity(quantity,input);
+                        checkValid = ValidateUtils.isQuantity(quantity, input);
                         if (!checkValid) {
                             checkValidQuantity = false;
                         } else {
@@ -659,11 +659,11 @@ public class ModelView {
 //                        noChange();
 //                        System.out.println("Nhập số lượng");
                         String input = "1";
-                        if(input.equals("0")) {
+                        if (input.equals("0")) {
                             checkNameModel = true;
                             launcher();
                         }
-                        checkValidQuantity2 = ValidateUtils.isQuantity(quantity1,input);
+                        checkValidQuantity2 = ValidateUtils.isQuantity(quantity1, input);
                         if (checkValidQuantity2) {
                             quantity1 = Integer.parseInt(input);
                         }
@@ -675,7 +675,7 @@ public class ModelView {
                         noChange();
                         System.out.println("Nhập giá");
                         String input = scanner.nextLine();
-                        if(input.equals("0")) {
+                        if (input.equals("0")) {
                             checkNameModel = true;
                             launcher();
                         }
@@ -732,7 +732,6 @@ public class ModelView {
                     } while (!isValidHeight);
 
 
-
                     int weight = 0;
                     boolean isValidWeight = false;
                     do {
@@ -758,7 +757,7 @@ public class ModelView {
                         noChange();
                         System.out.println("Nhập địa chỉ");
                         address = scanner.nextLine();
-                        if(address.equals("0")) {
+                        if (address.equals("0")) {
                             checkNameModel = true;
                             launcher();
                         }
@@ -791,7 +790,6 @@ public class ModelView {
                     String description = scanner.nextLine();
 
 
-
                     models.sort(new SortModelByIDIncrease());
                     int id = models.get(models.size() - 1).getIdModel() + 1;
                     model.setIdModel(id);
@@ -810,7 +808,7 @@ public class ModelView {
                     checkNameModel = true;
                     break;
             }
-        }while (!checkNameModel);
+        } while (!checkNameModel);
 
         fileService.writeData(FILE_PATH_MODEL_UPDATE, modelsUpdate);
         fileService.writeData(FILE_PATH_MODEL, models);
@@ -889,7 +887,7 @@ public class ModelView {
     }
 
 
-    public  void showModelRental1(int searchId) throws IOException, ParseException {
+    public void showModelRental1(int searchId) throws IOException, ParseException {
         RentalService rentalService = new RentalService();
         List<Rental> rentals = rentalService.getAllRental();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
@@ -904,7 +902,7 @@ public class ModelView {
         System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         Rental rental = new Rental();
         RentalView rentalView = new RentalView();
-        rentalView.printMonthFind(rentalAll,rentals, searchId);
+        rentalView.printMonthFind(rentalAll, rentals, searchId);
     }
 
 
@@ -931,7 +929,7 @@ public class ModelView {
         }
         System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         RentalView rentalView = new RentalView();
-        rentalView.printMonthFind(rentalAll,rentals, searchId);
+        rentalView.printMonthFind(rentalAll, rentals, searchId);
     }
 
     public void showModelListByTypeAdmin() throws IOException, ParseException, InterruptedException {
@@ -1209,16 +1207,12 @@ public class ModelView {
         System.out.println("                               ║                   [4] Tìm kiếm Model theo chiều cao                               ║");
         System.out.println("                               ║                   [5] Tìm kiếm Model theo cân nặng                                ║");
         System.out.println("                               ║                   [6] Tìm kiếm Model theo giá                                     ║");
-        System.out.println("                               ║                   [7] Tìm kiếm Model theo giới tính                               ║");
-        System.out.println("                               ║                   [8] Quay lại Menu                                               ║");
-        System.out.println("                               ║                   [9] Đăng xuất                                                   ║");
+        System.out.println("                               ║                   [7] Quay lại Menu                                               ║");
+        System.out.println("                               ║                   [8] Đăng xuất                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
     public void searchModel() throws IOException, ParseException, InterruptedException {
-        List<Model> models = modelService.getAllModel();
-
-        String typeOfModel;
         int select = 0;
         boolean checkAction = false;
         do {
@@ -1256,16 +1250,16 @@ public class ModelView {
                     searchModelByPriceRange();
                     checkAction = checkActionContinue();
                     break;
+//                case 7:
+//                    searchModelByGenderType();
+//                    checkAction = checkActionContinue();
+//                    break;
                 case 7:
-                    searchModelByGenderType();
-                    checkAction = checkActionContinue();
-                    break;
-                case 8:
                     CustomerView customerView = new CustomerView();
                     customerView.launcherCustomer();
                     checkAction = checkActionContinue();
                     break;
-                case 9:
+                case 8:
                     Menu menu = new Menu();
                     menu.login();
                     checkAction = checkActionContinue();
@@ -1316,7 +1310,6 @@ public class ModelView {
     }
 
 
-
     public void searchModelById() throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         List<Model> models = modelService.getAllModel();
@@ -1327,9 +1320,9 @@ public class ModelView {
         do {
             System.out.println("Nhập ID của người mẫu: ");
             String input = scanner.nextLine();
-            if(input.equals("0")) {
+            if (input.equals("0")) {
                 checkAction = true;
-                launcher();
+                customerView.launcherCustomer();
             }
             try {
                 id = Integer.parseInt(input);
@@ -1338,7 +1331,7 @@ public class ModelView {
                 id = 0;
                 continue;
             }
-            if(id < 0) {
+            if (id < 0) {
                 System.out.println("ID phải lớn hơn 0, vui lòng nhập lại!");
                 id = 0;
                 continue;
@@ -1374,7 +1367,6 @@ public class ModelView {
         do {
             noChange();
             System.out.println("Nhập tên người mẫu bạn muốn tìm kiếm: ");
-//            String kw = scanner.nextLine();
             String kw = scanner.nextLine().toUpperCase();
             if (kw.equals("0")) {
                 checkKW = true;
@@ -1400,42 +1392,42 @@ public class ModelView {
 
     public void searchModelByPriceRange() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
+        List<Model> results = new ArrayList<>();
+
         boolean checkRange = false;
         do {
-            noChange();
-            System.out.println("Nhập khoảng giá muốn tìm kiếm (ví dụ: 1000 1500): ");
-            String input = scanner.nextLine();
-            String[] priceRange = input.split(" ");
             try {
-                int lowerBound = Integer.parseInt(priceRange[0]);
-                int upperBound = Integer.parseInt(priceRange[1]);
-                if (input.equals("0")) {
+                noChange();
+                System.out.println("Nhập giá tối thiểu: ");
+                int minPrice = Integer.parseInt(scanner.nextLine());
+                String minPriceString = "" + minPrice;
+                if (minPriceString.equals("0")) {
                     checkRange = true;
                     customerView.launcherCustomer();
                 }
-                if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound) {
-                    System.out.println("Khoảng giá không hợp lệ, vui lòng nhập lại!");
-                    checkRange = false;
+                System.out.println("Nhập giá tối đa: ");
+                int maxPrice = Integer.parseInt(scanner.nextLine());
+                if (minPrice > maxPrice) {
+                    System.out.println("Giá tối thiểu phải nhỏ hơn giá tối đa!");
+                } else if (minPrice < 0) {
+                    System.out.println("Giá phải lớn hơn 0, vui lòng nhập lại!");
                 } else {
                     boolean checkOut = false;
                     for (int i = 0; i < models.size(); i++) {
-                        if (models.get(i).getPriceModel() >= lowerBound && models.get(i).getPriceModel() <= upperBound) {
+                        int price = models.get(i).getPriceModel();
+                        if (price >= maxPrice && price <= maxPrice) {
                             results.add(models.get(i));
                             checkOut = true;
                         }
                     }
                     if (!checkOut) {
-                        System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
-                        checkRange = false;
-                    } else {
-                        checkRange = true;
+                        System.out.println("Không tìm thấy model trong khoảng giá này!");
                     }
+                    checkRange = true;
                 }
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                System.out.println("Cú pháp không hợp lệ, vui lòng nhập lại!");
-                checkRange = false;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá phải là 1 số, vui lòng nhập lại!");
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -1448,43 +1440,45 @@ public class ModelView {
 
     public void searchModelByAgeRange() throws IOException {
         CustomerView customerView = new CustomerView();
-        List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
+        List<Model> results = new ArrayList<>();
+
         boolean checkRange = false;
         do {
-            noChange();
-            System.out.println("Nhập khoảng tuổi muốn tìm kiếm (ví dụ: 16 20): ");
-            String input = scanner.nextLine();
-            String[] ageRange = input.split(" ");
             try {
-                int lowerBound = Integer.parseInt(ageRange[0]);
-                int upperBound = Integer.parseInt(ageRange[1]);
-                if (input.equals("0")) {
+                noChange();
+                System.out.println("Nhập tuổi tối thiểu: ");
+                int minAge = Integer.parseInt(scanner.nextLine());
+                String minAgeString = "" + minAge;
+                if (minAgeString.equals("0")) {
                     checkRange = true;
                     customerView.launcherCustomer();
                 }
-                if (lowerBound < 0 || upperBound < 0 || lowerBound > upperBound || upperBound > 120) {
-                    System.out.println("Khoảng tuổi không hợp lệ, vui lòng nhập lại!");
-                    checkRange = false;
+                System.out.println("Nhập tuổi tối đa: ");
+                int maxAge = Integer.parseInt(scanner.nextLine());
+                if (minAge > maxAge) {
+                    System.out.println("Tuổi tối thiểu phải nhỏ hơn tuổi tối đa!");
+                } else if (minAge < 0 || minAge > 60 || maxAge > 60) {
+                    System.out.println("Tuổi phải lớn hơn 0 và nhỏ hơn 60, vui lòng nhập lại!");
                 } else {
                     boolean checkOut = false;
                     for (int i = 0; i < models.size(); i++) {
-                        if (models.get(i).getAge() >= lowerBound && models.get(i).getAge() <= upperBound) {
+                        int age = models.get(i).getAge();
+                        if (age >= minAge && age <= maxAge) {
                             results.add(models.get(i));
                             checkOut = true;
                         }
                     }
                     if (!checkOut) {
-                        System.out.println("Không tìm thấy người mẫu phù hợp, vui lòng nhập lại!");
-                        checkRange = false;
-                    } else {
-                        checkRange = true;
+                        System.out.println("Không tìm thấy model trong khoảng tuổi này!");
                     }
+                    checkRange = true;
                 }
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                System.out.println("Cú pháp không hợp lệ, vui lòng nhập lại!");
-                checkRange = false;
-            } catch (ParseException | InterruptedException e) {
+            } catch (NumberFormatException e) {
+                System.out.println("Tuổi phải là 1 số, vui lòng nhập lại!");
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         } while (!checkRange);
@@ -1511,7 +1505,7 @@ public class ModelView {
                 int maxHeight = Integer.parseInt(scanner.nextLine());
                 if (minHeight > maxHeight) {
                     System.out.println("Chiều cao tối thiểu phải nhỏ hơn chiều cao tối đa!");
-                } else if (minHeight < 0 || minHeight > 200 || maxHeight < 0 || maxHeight > 200) {
+                } else if (minHeight < 0 || minHeight > 200 || maxHeight > 200) {
                     System.out.println("Chiều cao phải lớn hơn 0 và nhỏ hơn 200, vui lòng nhập lại!");
                 } else {
                     boolean checkOut = false;
@@ -1558,7 +1552,7 @@ public class ModelView {
                 int maxWeight = Integer.parseInt(scanner.nextLine());
                 if (minWeight > maxWeight) {
                     System.out.println("Cân nặng tối thiểu phải nhỏ hơn cân nặng tối đaa!");
-                } else if (minWeight < 0 || minWeight > 120 || maxWeight < 0 || maxWeight > 120) {
+                } else if (minWeight < 0 || minWeight > 120 || maxWeight > 120) {
                     System.out.println("Cân nặng phải lớn hơn 0 và nhỏ hơn 120, vui lòng nhập lại!");
                 } else {
                     boolean checkOut = false;
@@ -1585,36 +1579,38 @@ public class ModelView {
         showModelList(results);
     }
 
+//    public void searchModelByGenderType() throws IOException, ParseException, InterruptedException {
+//        ModelView modelView = new ModelView();
+//        List<Model> models = modelService.getAllModel();
+//        List<Model> results = new ArrayList<>();
+//        CustomerView customerView = new CustomerView();
+//
+//        boolean checkGenderType;
+//        do {
+//            noChange();
+//            System.out.println("Nhập loại giới tính (Male/Female): ");
+//            String searchGenderType = scanner.next();
+//            if (searchGenderType.equals("0")) {
+//                checkGenderType = true;
+//                customerView.launcherCustomer();
+//            }
+//
+//            boolean checkOut = false;
+//            for (int i = 0; i < models.size(); i++) {
+//                String genderType = String.valueOf(models.get(i).getType());
+//                if (genderType.equalsIgnoreCase(searchGenderType)) {
+//                    results.add(models.get(i));
+//                    checkOut = true;
+//                }
+//            }
+//            if (!checkOut) {
+//                System.out.println("Không tìm thấy model với loại giới tính này!");
+//            }
+//            checkGenderType = true;
+//        } while (!checkGenderType);
+//        showModelList(results);
+//    }
 
-    public void searchModelByGenderType() throws IOException {
-        CustomerView customerView = new CustomerView();
-        List<Model> models = modelService.getAllModel();
-        List<Model> results = new ArrayList<>();
-
-        boolean checkGenderType = false;
-        do {
-            noChange();
-            System.out.println("Nhập loại giới tính (Male/Female/Other): ");
-            String searchGenderType = scanner.next();
-
-
-            boolean checkOut = false;
-            for (int i = 0; i < models.size(); i++) {
-                String genderType = String.valueOf(models.get(i).getType());
-                if (genderType.equalsIgnoreCase(searchGenderType)) {
-                    results.add(models.get(i));
-                    checkOut = true;
-                }
-            }
-            if (!checkOut) {
-                System.out.println("Không tìm thấy model với loại giới tính này!");
-            }
-
-            checkGenderType = true;
-        } while (!checkGenderType);
-
-        showModelList(results);
-    }
 
 
     public void noChange() {

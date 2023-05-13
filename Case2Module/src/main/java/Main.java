@@ -1,4 +1,5 @@
 import view.Menu;
+import view.ModelView;
 import view.RentalView;
 
 import java.io.IOException;
