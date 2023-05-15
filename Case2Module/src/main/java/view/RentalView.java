@@ -95,7 +95,7 @@ public class RentalView {
     }
 
 
-    public void printMonth(List<Rental> rentals,List<Rental> rentalAll, Date startDate, Date endDate, int idModel) throws IOException, ParseException, InterruptedException {
+    public void printMonth(List<Rental> rentals, List<Rental> rentalAll, Date startDate, Date endDate, int idModel) throws IOException, ParseException, InterruptedException {
         CustomerView customerView = new CustomerView();
         UserService userService = new UserService();
         List<Rental> results = new ArrayList<>();
@@ -117,7 +117,6 @@ public class RentalView {
         Thread.sleep(1000);
         System.out.println("Kiểm tra lại lịch trình bằng tháng");
 
-
         boolean checkMonth = false;
         do {
             System.out.println();
@@ -125,7 +124,7 @@ public class RentalView {
             int m = 0;
             int y = 0;
             try {
-//                noChange();
+                noChange();
                 System.out.print("Vui lòng nhập tháng từ 1 đến 12 (Vd: 5): ");
                 m = input.nextInt();
                 String number = "" + m;
@@ -432,8 +431,10 @@ public class RentalView {
                 if (endDate.isAfter(date.plusDays(30))) {
                     throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
                 }
+                boolean isModelAvailable = true;
                 for (Rental rental : rentalAll) {
                     if (rental.getIdRental() == idModel) {
+                        isModelAvailable = false; // idModel trùng với một rental trong danh sách rentalAll
                         if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
                             isInvalidDate = true;
                             System.out.println("Ngày thuê đã bị trùng");
@@ -449,6 +450,7 @@ public class RentalView {
                 }
                 for (Rental rental : rentals) {
                     if (rental.getIdRental() == idModel) {
+                        isModelAvailable = false; // idModel trùng với một rental trong danh sách rentals
                         if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
                             isInvalidDate = true;
                             System.out.println("Ngày thuê đã bị trùng");
@@ -461,6 +463,10 @@ public class RentalView {
                             isInvalidDate = false;
                         }
                     }
+                }
+
+                if (isModelAvailable) {
+                    isInvalidDate = false;
                 }
                 if (compareTwoDate(new Date(), startDateInput)) {
                     System.out.println("Ngày thuê đã bị quá hạn");
@@ -500,7 +506,50 @@ public class RentalView {
         System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         System.out.println(rental.rentalView());
         System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
-        printMonth(rentals, rentalAll, rental.getStartDate(), rental.getEndDate(), idModel);
+
+
+
+
+
+
+
+
+
+        int select = 0;
+        boolean checkAction = false;
+        do {
+            orderNext();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    orderModel();
+                    break;
+                case 2:
+                    printMonth(rentals, rentalAll, rental.getStartDate(), rental.getEndDate(), idModel);
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, vui lòng nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        }while (!checkAction);
+        if(checkAction) {
+            customerView.menuCustomerView();
+        }
+    }
+
+    public  void orderNext() {
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                   [1] Tiếp tục thuê                                               ║");
+        System.out.println("                               ║                   [2] Kiểm tra lại bằng tháng                                     ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
     public void showModelRental(int idModel) throws IOException {

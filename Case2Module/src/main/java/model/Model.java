@@ -38,6 +38,10 @@ public class Model implements IModel<Model> {
         this.description = description;
     }
 
+    public Model(int id) {
+        this.idModel = id;
+    }
+
     public void setIdModel(int idModel) {
         this.idModel = idModel;
     }
