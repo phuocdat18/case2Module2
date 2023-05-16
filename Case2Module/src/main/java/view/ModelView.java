@@ -231,7 +231,6 @@ public class ModelView {
                                                 modelsUpdate.get(j).setNameModel(nameModel);
                                             }
                                         }
-
                                         checkAction = true;
                                         break;
                                     case 2:
