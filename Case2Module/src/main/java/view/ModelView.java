@@ -72,7 +72,7 @@ public class ModelView {
         System.out.println("                               ║                        3. Tìm kiếm Model                                          ║");
         System.out.println("                               ║                        4. Thêm Model vào danh sách                                ║");
         System.out.println("                               ║                        5. Chỉnh sửa Model                                         ║");
-        System.out.println("                               ║                        5. Xóa Model trong danh sách                               ║");
+        System.out.println("                               ║                        6. Xóa Model trong danh sách                               ║");
         System.out.println("                               ║                        7. Quay lại Menu                                           ║");
         System.out.println("                               ║                        8. Đăng xuất                                               ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
@@ -521,7 +521,7 @@ public class ModelView {
         boolean checkID = false;
         do {
             noChange();
-            System.out.println("Nhập ID đồ uống, thức ăn bạn muốn xóa:");
+            System.out.println("Nhập ID người mẫu bạn muốn xóa:");
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkID = true;
@@ -552,11 +552,10 @@ public class ModelView {
                     break;
             }
         } while (!checkID);
-//
 //        fileService.writeData(FILE_PATH_MODEL, models);
 //        fileService.writeData(FILE_PATH_MODEL_UPDATE,modelsUpdate);
         showModelList();
-        System.out.println("✔ Bạn đã xóa món thành công ✔\n");
+        System.out.println("✔ Bạn đã xóa người mẫu thành công ✔\n");
     }
 
 
@@ -891,15 +890,15 @@ public class ModelView {
         RentalService rentalService = new RentalService();
         List<Rental> rentals = rentalService.getAllRental();
         List<Rental> rentalAll = rentalService.getAllRentalAll();
-        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
-        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
-        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Order", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         for (Rental rental : rentalAll) {
             if (rental.getIdRental() == searchId) {
                 System.out.println(rental.rentalView());
             }
         }
-        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
         Rental rental = new Rental();
         RentalView rentalView = new RentalView();
         rentalView.printMonthFind(rentalAll, rentals, searchId);
@@ -918,13 +917,13 @@ public class ModelView {
         for (Rental rental : rentals) {
             Date rentalDate = rental.getEndDate(); // Ngày thuê của rental
             if (rental.getIdRental() == searchId && rentalDate.after(currentDate) && rental.getIdCustomer() == UserService.userLoginning.getId()) {
-                System.out.println(rental.rentalView());
+                System.out.println(rental.rentalView1());
             }
         }
         for (Rental rental : rentalAll) {
             Date rentalDate = rental.getEndDate(); // Ngày thuê của rental
             if (rental.getIdRental() == searchId && rentalDate.after(currentDate) && rental.getIdCustomer() == UserService.userLoginning.getId()) {
-                System.out.println(rental.rentalView());
+                System.out.println(rental.rentalView1());
             }
         }
         System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
@@ -960,7 +959,7 @@ public class ModelView {
         } while (!checkType);
         models.sort(new SortModelByIDIncrease());
         System.out.println("            ╔═══════╦════════════════════╦═══════════╦══════════╦══════════╦══════════╦═══════════════╦═══════════════╦═══════════════╦════════════════════════════════════════╗");
-        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Địa chỉ", "Số điện thoại", "Giá", "Kinh nghiệm").println();
+        System.out.printf("            ║%-7s║%-20s║%-10s ║%-10s║%-10s║%-10s║%-15s║%-15s║%-15s║%-40s║", "ID", "Tên", "Giới tính", "Tuổi", "Chiều cao", "Cân nặng", "Số điện thoại", "Địa chỉ", "Giá", "Kinh nghiệm").println();
         System.out.println("            ╠═══════╬════════════════════╬═══════════╬══════════╬══════════╬══════════╬═══════════════╬═══════════════╬═══════════════╬════════════════════════════════════════╣");
         for (int i = 0; i < models.size(); i++) {
             if (models.get(i).getType().getName().equals(typeOfModel)) {
@@ -1207,8 +1206,9 @@ public class ModelView {
         System.out.println("                               ║                   [4] Tìm kiếm Model theo chiều cao                               ║");
         System.out.println("                               ║                   [5] Tìm kiếm Model theo cân nặng                                ║");
         System.out.println("                               ║                   [6] Tìm kiếm Model theo giá                                     ║");
-        System.out.println("                               ║                   [7] Quay lại Menu                                               ║");
-        System.out.println("                               ║                   [8] Đăng xuất                                                   ║");
+        System.out.println("                               ║                   [7] Tìm kiếm Model theo giới tính                               ║");
+        System.out.println("                               ║                   [8] Quay lại Menu                                               ║");
+        System.out.println("                               ║                   [9] Đăng xuất                                                   ║");
         System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
     }
 
@@ -1250,16 +1250,16 @@ public class ModelView {
                     searchModelByPriceRange();
                     checkAction = checkActionContinue();
                     break;
-//                case 7:
-//                    searchModelByGenderType();
-//                    checkAction = checkActionContinue();
-//                    break;
                 case 7:
+                    showModelListByType();
+                    checkAction = checkActionContinue();
+                    break;
+                case 8:
                     CustomerView customerView = new CustomerView();
                     customerView.launcherCustomer();
                     checkAction = checkActionContinue();
                     break;
-                case 8:
+                case 9:
                     Menu menu = new Menu();
                     menu.login();
                     checkAction = checkActionContinue();

@@ -64,6 +64,16 @@ public class UserService {
         }
         return null;
     }
+    public User loginAdmin(String username, String password) throws IOException {
+        List<User> allUsers = getAllUser();
+        for (int i = 0; i < allUsers.size(); i++) {
+            if(allUsers.get(i).getUsername().equals(username) && allUsers.get(i).getPassword().equals(password) && allUsers.get(i).getRole().equals(Role.admin)) {
+                userLoginning = allUsers.get(i);
+                return allUsers.get(i);
+            }
+        }
+        return null;
+    }
     public boolean checkUserName(String username) throws IOException {
         List<User> allUsers = getAllUser();
         for (int i = 0; i < allUsers.size(); i++) {

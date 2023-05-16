@@ -79,6 +79,10 @@ public class LoginView {
                 System.out.println("Tài khoản hoặc mật khẩu không đúng. Vui lòng nhập lại!");
                 count++;
             } else {
+                List<User> userList = new ArrayList<>();
+                User user = userService.loginAdmin(username, password);
+                userList.add(user);
+                fileService.writeData(FILE_PATH_USERUSE, userList);
                 AdminView adminView = new AdminView();
                 adminView.launcherAdmin();
             }
@@ -152,15 +156,12 @@ public class LoginView {
                 case "female":
                     checkGender = true;
                     break;
-                case "other":
-                    checkGender = true;
-                    break;
                 case "0":
                     checkGender = true;
                     menu.login();
                     break;
                 default:
-                    System.out.println("Nhập sai, xin mời nhập lại (male/female/other):");
+                    System.out.println("Nhập sai, xin mời nhập lại (male/female):");
                     break;
             }
         } while (!checkGender);
@@ -227,35 +228,6 @@ public class LoginView {
         } while (!checkEmail);
         user.setEmail(email);
     }
-
-//    public void inputCCCD(User user) throws IOException {
-//        String cccd;
-//        boolean checkValid = false;
-//        boolean checkCCCD = false;
-//        do {
-//            do {
-//                noChange();
-//                System.out.println("Nhập số CCCD của bạn: Bắt đầu bằng 0 và có 12 số!");
-//                cccd = scanner.nextLine();
-//                if(cccd.equals("0")) {
-//                    checkCCCD = true;
-//                    menu.login();
-//                }
-//                checkValid = ValidateUtils.isCCCD(cccd);
-//                if (!checkValid) {
-//                    System.out.println("Số CCCD không hợp lệ vui lòng nhập lại!");
-//                }
-//            } while (!checkValid);
-//            boolean checkCCCDAvailable = userService.checkCCCD(cccd);
-//            if (checkCCCDAvailable) {
-//                System.out.println("Số CCCD đã tồn tại vui lòng nhập lại!");
-//                checkCCCD = false;
-//            }else {
-//                checkCCCD = true;
-//            }
-//        } while (!checkCCCD);
-//        user.setCccd(cccd);
-//    }
 
     public void inputPhoneNumber(User user) throws IOException, ParseException, InterruptedException {
         String phoneNumber = null;
@@ -675,7 +647,7 @@ public class LoginView {
         noChange();
         int idUser = 0;
         do {
-            System.out.println("Nhập ID của khách hàng: ");
+            System.out.println("Nhập ID của tài khoản: ");
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkAction = true;
@@ -715,7 +687,7 @@ public class LoginView {
         List<User> users = userService.getCustomerList();
         AdminView adminView = new AdminView();
         if (users.isEmpty()) {
-            System.out.println("Hiện tại chưa có khách hàng nào đăng kí!");
+            System.out.println("Hiện tại chưa có tài khoản nào!");
         } else {
             System.out.println("            ╔═══════╦══════════════════════╦═════════════╦══════════════════════╦═════════════╦═════════════╦═════════════╦════════════════════╦═════════════════════════╗");
             System.out.printf("            ║%-7s║%-22s║%-13s║%-22s║%-13s║%-13s║%-13s║%-20s║%-25s║", "ID", "Tên đăng nhập", "Mật khẩu", "Họ tên", "Số điện thoại", "Giới tính", "Ngày sinh", "Email", "Địa chỉ").println();

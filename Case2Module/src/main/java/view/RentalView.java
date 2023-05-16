@@ -88,10 +88,13 @@ public class RentalView {
 
     public void showRental() throws IOException {
         List<Rental> rentals = rentalService.getAllRental();
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Order", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         for (Rental rental : rentals) {
             System.out.println(rental.rentalView());
-
         }
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
     }
 
 
@@ -172,7 +175,7 @@ public class RentalView {
                 List<Rental> rentals1 = new ArrayList<>();
                 List<Rental> rentalsAll1 = new ArrayList<>();
                 for (Rental rental : rentalAll) {
-                    if (rental.getIdRental() == idModel) {
+                    if (rental.getIdModel() == idModel) {
                         if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
                             isRentalDay = true;
                             rentalsAll1.add(rental);
@@ -187,7 +190,7 @@ public class RentalView {
                     }
                 }
                 for (Rental rental : rentals) {
-                    if (rental.getIdRental() == idModel) {
+                    if (rental.getIdModel() == idModel) {
                         if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
                             isRentalDay = true;
                             rentals1.add(rental);
@@ -204,14 +207,14 @@ public class RentalView {
                 if (isRentalDay) {
                     for (Rental rental : rentals1) {
                         if (rental.getIdCustomer() == users.get(0).getId()) {
-                            System.out.print("\u001B[32m");
+                            System.out.print("\u001B[34m");
                         } else {
                             System.out.print("\u001B[31m");
                         }
                     }
                     for (Rental rental : rentalsAll1) {
                         if (rental.getIdCustomer() == users.get(0).getId()) {
-                            System.out.print("\u001B[32m");
+                            System.out.print("\u001B[34m");
                         } else {
                             System.out.print("\u001B[31m");
                         }
@@ -292,7 +295,7 @@ public class RentalView {
                 List<Rental> rentals1 = new ArrayList<>();
                 List<Rental> rentalsAll1 = new ArrayList<>();
                 for (Rental rental : rentalAll) {
-                    if (rental.getIdRental() == searchId) {
+                    if (rental.getIdModel() == searchId) {
                         if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
                             isRentalDay = true;
                             rentalsAll1.add(rental);
@@ -307,7 +310,7 @@ public class RentalView {
                     }
                 }
                 for (Rental rental : rentals) {
-                    if (rental.getIdRental() == searchId) {
+                    if (rental.getIdModel() == searchId) {
                         if (compareTwoDate(rental.getStartDate(), cal.getTime()) || compareTwoDate(rental.getEndDate(), cal.getTime())) {
                             isRentalDay = true;
                             rentals1.add(rental);
@@ -324,14 +327,14 @@ public class RentalView {
                 if (isRentalDay) {
                     for (Rental rental : rentals1) {
                         if (rental.getIdCustomer() == users.get(0).getId()) {
-                            System.out.print("\u001B[32m");
+                            System.out.print("\u001B[34m");
                         } else {
                             System.out.print("\u001B[31m");
                         }
                     }
                     for (Rental rental : rentalsAll1) {
                         if (rental.getIdCustomer() == users.get(0).getId()) {
-                            System.out.print("\u001B[32m");
+                            System.out.print("\u001B[34m");
                         } else {
                             System.out.print("\u001B[31m");
                         }
@@ -433,7 +436,7 @@ public class RentalView {
                 }
                 boolean isModelAvailable = true;
                 for (Rental rental : rentalAll) {
-                    if (rental.getIdRental() == idModel) {
+                    if (rental.getIdModel() == idModel) {
                         isModelAvailable = false; // idModel trùng với một rental trong danh sách rentalAll
                         if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
                             isInvalidDate = true;
@@ -449,7 +452,7 @@ public class RentalView {
                     }
                 }
                 for (Rental rental : rentals) {
-                    if (rental.getIdRental() == idModel) {
+                    if (rental.getIdModel() == idModel) {
                         isModelAvailable = false; // idModel trùng với một rental trong danh sách rentals
                         if (compareTwoDate(rental.getStartDate(), startDateInput) || compareTwoDate(rental.getEndDate(), endDateInput) || compareTwoDate(rental.getStartDate(), endDateInput) || compareTwoDate(rental.getEndDate(), startDateInput)) {
                             isInvalidDate = true;
@@ -486,7 +489,9 @@ public class RentalView {
         ModelService modelService = new ModelService();
         Model model = modelService.searchId(idModel);
         rentals.sort(new SortRentalById());
-        rental.setIdRental(model.getIdModel());
+        int id = rentals.get(rentals.size() - 1).getIdRental() + 1;
+        rental.setIdRental(id);
+        rental.setIdModel(model.getIdModel());
         rental.setIdCustomer(UserService.userLoginning.getId());
         rental.setNameCustomer(UserService.userLoginning.getName());
         rental.setNameModel(model.getName());
@@ -501,11 +506,11 @@ public class RentalView {
         rentals.add(rental);
         fileService.writeData(FILE_PATH_RENTAL, rentals);
 
-        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
-        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
-        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Order", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         System.out.println(rental.rentalView());
-        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
 
 
 
@@ -554,15 +559,15 @@ public class RentalView {
 
     public void showModelRental(int idModel) throws IOException {
         List<Rental> rentals = rentalService.getAllRental();
-        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
-        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
-        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
+        System.out.println("            ╔══════════════╦══════════════╦══════════════╦══════════════╦══════════════╦═════════════╦═════════════╦═════════════╦═════════════╦═════════════════════════╦══════════╗");
+        System.out.printf("            ║%-14s║%-14s║%-14s║%-14s║%-14s║%-13s║%-13s║%-13s║%-13s║%-25s║%-10s║", "ID Order", "ID Người mẫu", "ID Khách hàng", "Tên khách hàng", "Tên người mẫu", "Ngày bắt đầu", "Ngày kết thúc", "Giá", "Tổng giá", "Ngày tạo Bill", "Trạng thái").println();
+        System.out.println("            ╠══════════════╬══════════════╬══════════════╬══════════════╬══════════════╬═════════════╬═════════════╬═════════════╬═════════════╬═════════════════════════╬══════════╣");
         for (Rental rental : rentals) {
-            if (rental.getIdRental() == idModel) {
+            if (rental.getIdModel() == idModel) {
                 System.out.println(rental.rentalView());
             }
         }
-        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
+        System.out.println("            ╚══════════════╩══════════════╩══════════════╩══════════════╩══════════════╩═════════════╩═════════════╩═════════════╩═════════════╩═════════════════════════╩══════════╝");
     }
 
     public static void noChange() {
