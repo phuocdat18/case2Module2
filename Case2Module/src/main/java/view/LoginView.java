@@ -147,7 +147,7 @@ public class LoginView {
         String gender = null;
         do {
             noChange();
-            System.out.println("Nhập giới tính của bạn: male/female/other");
+            System.out.println("Nhập giới tính của bạn: male/female");
             gender = scanner.nextLine();
             switch (gender) {
                 case "male":

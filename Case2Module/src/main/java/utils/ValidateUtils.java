@@ -11,7 +11,7 @@ public class ValidateUtils {
     public static final  String DAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
     public static final  String BIRTHDAY_REGEX = "^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)$"; //01/01/2023
     public static final String MONTH_REGEX = "^(0?[1-9]|1[012])/((19|20)\\d\\d)$"; // 04/2023
-    public static final String FULLNAME_REGEX = "^[\\p{L} \\.'-]+$";
+    public static final String FULLNAME_REGEX = "^([A-ZÀ-ỹ][a-zÀ-ỹ]*[ ]?)+$";
     public static final String NAMEMODEL_REGEX = "^[\\p{L}0-9\\s\\.\\,\\-'()]{1,40}$";
     public static final String ADDREE_REGEX = "^([^. ][.]*[ ]?)+$";
 

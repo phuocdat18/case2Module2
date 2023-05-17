@@ -400,9 +400,17 @@ public class RentalView {
         boolean isInvalidDays = true;
         while (isInvalidDays) {
             try {
+                noChange();
                 Scanner input = new Scanner(System.in);
                 System.out.print("Vui lòng nhập số ngày thuê: ");
                 numberOfDays = Integer.parseInt(scanner.nextLine());
+                String numberOfDays1 = "" + numberOfDays;
+                if (numberOfDays1.equals("0")) {
+                    customerView.launcherCustomer();
+                }
+                if (numberOfDays > 30) {
+                    throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
+                }
                 if (numberOfDays <= 0) {
                     throw new IllegalArgumentException("Số ngày không hợp lệ");
                 }
@@ -420,8 +428,12 @@ public class RentalView {
         boolean isInvalidDate = true;
         while (isInvalidDate) {
             try {
+                noChange();
                 System.out.print("Vui lòng nhập ngày bắt đầu thuê (dd/MM/yyyy): ");
                 startDateString = scanner.nextLine();
+                if (startDateString.equals("0")) {
+                    customerView.launcherCustomer();
+                }
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
                 LocalDate date = LocalDate.parse(startDateString, formatter);
@@ -431,9 +443,9 @@ public class RentalView {
                 String endDateString = formatter.format(endDate);
                 endDateInput = FormatDateModel.parseDate(endDateString);
                 // Kiểm tra ngày kết thúc có vượt quá 30 ngày kể từ ngày bắt đầu hay không.
-                if (endDate.isAfter(date.plusDays(30))) {
-                    throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
-                }
+//                if (endDate.isAfter(date.plusDays(30))) {
+//                    throw new IllegalArgumentException("Số ngày thuê không được vượt quá 30 ngày");
+//                }
                 boolean isModelAvailable = true;
                 for (Rental rental : rentalAll) {
                     if (rental.getIdModel() == idModel) {
@@ -475,7 +487,7 @@ public class RentalView {
                     System.out.println("Ngày thuê đã bị quá hạn");
                     isInvalidDate = true;
                 } else if (startDateInput.compareTo(new Date()) < 0) {
-                    System.out.println("Ngày thuê đã bị quá");
+                    System.out.println("Ngày thuê đã bị quá hạn");
                     isInvalidDate = true;
                 }
             } catch (DateTimeParseException e) {

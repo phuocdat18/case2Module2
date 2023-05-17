@@ -44,7 +44,7 @@ public class AdminView {
             }
             switch (select) {
                 case 1:
-                    modelView.launcher();
+                    launcher();
                     checkAction = checkActionContinue();
                     break;
                 case 2:
@@ -293,6 +293,78 @@ public class AdminView {
             }
         }while (!checkAction);
         if(checkAction) {
+            launcherAdmin();
+        }
+    }
+
+    public void menuModelAdminView() {
+        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("                               ║                        1. Hiển thị danh sách Model                                ║");
+        System.out.println("                               ║                        2. Hiển thị danh sách Model theo giới tính                 ║");
+        System.out.println("                               ║                        3. Tìm kiếm Model                                          ║");
+        System.out.println("                               ║                        4. Thêm Model vào danh sách                                ║");
+        System.out.println("                               ║                        5. Chỉnh sửa Model                                         ║");
+        System.out.println("                               ║                        6. Xóa Model trong danh sách                               ║");
+        System.out.println("                               ║                        7. Quay lại Menu                                           ║");
+        System.out.println("                               ║                        8. Đăng xuất                                               ║");
+        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
+    }
+
+    public void launcher() throws IOException, ParseException, InterruptedException {
+        ModelView modelView = new ModelView();
+        boolean checkAction = false;
+        int select = 0;
+        do {
+            menuModelAdminView();
+            System.out.println("Chọn chức năng:");
+            try {
+                select = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("Nhập lỗi, vui lòng nhập lại!");
+                select = 0;
+                continue;
+            }
+            switch (select) {
+                case 1:
+                    modelView.showModelListStepModelAdmin();
+                    checkAction = checkActionContinue();
+                    break;
+                case 2:
+                    modelView.showModelListByTypeAdmin();
+                    checkAction = checkActionContinue();
+                    break;
+                case 3:
+                    modelView.searchModel();
+                    checkAction = checkActionContinue();
+                    break;
+                case 4:
+                    modelView.addModel();
+                    checkAction = checkActionContinue();
+                    break;
+                case 5:
+                    modelView.editModelById();
+                    checkAction = checkActionContinue();
+                    break;
+                case 6:
+                    modelView.deleteModelById();
+                    checkAction = checkActionContinue();
+                    break;
+                case 7:
+                    launcherAdmin();
+                    checkAction = checkActionContinue();
+                    break;
+                case 8:
+                    Menu menu = new Menu();
+                    menu.login();
+                    checkAction = checkActionContinue();
+                    break;
+                default:
+                    System.out.println("Nhập sai chức năng, mời nhập lại!");
+                    checkAction = false;
+                    break;
+            }
+        } while (!checkAction);
+        if (checkAction) {
             launcherAdmin();
         }
     }

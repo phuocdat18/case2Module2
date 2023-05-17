@@ -65,79 +65,6 @@ public class ModelView {
     }
 
 
-    public void menuModelAdminView() {
-        System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("                               ║                        1. Hiển thị danh sách Model                                ║");
-        System.out.println("                               ║                        2. Hiển thị danh sách Model theo giới tính                 ║");
-        System.out.println("                               ║                        3. Tìm kiếm Model                                          ║");
-        System.out.println("                               ║                        4. Thêm Model vào danh sách                                ║");
-        System.out.println("                               ║                        5. Chỉnh sửa Model                                         ║");
-        System.out.println("                               ║                        6. Xóa Model trong danh sách                               ║");
-        System.out.println("                               ║                        7. Quay lại Menu                                           ║");
-        System.out.println("                               ║                        8. Đăng xuất                                               ║");
-        System.out.println("                               ╚═══════════════════════════════════════════════════════════════════════════════════╝");
-    }
-
-    public void launcher() throws IOException, ParseException, InterruptedException {
-        boolean checkAction = false;
-        int select = 0;
-        do {
-            menuModelAdminView();
-            System.out.println("Chọn chức năng:");
-            try {
-                select = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException numberFormatException) {
-                System.out.println("Nhập lỗi, vui lòng nhập lại!");
-                select = 0;
-                continue;
-            }
-            switch (select) {
-                case 1:
-                    showModelListStepModelAdmin();
-                    checkAction = checkActionContinue();
-                    break;
-                case 2:
-                    showModelListByTypeAdmin();
-                    checkAction = checkActionContinue();
-                    break;
-                case 3:
-                    searchModel();
-                    checkAction = checkActionContinue();
-                    break;
-                case 4:
-                    addModel();
-                    checkAction = checkActionContinue();
-                    break;
-                case 5:
-                    editModelById();
-                    checkAction = checkActionContinue();
-                    break;
-                case 6:
-                    deleteModelById();
-                    checkAction = checkActionContinue();
-                    break;
-                case 7:
-                    AdminView adminView = new AdminView();
-                    adminView.launcherAdmin();
-                    checkAction = checkActionContinue();
-                    break;
-                case 8:
-                    Menu menu = new Menu();
-                    menu.login();
-                    checkAction = checkActionContinue();
-                    break;
-                default:
-                    System.out.println("Nhập sai chức năng, mời nhập lại!");
-                    checkAction = false;
-                    break;
-            }
-        } while (!checkAction);
-        if (checkAction) {
-            AdminView adminView = new AdminView();
-            adminView.launcherAdmin();
-        }
-    }
-
 
     public void menuEditModelView() {
         System.out.println("                               ╔═══════════════════════════════════════════════════════════════════════════════════╗");
@@ -159,12 +86,10 @@ public class ModelView {
 
     public void editModelById() throws IOException, ParseException, InterruptedException {
         showModelList();
-        Model model = new Model();
-        List<Model> results = new ArrayList<>();
         List<Model> models = modelService.getAllModel();
         List<Model> modelsUpdate = modelService.getAllModelUpdate();
-        List<Rental> rentalUpdate = rentalService.getAllRentalUpdate();
         ModelView modelView = new ModelView();
+        AdminView adminView = new AdminView();
 
         int searchId = 0;
         boolean checkId = false;
@@ -175,7 +100,7 @@ public class ModelView {
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkId = true;
-                launcher();
+                adminView.launcher();
             }
             try {
                 searchId = Integer.parseInt(input);
@@ -218,7 +143,7 @@ public class ModelView {
                                             nameModel = scanner.nextLine();
                                             if (nameModel.equals("0")) {
                                                 checkId = true;
-                                                launcher();
+                                                adminView.launcher();
                                             }
                                             checkValidFullName = ValidateUtils.isNameModel(nameModel);
                                             if (!checkValidFullName) {
@@ -239,7 +164,7 @@ public class ModelView {
                                         String type = scanner.nextLine();
                                         if (type.equals("0")) {
                                             checkId = true;
-                                            launcher();
+                                            adminView.launcher();
                                         }
                                         if (models.get(i).getType().equals(EGender.male)) {
                                             switch (type) {
@@ -283,7 +208,7 @@ public class ModelView {
                                             height = scanner.nextLine();
                                             if (height.equals("0")) {
                                                 checkId = true;
-                                                launcher();
+                                                adminView.launcher();
                                             }
                                             checkValidHeight = ValidateUtils.isValidHeight(height);
                                             if (!checkValidHeight) {
@@ -308,7 +233,7 @@ public class ModelView {
                                                 scanner.nextLine();
                                                 if (weight == 0) {
                                                     checkId = true;
-                                                    launcher();
+                                                    adminView.launcher();
                                                 }
                                                 models.get(i).setWeight(weight);
                                                 for (int j = 0; j < modelsUpdate.size(); j++) {
@@ -332,7 +257,7 @@ public class ModelView {
                                             phoneNumber = scanner.nextLine();
                                             if (phoneNumber.equals("0")) {
                                                 checkId = true;
-                                                launcher();
+                                                adminView.launcher();
                                             }
                                             checkValidPhoneNumber = ValidateUtils.isPhoneNumber(phoneNumber);
                                             if (!checkValidPhoneNumber) {
@@ -355,7 +280,7 @@ public class ModelView {
                                         address = scanner.nextLine();
                                         if (address.equals("0")) {
                                             checkId = true;
-                                            launcher();
+                                            adminView.launcher();
                                         }
                                         models.get(i).setAddressModel(address);
                                         for (int j = 0; j < modelsUpdate.size(); j++) {
@@ -374,7 +299,7 @@ public class ModelView {
                                             String input1 = scanner.nextLine();
                                             if (input1.equals("0")) {
                                                 checkId = true;
-                                                launcher();
+                                                adminView.launcher();
                                             }
                                             try {
                                                 price = Integer.parseInt(input1);
@@ -403,7 +328,7 @@ public class ModelView {
                                         description = scanner.nextLine();
                                         if (description.equals("0")) {
                                             checkId = true;
-                                            launcher();
+                                            adminView.launcher();
                                         }
                                         models.get(i).setDescription(description);
                                         for (int j = 0; j < modelsUpdate.size(); j++) {
@@ -418,7 +343,6 @@ public class ModelView {
                                         checkAction = true;
                                         break;
                                     case 10:
-                                        AdminView adminView = new AdminView();
                                         adminView.launcherAdmin();
                                         checkAction = true;
                                         break;
@@ -467,6 +391,7 @@ public class ModelView {
     }
 
     public void findModelById() throws IOException, ParseException, InterruptedException {
+        AdminView adminView = new AdminView();
         List<Model> models = modelService.getAllModel();
         boolean checkAction = false;
         noChange();
@@ -476,7 +401,7 @@ public class ModelView {
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkAction = true;
-                launcher();
+                adminView.launcher();
             }
             try {
                 id = Integer.parseInt(input);
@@ -515,6 +440,7 @@ public class ModelView {
         showModelList();
         List<Model> models = modelService.getAllModel();
         List<Model> modelsUpdate = modelService.getAllModelUpdate();
+        AdminView adminView = new AdminView();
 
         int id = 0;
         boolean checkID = false;
@@ -524,7 +450,7 @@ public class ModelView {
             String input = scanner.nextLine();
             if (input.equals("0")) {
                 checkID = true;
-                launcher();
+                adminView.launcher();
             }
             try {
                 id = Integer.parseInt(input);
@@ -561,6 +487,7 @@ public class ModelView {
     public void addModel() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
         List<Model> modelsUpdate = modelService.getAllModelUpdate();
+        AdminView adminView = new AdminView();
         Model model = new Model();
 
         String typeOfModel;
@@ -571,7 +498,7 @@ public class ModelView {
             typeOfModel = scanner.nextLine();
             if (typeOfModel.equals("0")) {
                 checkType = true;
-                launcher();
+                adminView.launcher();
             }
             switch (typeOfModel) {
                 case "male":
@@ -596,7 +523,7 @@ public class ModelView {
                 nameModel = scanner.nextLine();
                 if (nameModel.equals("0")) {
                     checkNameModel = true;
-                    launcher();
+                    adminView.launcher();
                 }
                 checkValidNameModel = ValidateUtils.isNameModel(nameModel);
                 if (!checkValidNameModel) {
@@ -616,7 +543,7 @@ public class ModelView {
                         String input = "1";
                         if (input.equals("0")) {
                             checkNameModel = true;
-                            launcher();
+                            adminView.launcher();
                         }
                         checkValid = ValidateUtils.isQuantity(quantity, input);
                         if (!checkValid) {
@@ -659,7 +586,7 @@ public class ModelView {
                         String input = "1";
                         if (input.equals("0")) {
                             checkNameModel = true;
-                            launcher();
+                            adminView.launcher();
                         }
                         checkValidQuantity2 = ValidateUtils.isQuantity(quantity1, input);
                         if (checkValidQuantity2) {
@@ -675,7 +602,7 @@ public class ModelView {
                         String input = scanner.nextLine();
                         if (input.equals("0")) {
                             checkNameModel = true;
-                            launcher();
+                            adminView.launcher();
                         }
                         try {
                             price = Integer.parseInt(input);
@@ -757,7 +684,7 @@ public class ModelView {
                         address = scanner.nextLine();
                         if (address.equals("0")) {
                             checkNameModel = true;
-                            launcher();
+                            adminView.launcher();
                         }
                         checkValidAddress = ValidateUtils.isAddress(address);
                         if (!checkValidAddress) {
@@ -773,7 +700,7 @@ public class ModelView {
                         String input = scanner.nextLine();
                         if (input.equals("0")) {
                             checkNameModel = true;
-                            launcher();
+                            adminView.launcher();
                         }
                         if (!ValidateUtils.isPhoneNumber(input)) {
                             System.out.println("Số điện thoại không hợp lệ. Vui lòng nhập lại");
@@ -932,6 +859,7 @@ public class ModelView {
 
     public void showModelListByTypeAdmin() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
+        AdminView adminView = new AdminView();
 
         String typeOfModel;
         boolean checkType = false;
@@ -941,7 +869,7 @@ public class ModelView {
             typeOfModel = scanner.nextLine();
             if (typeOfModel.equals("0")) {
                 checkType = true;
-                launcher();
+                adminView.launcher();
             }
             switch (typeOfModel) {
                 case "male":
@@ -971,6 +899,7 @@ public class ModelView {
 
     public void showModelListByType() throws IOException, ParseException, InterruptedException {
         List<Model> models = modelService.getAllModel();
+        AdminView adminView = new AdminView();
 
         String typeOfModel;
         boolean checkType = false;
@@ -980,7 +909,7 @@ public class ModelView {
             typeOfModel = scanner.nextLine();
             if (typeOfModel.equals("0")) {
                 checkType = true;
-                launcher();
+                adminView.launcher();
             }
             switch (typeOfModel) {
                 case "male":
@@ -1023,7 +952,7 @@ public class ModelView {
     }
 
     public void modelViewAdmin() throws IOException, ParseException, InterruptedException {
-//        LoginView loginView = new LoginView();
+        AdminView adminView = new AdminView();
         int select = 0;
         boolean checkAction = false;
         do {
@@ -1058,7 +987,6 @@ public class ModelView {
                     checkAction = checkActionContinue();
                     break;
                 case 6:
-                    AdminView adminView = new AdminView();
                     adminView.launcherAdmin();
                     break;
                 case 7:
@@ -1072,7 +1000,7 @@ public class ModelView {
             }
         } while (!checkAction);
         if (checkAction) {
-            launcher();
+            adminView.launcher();
         }
     }
 
@@ -1212,6 +1140,7 @@ public class ModelView {
     }
 
     public void searchModel() throws IOException, ParseException, InterruptedException {
+        AdminView adminView = new AdminView();
         int select = 0;
         boolean checkAction = false;
         do {
@@ -1270,7 +1199,7 @@ public class ModelView {
             }
         } while (!checkAction);
         if (checkAction) {
-            launcher();
+            adminView.launcher();
         }
     }
 
